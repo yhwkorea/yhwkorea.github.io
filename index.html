@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>yhwkorea</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #0f172a;
+    color: #e2e8f0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 60px 24px;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  .header h1 {
+    font-size: 36px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #38bdf8, #818cf8, #c084fc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 12px;
+  }
+  .header p {
+    color: #94a3b8;
+    font-size: 16px;
+  }
+
+  .projects {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+    max-width: 1000px;
+    width: 100%;
+  }
+
+  .card {
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 16px;
+    padding: 28px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.25s;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+  .card:hover {
+    border-color: #475569;
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+  }
+  .card:hover::before { opacity: 1; }
+
+  .card-icon {
+    font-size: 36px;
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #0f172a;
+    border-radius: 12px;
+  }
+  .card-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #f1f5f9;
+  }
+  .card-desc {
+    font-size: 14px;
+    color: #94a3b8;
+    line-height: 1.6;
+  }
+  .card-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: auto;
+  }
+  .tag {
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    background: #0f172a;
+    color: #64748b;
+    border: 1px solid #1e293b;
+  }
+
+  .footer {
+    margin-top: 60px;
+    color: #475569;
+    font-size: 13px;
+    text-align: center;
+  }
+  .footer a {
+    color: #64748b;
+    text-decoration: none;
+  }
+  .footer a:hover { color: #94a3b8; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>yhwkorea</h1>
+  <p>Projects & Experiments</p>
+</div>
+
+<div class="projects">
+
+  <a href="/sudoku-solver" class="card" style="--accent: #38bdf8;">
+    <div class="card-icon">&#x1F9E9;</div>
+    <div class="card-title">Sudoku Human Solver</div>
+    <div class="card-desc">
+      12가지 인간 풀이 기법으로 스도쿠를 단계별로 풀어주는 시각화 도구.
+      Naked Single부터 Swordfish, Bifurcation까지.
+    </div>
+    <div class="card-tags">
+      <span class="tag">JavaScript</span>
+      <span class="tag">Sudoku</span>
+      <span class="tag">Algorithm</span>
+    </div>
+  </a>
+
+</div>
+
+<div class="footer">
+  <a href="https://github.com/yhwkorea">GitHub</a>
+</div>
+
+</body>
+</html>
