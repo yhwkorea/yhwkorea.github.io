@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>낙하 — 인크리멘탈 v0.7</title>
+<style>
+:root{
+  --bg:#150f08; --gold:#e6a935; --hot:#e5484d; --cool:#7fb8d4;
+  --ink:#f2e6cc; --dim:#a8946e; --ok:#2dd4bf; --star:#e0a0b8; --deep:#e08a3c;
+}
+*{box-sizing:border-box; margin:0;}
+html,body{height:100%;}
+body{
+  background:radial-gradient(1000px 640px at 50% -12%, #3d2610 0%, var(--bg) 62%), var(--bg);
+  color:var(--ink); font-family:"Bahnschrift","Segoe UI",system-ui,sans-serif;
+  display:flex; justify-content:center; align-items:flex-start; gap:14px;
+  padding:14px 12px; min-height:100%; user-select:none;
+}
+#left{display:flex; flex-direction:column; gap:8px;}
+#goal{width:400px; font-size:12px; color:var(--deep); letter-spacing:.5px; padding:6px 10px; border-radius:7px;
+  background:linear-gradient(90deg,#2a1c0c,#1c1408); border:1px solid #4a3418; border-left:3px solid var(--deep);}
+#goal b{color:var(--ink);}
+#coinbar{display:flex; align-items:center; gap:10px; width:400px;}
+.brand{font-size:12px; letter-spacing:4px; color:var(--hot); font-weight:700;}
+#depthTag{font-size:11px; letter-spacing:2px; color:var(--deep); border:1px solid #4a2a1a; border-radius:4px; padding:2px 7px;}
+.spacer{flex:1;}
+#coins{font-size:30px; font-weight:800; color:var(--gold); text-shadow:0 0 18px rgba(255,207,63,.6); font-variant-numeric:tabular-nums; line-height:1;}
+#coinsub{font-size:11px; color:var(--dim); letter-spacing:1px; text-align:right;}
+#wrap{position:relative; width:400px; height:500px;}
+canvas{display:block; border-radius:10px; background:linear-gradient(180deg,#251706,#130b03); box-shadow:0 0 0 2px #6b4a1e, 0 0 0 5px #241708, 0 18px 50px rgba(0,0,0,.6), inset 0 0 60px rgba(120,70,20,.16);}
+#depthbar{position:absolute; left:10px; right:10px; bottom:-1px; height:5px; border-radius:3px; background:#241436; overflow:hidden;}
+#depthfill{height:100%; width:0%; background:linear-gradient(90deg,var(--deep),var(--gold)); transition:width .2s; box-shadow:0 0 10px var(--deep);}
+#hint{position:absolute; left:0; right:0; top:44%; text-align:center; color:#c9a8ff; font-size:14px; letter-spacing:2px; pointer-events:none; text-shadow:0 2px 12px #000; animation:pulse 1.6s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:.5;}50%{opacity:1;}}
+#rateline{width:400px; display:flex; gap:12px; font-size:12px; color:var(--dim); align-items:center;}
+#rateline b{color:var(--ink); font-variant-numeric:tabular-nums;}
+.star{color:var(--star);}
+#taltray{width:400px; display:flex; gap:5px; flex-wrap:wrap; min-height:20px;}
+.taltag{font-size:10px; padding:2px 7px; border:1px solid #3a2a1a; border-radius:10px; color:var(--deep); background:#1a1008;}
+.taltag b{color:var(--gold);}
+#ballrow{width:400px; display:flex; gap:6px; flex-wrap:wrap;}
+.ball{display:flex; align-items:center; gap:6px; font-size:11px; padding:5px 9px; border-radius:8px; cursor:pointer;
+  border:1px solid #2a1a3e; background:#120b1c; transition:border-color .12s, background .12s;}
+.ball .dot{width:11px; height:11px; border-radius:50%;}
+.ball.equipped{border-color:var(--gold); background:#1c1408;}
+.ball.buy{border-color:#3a6a52;} .ball.buy:hover{border-color:var(--ok); background:#12261c;}
+.ball.locked{opacity:.45; cursor:default;}
+.ball .c{color:#a85a6a; font-variant-numeric:tabular-nums;} .ball.buy .c{color:var(--ok);}
+
+/* 스킬트리 */
+#right{width:470px; display:flex; flex-direction:column; gap:8px;}
+#treehead{display:flex; align-items:center; gap:8px; font-size:11px; letter-spacing:3px; color:var(--dim);}
+#treewrap{position:relative; overflow:hidden; border:1px solid #5a4020; border-radius:10px; background:linear-gradient(180deg,#221810,#17100a); padding:4px;}
+#treeSvg{position:absolute; left:0; top:0; pointer-events:none;}
+.node{
+  position:absolute; width:78px; height:60px; border-radius:9px; padding:5px 6px; cursor:pointer;
+  border:1px solid #2a1a3e; background:linear-gradient(170deg,#181026,#110b1c);
+  display:flex; flex-direction:column; gap:2px; transition:transform .1s, box-shadow .12s, border-color .12s;
+}
+.node .ic{font-size:14px; line-height:1;}
+.node .nm{font-size:10px; font-weight:700; line-height:1.05;}
+.node .cost{font-size:10px; font-variant-numeric:tabular-nums; margin-top:auto; color:#a85a6a;}
+.node.locked{opacity:.32; cursor:default;}
+.node.avail{border-color:#3a2a56;}
+.node.afford{border-color:#3a6a52; box-shadow:0 0 10px rgba(91,255,176,.12);}
+.node.afford:hover{transform:translateY(-2px); border-color:var(--ok);}
+.node.afford .cost{color:var(--ok);}
+.node.owned{border-color:var(--gold); background:linear-gradient(170deg,#241a08,#161006);}
+.node.owned .cost{color:var(--gold);}
+.node.owned .cost::before{content:'보유';}
+.node.owned .costval{display:none;}
+.btn{background:#1e1030; color:var(--ink); border:1px solid #3a2456; border-radius:6px; padding:7px 11px; font-size:12px; cursor:pointer; letter-spacing:1px; font-family:inherit;}
+.btn:hover{background:#2a1746;}
+.big{width:100%; padding:11px; font-weight:700;}
+.btn.deep{background:linear-gradient(90deg,#3a2410,#5a3a18); border-color:var(--deep); color:#ffe0c0;}
+.btn.deep:hover:not(:disabled){background:linear-gradient(90deg,#4a3018,#6a4a20);}
+.btn.deep:disabled{opacity:.4; cursor:default;}
+.btn.star{background:linear-gradient(90deg,#3a1860,#5a2a80); border-color:var(--star); color:#f0e0ff;}
+.btn.star:hover:not(:disabled){background:linear-gradient(90deg,#4a2070,#6a34a0);}
+.btn.star:disabled{opacity:.35; cursor:default;}
+#prestigeBox{padding:9px; border:1px solid #3a2456; border-radius:8px; background:linear-gradient(170deg,#1a1030,#120a1c); display:none;}
+#prestigeBox.show{display:block;}
+#prestigeBox .t{font-size:11px; letter-spacing:2px; color:var(--star); margin-bottom:4px;}
+#prestigeBox .g{font-size:11px; color:var(--dim); margin-bottom:6px;}
+#prestigeBox .g b{color:var(--star);}
+#tip{font-size:11px; color:var(--dim); min-height:15px;}
+
+/* 탤런트 드래프트 오버레이 */
+#draft{position:absolute; inset:0; display:none; flex-direction:column; align-items:center; justify-content:center; gap:12px; background:rgba(8,5,16,.92); backdrop-filter:blur(3px); border-radius:10px; z-index:6; padding:16px;}
+#draft.show{display:flex;}
+#draft h2{font-size:20px; letter-spacing:3px; color:var(--deep);}
+#draft .sub{font-size:11px; color:var(--dim); margin-top:-6px;}
+#dcards{display:flex; gap:10px;}
+.tcard{width:112px; min-height:140px; border:1px solid #3a2a1a; border-radius:10px; padding:12px 10px; background:linear-gradient(170deg,#1e1408,#120c06); cursor:pointer; display:flex; flex-direction:column; gap:7px; transition:transform .12s, border-color .12s, box-shadow .12s;}
+.tcard:hover{transform:translateY(-6px); border-color:var(--gold); box-shadow:0 12px 26px rgba(255,207,63,.16);}
+.tcard .ic{font-size:24px;} .tcard .nm{font-size:13px; font-weight:700;} .tcard .ds{font-size:10.5px; color:var(--dim); line-height:1.4;} .tcard .lv{margin-top:auto; font-size:10px; color:var(--deep);}
+#toast{position:absolute; left:0; right:0; top:8px; text-align:center; pointer-events:none; font-size:13px; color:var(--ok); opacity:0; letter-spacing:1px; text-shadow:0 2px 10px #000;}
+</style>
+</head>
+<body>
+
+<div id="left">
+  <div id="goal">🎯 <b id="goalT">가장 깊이 내려가라</b></div>
+  <div id="coinbar">
+    <span class="brand">낙하</span><span id="depthTag">깊이 1</span>
+    <div class="spacer"></div>
+    <div><div id="coins">0</div><div id="coinsub">코인</div></div>
+  </div>
+  <div id="wrap">
+    <canvas id="c" width="400" height="500"></canvas>
+    <div id="hint">클릭해서 공을 떨어뜨려라</div>
+    <div id="toast"></div><div id="draft"></div>
+    <div id="depthbar"><div id="depthfill"></div></div>
+  </div>
+  <div id="rateline">
+    <span>초당 <b id="cps">0</b></span><span>공값 <b id="pv">1</b></span>
+    <span class="star">★ <b id="stars">0</b> ×<b id="mult">1.0</b></span>
+    <span style="margin-left:auto"></span>
+    <button class="btn" id="btnSound">🔊</button><button class="btn" id="btnWipe" title="세이브 초기화">↺</button>
+  </div>
+  <div id="taltray"></div>
+  <div id="ballrow"></div>
+</div>
+
+<div id="right">
+  <div id="treehead"><span>스킬 트리 — 선행 노드를 먼저 열어야 다음이 열린다</span></div>
+  <div id="treewrap"><svg id="treeSvg"></svg></div>
+  <div id="tip">노드에 마우스를 올리면 효과가 보인다</div>
+  <button class="btn deep big" id="btnDescend" disabled>다음 깊이로</button>
+  <div id="prestigeBox">
+    <div class="t">★ 프레스티지 (환생)</div>
+    <div class="g">지금까지 번 걸 <b style="color:#ff8a8a">전부 버리고 처음부터</b> — 대신 <b id="pgain">0</b> ★ 획득.<br>★는 리셋해도 영원히 남아 <b>모든 수익 ×<span id="pmult">1.00</span></b>. 성장이 느려지면 한 번 환생 → 다음엔 훨씬 빨리·멀리.</div>
+    <button class="btn star big" id="btnPrestige">전부 리셋하고 ★ 얻기</button>
+  </div>
+</div>
+
+<script>
+"use strict";
+const cv=document.getElementById('c'), g=cv.getContext('2d');
+const W=cv.width, H=cv.height;
+const rand=(a,b)=>a+Math.random()*(b-a), clamp=(v,a,b)=>v<a?a:v>b?b:v;
+function fmt(n){ n=Math.floor(n); if(n<1e4) return ''+n;
+  const u=['','K','M','B','T','Qa','Qi','Sx','Sp','Oc','No','De']; let i=0;
+  while(n>=1000 && i<u.length-1){ n/=1000; i++; } return n.toFixed(n<10?2:n<100?1:0)+u[i]; }
+const now=()=>Date.now();
+
+/* ===== 사운드 ===== */
+let AC=null, master=null, sfxOn=true;
+function ac(){ if(!AC){AC=new(window.AudioContext||window.webkitAudioContext)(); master=AC.createGain(); master.gain.value=.85; master.connect(AC.destination); startBGM();} return AC; }
+function blip(f,dur,type,gain){ if(!sfxOn||!AC) return;
+  try{const c=AC,o=c.createOscillator(),g2=c.createGain(); o.type=type||'triangle'; o.frequency.value=f;
+    g2.gain.setValueAtTime(gain||.05,c.currentTime); g2.gain.exponentialRampToValueAtTime(.0005,c.currentTime+dur);
+    o.connect(g2); g2.connect(master); o.start(); o.stop(c.currentTime+dur+.02);}catch(e){} }
+function coinSound(combo){ const b=440*Math.pow(2,clamp(combo,0,24)/12); blip(b,.08,'square',.032); }
+function payoutSound(m){ if(!sfxOn) return; blip(600+m*30,.14,'triangle',.05); if(m>=3) blip(900,.12,'triangle',.04); }
+let bgmTimer=null, bgmStep=0;
+const BGM=[0,3,7,10,12,10,7,3, 0,3,7,12,15,12,7,3, -2,2,5,9,12,9,5,2, -5,0,3,7,10,7,3,0];
+function startBGM(){ if(bgmTimer) clearInterval(bgmTimer);
+  bgmTimer=setInterval(()=>{ if(!sfxOn||!AC) return; const s=BGM[bgmStep%BGM.length]; bgmStep++; const f=196*Math.pow(2,s/12);
+    try{const c=AC,o=c.createOscillator(),gg=c.createGain(),lp=c.createBiquadFilter();
+      o.type='sawtooth'; o.frequency.value=f; lp.type='lowpass'; lp.frequency.value=900;
+      gg.gain.setValueAtTime(.02,c.currentTime); gg.gain.exponentialRampToValueAtTime(.0004,c.currentTime+.28);
+      o.connect(lp); lp.connect(gg); gg.connect(master); o.start(); o.stop(c.currentTime+.3);
+      if(bgmStep%4===0){const b=c.createOscillator(),bg=c.createGain(); b.type='sine'; b.frequency.value=f/2;
+        bg.gain.setValueAtTime(.04,c.currentTime); bg.gain.exponentialRampToValueAtTime(.0004,c.currentTime+.4);
+        b.connect(bg); bg.connect(master); b.start(); b.stop(c.currentTime+.42);} }catch(e){} },150); }
+
+/* ===== 상태 ===== */
+const S={
+  coins:0, totalEarned:0, stars:0, depth:1, depthEarned:0,
+  lv:{ pegVal:0, gold:0, auto:0, combo:0, bin:0, launcher:0, balls:0 },
+  tb:{ goldMult:0, goldCombo:0, rest:0, jackpot:0, depthBonus:0, offline:0 },
+  tal:{ goldVein:0, elastic:0, chain:0, deep:0, twin:0, jackpot:0 },
+  tree:[], rep:{}, ballType:'std', ballsUn:['std'], lastCps:0, lastSeen:0,
+};
+function starMult(){ return 1 + S.stars*0.15; }
+function depthMult(){ return Math.pow(1.5, S.depth-1) * (1 + S.tal.deep*0.15 + S.tb.depthBonus); }
+
+/* ===== 스킬 트리 ===== */
+// col: 0물량 1금맥 2연쇄 3대박 4심부 / tier: 세로 위치 / need: 선행 노드 id
+const TREE=[
+  // 물량
+  {id:'v0',col:0,tier:0,ic:'↻',nm:'자동투하',cost:40,     need:null, ds:'공이 저절로 떨어진다', ap:()=>S.lv.auto=Math.max(S.lv.auto,1)},
+  {id:'v1',col:0,tier:1,ic:'↻',nm:'자동 가속',cost:400,    need:'v0', ds:'자동투하 빨라짐',       ap:()=>S.lv.auto+=3},
+  {id:'v2',col:0,tier:2,ic:'●●',nm:'멀티볼',cost:1500,    need:'v1', ds:'수동 클릭 공 +1',        ap:()=>S.lv.balls+=1},
+  {id:'v3',col:0,tier:3,ic:'↻',nm:'가속 II',cost:12000,   need:'v2', ds:'자동투하 더 빨라짐',     ap:()=>S.lv.auto+=4},
+  {id:'v4',col:0,tier:4,ic:'⋔',nm:'발사기',cost:150000,   need:'v3', ds:'자동투하 위치 +1',       ap:()=>S.lv.launcher+=1},
+  // 금맥
+  {id:'g0',col:1,tier:0,ic:'✦',nm:'금못',cost:800,       need:null, ds:'금못 +2',                ap:()=>S.lv.gold+=2},
+  {id:'g1',col:1,tier:1,ic:'✦',nm:'금맥',cost:6000,      need:'g0', ds:'금못 값 +50%',           ap:()=>S.tb.goldMult+=0.5},
+  {id:'g2',col:1,tier:2,ic:'✦',nm:'금못 II',cost:40000,  need:'g1', ds:'금못 +3',                ap:()=>S.lv.gold+=3},
+  {id:'g3',col:1,tier:3,ic:'✦',nm:'공명',cost:120000,    need:'g2', ds:'금못 맞으면 콤보 +2',    ap:()=>S.tb.goldCombo+=2},
+  // 연쇄
+  {id:'c0',col:2,tier:0,ic:'⚡',nm:'콤보',cost:200,       need:null, ds:'콤보 배율 ↑',            ap:()=>S.lv.combo+=2},
+  {id:'c1',col:2,tier:1,ic:'⟳',nm:'탄성',cost:2000,      need:'c0', ds:'공 반발 ↑ (콤보 잘 쌓임)', ap:()=>S.tb.rest+=0.05},
+  {id:'c2',col:2,tier:2,ic:'⚡',nm:'콤보 II',cost:18000,  need:'c1', ds:'콤보 배율 ↑↑',           ap:()=>S.lv.combo+=3},
+  {id:'c3',col:2,tier:3,ic:'⚡',nm:'과열',cost:90000,     need:'c2', ds:'콤보 배율 대폭 ↑',        ap:()=>S.lv.combo+=5},
+  // 대박
+  {id:'b0',col:3,tier:0,ic:'▧',nm:'통 강화',cost:4000,   need:null, ds:'바닥 통 배수 +1',        ap:()=>S.lv.bin+=1},
+  {id:'b1',col:3,tier:1,ic:'★',nm:'한탕',cost:30000,     need:'b0', ds:'가운데 대박통 +2',        ap:()=>S.tb.jackpot+=2},
+  {id:'b2',col:3,tier:2,ic:'▧',nm:'통 II',cost:180000,   need:'b1', ds:'바닥 통 배수 +2',        ap:()=>S.lv.bin+=2},
+  // 심부
+  {id:'d0',col:4,tier:0,ic:'＋',nm:'못 강화',cost:60,     need:null, ds:'못 값 +3',               ap:()=>S.lv.pegVal+=3},
+  {id:'d1',col:4,tier:1,ic:'＋',nm:'강화 II',cost:1500,   need:'d0', ds:'못 값 +6',               ap:()=>S.lv.pegVal+=6},
+  {id:'d2',col:4,tier:2,ic:'▼',nm:'심층',cost:25000,     need:'d1', ds:'깊이 배수 +20%',          ap:()=>S.tb.depthBonus+=0.2},
+  {id:'d3',col:4,tier:3,ic:'⏾',nm:'오프라인',cost:60000, need:'d2', ds:'오프라인 효율 +30%',      ap:()=>S.tb.offline+=0.3},
+  {id:'d4',col:4,tier:4,ic:'＋',nm:'강화 III',cost:300000,need:'d3', ds:'못 값 +20',              ap:()=>S.lv.pegVal+=20},
+  // 무한 노드 (반복 구매, 지수 비용) — 후반 코인 싱크
+  {id:'i0',col:0,tier:5,ic:'∞',nm:'무한 가속',cost:400000, grow:1.9, rep:true, need:'v4', ds:'자동투하 +1 (반복)', ap:()=>S.lv.auto+=1},
+  {id:'i2',col:2,tier:4,ic:'∞',nm:'무한 콤보',cost:250000, grow:1.8, rep:true, need:'c3', ds:'콤보 배율 +0.02 (반복)', ap:()=>S.lv.combo+=1},
+  {id:'i4',col:4,tier:5,ic:'∞',nm:'무한 강화',cost:200000, grow:1.75,rep:true, need:'d4', ds:'못 값 +8 (반복)', ap:()=>S.lv.pegVal+=8},
+];
+const NODE=Object.fromEntries(TREE.map(n=>[n.id,n]));
+const owned=id=>S.tree.includes(id);
+const prereqOk=n=>!n.need||owned(n.need);
+function nodeCost(n){ return n.rep? Math.floor(n.cost*Math.pow(n.grow,S.rep[n.id]||0)) : n.cost; }
+function canBuy(n){ if(!prereqOk(n)) return false; if(!n.rep && owned(n.id)) return false; return S.coins>=nodeCost(n); }
+
+function autoInterval(){ return S.lv.auto? Math.max(22, 110/(1+ (S.lv.auto-1)*0.2)) : 1e9; }
+function depthTarget(d){ return Math.floor(3000*Math.pow(5,d-1)); }
+const PRESTIGE_MIN=3000000;
+function prestigeGain(){ return Math.floor(Math.sqrt(S.totalEarned/PRESTIGE_MIN)); }
+// 깊이 = 목적지. 이름 있는 지대로 하강해 최종 '심연핵'을 목표로.
+const ZONES=[{from:1,nm:'지표층'},{from:5,nm:'균열대'},{from:10,nm:'용암층'},{from:16,nm:'결정동'},{from:22,nm:'심연핵'}];
+// 지대별 맵 비주얼 — 깊이가 지대를 넘으면 보드가 통째로 바뀐다
+const ZONEVIS={
+  '지표층':{bg1:'#2a1a0a',bg2:'#150c04', peg:'178,192,208', glow:'#9fb2c8'},
+  '균열대':{bg1:'#0b2420',bg2:'#05130f', peg:'111,208,192', glow:'#6fd0c0'},
+  '용암층':{bg1:'#2c0e06',bg2:'#160503', peg:'230,126,74',  glow:'#e07a4a'},
+  '결정동':{bg1:'#151038',bg2:'#0a081e', peg:'160,148,232', glow:'#9a8fe0'},
+  '심연핵':{bg1:'#20160a',bg2:'#0a0600', peg:'214,172,70',  glow:'#e0b840'},
+};
+function zoneVis(d){ return ZONEVIS[zoneName(d)]||ZONEVIS['지표층']; }
+const FINAL_DEPTH=22;
+function zoneName(d){ let z=ZONES[0].nm; for(const zn of ZONES) if(d>=zn.from) z=zn.nm; return z; }
+function goalText(){
+  if(S.depth>=FINAL_DEPTH) return '🏆 심연핵 도달 — 최종 목적지 정복 (계속 무한 하강 가능)';
+  const nextZone=ZONES.find(z=>z.from>S.depth);
+  return '목적지 = 심연핵(깊이 '+FINAL_DEPTH+')까지 하강 · 현재 '+zoneName(S.depth)+' 깊이 '+S.depth
+       +(nextZone? ' → 다음 지대 '+nextZone.nm+'(깊이 '+nextZone.from+')' : '');
+}
+
+/* ===== 탤런트 ===== */
+const TAL=[
+  {k:'goldVein',ic:'✦',nm:'금맥',ds:'금못 값 +30%'},
+  {k:'elastic', ic:'⟳',nm:'탄성',ds:'공 반발 ↑'},
+  {k:'chain',   ic:'⋰',nm:'연쇄',ds:'금못 맞으면 인접 못도 득점'},
+  {k:'deep',    ic:'▼',nm:'심층',ds:'깊이 배수 +15%'},
+  {k:'twin',    ic:'❉',nm:'쌍투',ds:'자동투하 25% +1공'},
+  {k:'jackpot', ic:'★',nm:'한탕',ds:'대박 통 배수 +2'},
+];
+function talEffREST(){ return clamp(REST + S.tal.elastic*0.05 + S.tb.rest, 0, 0.88); }
+
+/* ===== 보드 ===== */
+let pegs=[], balls=[], pops=[], parts=[], bins=[];
+let shake=0, launchX=W/2, flashT=0, cpsBuf=[], cpsAcc=0, avgPay=0;
+const PEG_R=6, BALL_R=8, GRAV=0.22, REST=0.58, FLOOR=H-38;
+function buildBoard(){
+  pegs=[]; const rows=6, top=84, gapY=(FLOOR-top-22)/rows;
+  const goldWant=S.lv.gold*2 + Math.floor(S.depth/2); let goldPlaced=0;
+  for(let r=0;r<rows;r++){ const y=top+r*gapY, cols=(r%2===0)?6:7, gapX=W/(cols+(r%2===0?1:0));
+    for(let i=0;i<cols;i++){ const x=(r%2===0)? gapX*(i+1): gapX*(i+0.5); pegs.push({x,y,r:PEG_R, gold:false, hit:0}); } }
+  while(goldPlaced<goldWant && goldPlaced<pegs.length){ const p=pegs[Math.floor(Math.random()*pegs.length)]; if(!p.gold){p.gold=true; goldPlaced++;} }
+  const baseB=[2,1,0,3,0,1,2];
+  bins=baseB.map((m,i)=>{ let mult=m>0?m+S.lv.bin:0; if(i===3&&m>0) mult=3+S.lv.bin+Math.floor(S.stars/2)+S.tal.jackpot*2+S.tb.jackpot*2;
+    return {mult, flash:0, color: mult>=6?'#ffcf3f':mult>=3?'#ff5bd0':mult>=1?'#57e0ff':'#3a2456'}; }); }
+function pegValue(p){ let v=((p.gold?5:1)+S.lv.pegVal)*depthMult(); if(p.gold) v*=(1+S.tal.goldVein*0.3+S.tb.goldMult); return v; }
+function pegMult(p){ return p.gold? 2:1; }
+/* ===== 공 제작 (타입) ===== */
+const BALLTYPES=[
+  {id:'std',   nm:'표준',    col:'#eaffff', cost:0,      ds:'기본 공'},
+  {id:'heavy', nm:'무거운 공',col:'#c9a0ff', cost:8000,   restMul:0.55, valueMul:2.2, ds:'덜 튕김 · 못값 ×2.2 (관통형)'},
+  {id:'bomb',  nm:'폭발 공',  col:'#ff8a5a', cost:60000,  ds:'착지 시 주변 못 일괄 득점'},
+  {id:'magnet',nm:'자성 공',  col:'#5bffb0', cost:200000, ds:'금못 쪽으로 끌림 (금맥 빌드)'},
+  {id:'split', nm:'분열 공',  col:'#57e0ff', cost:800000, ds:'못 맞으면 가끔 공 하나 분열'},
+];
+const BT=Object.fromEntries(BALLTYPES.map(b=>[b.id,b]));
+function spawnBall(x,type,y,isChild){ const t=type||S.ballType;
+  balls.push({x:clamp(x+rand(-8,8),BALL_R,W-BALL_R), y:y||66, vx:rand(-.6,.6), vy:0, combo:0, gained:0, age:0, trail:[], type:t, isChild:!!isChild}); }
+function dropBall(x){ ac(); const h=document.getElementById('hint'); if(h) h.style.display='none'; const n=1+S.lv.balls; for(let i=0;i<n;i++) spawnBall(x); }
+function earn(a){ a*=starMult(); S.coins+=a; S.totalEarned+=a; S.depthEarned+=a; cpsAcc+=a; }
+
+let autoT=0;
+function step(){
+  if(S.lv.auto>0){ autoT--;
+    if(autoT<=0){ const spots=1+S.lv.launcher;
+      for(let s=0;s<spots;s++){ const x=spots===1? rand(W*0.2,W*0.8) : W*(s+1)/(spots+1); spawnBall(x); if(S.tal.twin && Math.random()<0.25) spawnBall(x); }
+      autoT=autoInterval(); } }
+  const R0=talEffREST();
+  for(let bi=balls.length-1;bi>=0;bi--){
+    const b=balls[bi]; const bt=BT[b.type]||BT.std; const R=R0*(bt.restMul||1); const vmul=bt.valueMul||1;
+    b.vy+=GRAV; b.x+=b.vx; b.y+=b.vy; b.age++; b.vx*=0.999;
+    // 자성: 가장 가까운 금못 쪽으로 살짝 끌림
+    if(b.type==='magnet'){ let gx=null,gd=1e9; for(const p of pegs){ if(!p.gold||p.y<b.y) continue; const dd=(p.x-b.x)*(p.x-b.x)+(p.y-b.y)*(p.y-b.y); if(dd<gd){gd=dd;gx=p.x;} } if(gx!=null) b.vx+=clamp(gx-b.x,-1,1)*0.08; }
+    if(b.x<BALL_R){b.x=BALL_R; b.vx=Math.abs(b.vx)*R;} if(b.x>W-BALL_R){b.x=W-BALL_R; b.vx=-Math.abs(b.vx)*R;}
+    b.trail.push({x:b.x,y:b.y}); if(b.trail.length>7) b.trail.shift();
+    for(const p of pegs){ const dx=b.x-p.x, dy=b.y-p.y, d2=dx*dx+dy*dy, rr=BALL_R+p.r;
+      if(d2<rr*rr){ const d=Math.sqrt(d2)||.01, nx=dx/d, ny=dy/d, ov=rr-d; b.x+=nx*ov; b.y+=ny*ov;
+        const dot=b.vx*nx+b.vy*ny; b.vx=(b.vx-2*dot*nx)*R+rand(-.9,.9); b.vy=(b.vy-2*dot*ny)*R; if(b.vy<1.2 && b.y<p.y) b.vy=1.2;
+        b.combo++; if(p.gold) b.combo+=S.tb.goldCombo;
+        const gain=pegValue(p)*pegMult(p)*vmul*(1+b.combo*(0.02+S.lv.combo*0.02));
+        b.gained+=gain; earn(gain); p.hit=1;
+        if(p.gold && S.tal.chain){ for(const q of pegs){ if(q===p) continue; const qx=q.x-p.x, qy=q.y-p.y;
+          if(qx*qx+qy*qy<2600){ const cg=pegValue(q)*0.25*S.tal.chain; b.gained+=cg; earn(cg); q.hit=Math.max(q.hit,.7); } } }
+        // 분열: 낮은 확률로 자식 공 (자식은 다시 분열 안 함)
+        if(b.type==='split' && !b.isChild && balls.length<44 && Math.random()<0.05){ spawnBall(b.x,'std',b.y,true); }
+        if(balls.length<44){ addPop(p.x,p.y-5,'+'+fmt(gain*starMult()),p.gold?'#ffcf3f':'#57e0ff',p.gold?15:12); spawnParts(p.x,p.y,p.gold?'#ffcf3f':'#a06bff',p.gold?7:4); }
+        coinSound(b.combo); } }
+    if(b.y>FLOOR){ const bin=bins[clamp(Math.floor(b.x/(W/bins.length)),0,bins.length-1)]; bin.flash=1;
+      // 폭발: 착지점 주변 못 일괄 득점
+      if(b.type==='bomb'){ let boom=0; for(const p of pegs){ const bx=p.x-b.x, by=p.y-(FLOOR); if(bx*bx+by*by<9000){ boom+=pegValue(p)*2; p.hit=1; } }
+        if(boom>0){ b.gained+=boom; earn(boom); addPop(clamp(b.x,26,W-26),FLOOR-24,'폭발 +'+fmt(boom*starMult()),'#ff8a5a',20); spawnParts(b.x,FLOOR-10,'#ff8a5a',14); } }
+      const pay=b.gained*(bin.mult||0.2); earn(pay);
+      // 흔들림: 최근 평균 수익 대비 얼마나 큰가로 결정 (초반=정적, 대박=크게)
+      avgPay = avgPay? avgPay*0.96 + pay*0.04 : pay;
+      const ratio = pay/(avgPay||1);
+      const sk = clamp((ratio-1.6)*3.2, 0, 15);
+      if(sk>0.4) shake=Math.min(shake+sk,16);
+      if(ratio>3.2) flashT=Math.min(1, (ratio-3.2)*0.3+0.4);
+      const big=ratio>2.5;
+      if(balls.length<44){ addPop(clamp(b.x,26,W-26),FLOOR-4,(bin.mult?'×'+bin.mult+' ':'')+'+'+fmt(pay*starMult()),bin.color,big?24:15); spawnParts(b.x,FLOOR,bin.color,big?18:6); }
+      payoutSound(bin.mult); balls.splice(bi,1); continue; }
+    if(b.y>H+30||b.age>1400) balls.splice(bi,1); }
+  for(let i=pops.length-1;i>=0;i--){const p=pops[i]; p.y+=p.vy; p.vy*=0.92; p.life--; p.scale+=(1-p.scale)*.3; if(p.life<=0) pops.splice(i,1);}
+  for(let i=parts.length-1;i>=0;i--){const q=parts[i]; q.vy+=.25; q.x+=q.vx; q.y+=q.vy; q.life--; q.vx*=.98; if(q.life<=0) parts.splice(i,1);}
+  for(const p of pegs) if(p.hit>0) p.hit=Math.max(0,p.hit-.06);
+  for(const b of bins) if(b.flash>0) b.flash=Math.max(0,b.flash-.05);
+  if(shake>0) shake*=.86; if(flashT>0) flashT=Math.max(0,flashT-.05); }
+function addPop(x,y,t,c,s){ pops.push({x,y,txt:t,col:c,size:s,vy:-1.3,life:42,scale:.3}); }
+function spawnParts(x,y,c,n){ for(let i=0;i<n;i++){const a=rand(0,6.28),s=rand(1,4.5); parts.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-1,life:rand(18,36),col:c,r:rand(1.5,3)});} }
+function depthHue(){ return (S.depth*38)%360; }
+
+/* ===== 지대 절차적 배경 (코드로 그리는 분위기) ===== */
+let zoneDecor=[], ambient=[], lastZoneName='';
+function genZone(){
+  const z=zoneName(S.depth); lastZoneName=z; zoneDecor=[]; ambient=[];
+  if(z==='용암층'){
+    for(let i=0;i<12;i++){ let cx=rand(0,W),cy=rand(74,FLOOR); const seg=[[cx,cy]];
+      for(let s=0;s<4;s++){ cx+=rand(-26,26); cy+=rand(12,30); seg.push([cx,cy]); }
+      zoneDecor.push({t:'crack',seg,ph:rand(0,6.3),w:rand(1.5,3)}); }
+  } else if(z==='결정동'){
+    for(let i=0;i<15;i++) zoneDecor.push({t:'facet',x:rand(10,W-10),y:rand(74,FLOOR),r:rand(10,28),a:rand(0,6.3),ph:rand(0,6.3)});
+  } else if(z==='균열대'){
+    for(let i=0;i<9;i++){ let cx=rand(0,W),cy=rand(74,FLOOR); const seg=[[cx,cy]];
+      for(let s=0;s<3;s++){ cx+=rand(-30,30); cy+=rand(16,34); seg.push([cx,cy]); }
+      zoneDecor.push({t:'vein',seg,ph:rand(0,6.3)}); }
+  } else if(z==='심연핵'){
+    zoneDecor.push({t:'core'});
+  } else {
+    for(let i=0;i<7;i++) zoneDecor.push({t:'strata',y:90+i*((FLOOR-90)/7),ph:rand(0,6.3)});
+  }
+}
+function drawZoneBg(zv){
+  if(zoneName(S.depth)!==lastZoneName) genZone();
+  const T=frameN*0.05;
+  // 정적 데코
+  for(const d of zoneDecor){
+    if(d.t==='crack'){ const glow=.3+.22*Math.sin(T+d.ph);
+      g.strokeStyle=`rgba(255,110,40,${glow})`; g.lineWidth=d.w; g.shadowColor='#ff7028'; g.shadowBlur=10;
+      g.beginPath(); g.moveTo(d.seg[0][0],d.seg[0][1]); for(let i=1;i<d.seg.length;i++) g.lineTo(d.seg[i][0],d.seg[i][1]); g.stroke(); g.shadowBlur=0;
+    } else if(d.t==='vein'){ g.strokeStyle=`rgba(90,230,190,${.22+.12*Math.sin(T+d.ph)})`; g.lineWidth=1.4; g.shadowColor='#5be6be'; g.shadowBlur=7;
+      g.beginPath(); g.moveTo(d.seg[0][0],d.seg[0][1]); for(let i=1;i<d.seg.length;i++) g.lineTo(d.seg[i][0],d.seg[i][1]); g.stroke(); g.shadowBlur=0;
+    } else if(d.t==='facet'){ const s=.5+.5*Math.sin(T*0.7+d.ph); g.save(); g.translate(d.x,d.y); g.rotate(d.a);
+      g.fillStyle=`rgba(150,140,235,${.05+s*0.06})`; g.strokeStyle=`rgba(190,180,255,${.12+s*0.18})`; g.lineWidth=1;
+      g.beginPath(); g.moveTo(0,-d.r); g.lineTo(d.r*0.7,0); g.lineTo(0,d.r); g.lineTo(-d.r*0.7,0); g.closePath(); g.fill(); g.stroke(); g.restore();
+    } else if(d.t==='strata'){ g.strokeStyle=`rgba(120,90,50,${.10+.05*Math.sin(T*0.4+d.ph)})`; g.lineWidth=1;
+      g.beginPath(); g.moveTo(0,d.y); g.lineTo(W,d.y); g.stroke();
+    } else if(d.t==='core'){ const r=120+30*Math.sin(T*0.5); const rg=g.createRadialGradient(W/2,FLOOR*0.5,10,W/2,FLOOR*0.5,r);
+      rg.addColorStop(0,'rgba(255,210,90,0.16)'); rg.addColorStop(1,'rgba(255,210,90,0)'); g.fillStyle=rg; g.fillRect(0,0,W,H);
+      for(let k=0;k<8;k++){ const a=T*0.15+k*0.785; g.strokeStyle='rgba(255,205,80,0.05)'; g.lineWidth=14;
+        g.beginPath(); g.moveTo(W/2,FLOOR*0.5); g.lineTo(W/2+Math.cos(a)*260,FLOOR*0.5+Math.sin(a)*260); g.stroke(); } }
+  }
+  // 앰비언트 파티클 (지대별 움직임)
+  const z=lastZoneName;
+  while(ambient.length<26) ambient.push(newAmbient(z));
+  for(let i=ambient.length-1;i>=0;i--){ const a=ambient[i]; a.x+=a.vx; a.y+=a.vy; a.life--;
+    g.globalAlpha=clamp(a.life/a.max,0,1)*a.op; g.fillStyle=a.col; g.beginPath(); g.arc(a.x,a.y,a.r,0,7); g.fill();
+    if(a.life<=0||a.y<-10||a.y>H+10) ambient[i]=newAmbient(z); }
+  g.globalAlpha=1;
+}
+function newAmbient(z){
+  if(z==='용암층') return {x:rand(0,W),y:FLOOR+rand(0,20),vx:rand(-.2,.2),vy:-rand(.4,1.1),r:rand(1,2.6),col:'#ff8a3a',op:.7,life:rand(60,140),max:140};
+  if(z==='결정동') return {x:rand(0,W),y:rand(0,FLOOR),vx:rand(-.3,.3),vy:rand(-.2,.2),r:rand(1,2.2),col:'#b8aaff',op:.6,life:rand(80,180),max:180};
+  if(z==='균열대') return {x:rand(0,W),y:rand(0,FLOOR),vx:rand(-.15,.15),vy:rand(-.3,-.05),r:rand(1,2),col:'#7fe6cc',op:.5,life:rand(90,170),max:170};
+  if(z==='심연핵') return {x:W/2+rand(-120,120),y:FLOOR*0.5+rand(-100,100),vx:rand(-.25,.25),vy:rand(-.25,.25),r:rand(1,2.4),col:'#ffd86a',op:.7,life:rand(70,150),max:150};
+  return {x:rand(0,W),y:rand(0,FLOOR),vx:rand(-.1,.1),vy:rand(.05,.25),r:rand(.8,1.8),col:'#c9a86a',op:.4,life:rand(100,200),max:200};
+}
+
+/* ===== 렌더 (보드) ===== */
+function draw(){
+  g.clearRect(0,0,W,H); g.save();
+  if(shake>.3) g.translate(rand(-shake,shake),rand(-shake,shake));
+  // 지대 배경 — 맵이 지대마다 바뀐다
+  const zv=zoneVis(S.depth);
+  const bg=g.createLinearGradient(0,0,0,H); bg.addColorStop(0,zv.bg1); bg.addColorStop(1,zv.bg2);
+  g.fillStyle=bg; g.fillRect(-20,-20,W+40,H+40);
+  if(flashT>0){ g.fillStyle='rgba(255,207,63,'+(flashT*.2)+')'; g.fillRect(-20,-20,W+40,H+40); }
+  g.save(); g.globalAlpha=.9; g.fillStyle='#ff5bd0'; g.beginPath(); g.moveTo(launchX-8,48); g.lineTo(launchX+8,48); g.lineTo(launchX,60); g.closePath(); g.fill();
+  g.strokeStyle='rgba(255,91,208,.2)'; g.setLineDash([4,6]); g.beginPath(); g.moveTo(launchX,62); g.lineTo(launchX,FLOOR); g.stroke(); g.setLineDash([]); g.restore();
+  for(const b of bins){ const bw=W/bins.length,i=bins.indexOf(b); g.save(); g.fillStyle=b.color; g.globalAlpha=.13+b.flash*.5;
+    g.fillRect(i*bw+2,FLOOR,bw-4,H-FLOOR-5); g.globalAlpha=1; g.fillStyle=b.color; g.font='bold 12px Bahnschrift'; g.textAlign='center'; g.fillText(b.mult?'×'+b.mult:'—',i*bw+bw/2,H-12); g.restore(); }
+  for(const p of pegs){ const rr=p.r+(p.gold?2:0)+p.hit*4;
+    if(p.gold){
+      g.beginPath(); g.arc(p.x,p.y,rr+4,0,7); g.fillStyle=`rgba(230,169,53,${.28+p.hit*.4})`; g.fill();               // 후광
+      g.beginPath(); g.arc(p.x,p.y,rr,0,7); g.fillStyle=`rgba(255,206,74,${.9+p.hit*.1})`; g.shadowColor='#ffca3a'; g.shadowBlur=13+p.hit*16; g.fill(); g.shadowBlur=0;
+      g.beginPath(); g.arc(p.x-rr*0.28,p.y-rr*0.28,rr*0.38,0,7); g.fillStyle='rgba(255,255,220,.92)'; g.fill();        // 하이라이트
+    } else {
+      g.beginPath(); g.arc(p.x,p.y,rr,0,7); g.fillStyle=`rgba(${zv.peg},${.55+p.hit*.4})`; g.shadowColor=zv.glow; g.shadowBlur=3+p.hit*12; g.fill(); g.shadowBlur=0;
+      g.beginPath(); g.arc(p.x-rr*0.3,p.y-rr*0.3,rr*0.32,0,7); g.fillStyle='rgba(255,255,255,.45)'; g.fill();
+    } }
+  for(const b of balls){ const bcol=(BT[b.type]||BT.std).col;
+    for(let i=0;i<b.trail.length;i++){const t=b.trail[i],a=i/b.trail.length; g.beginPath(); g.arc(t.x,t.y,BALL_R*a*.8,0,7); g.fillStyle=`rgba(87,224,255,${a*.22})`; g.fill();}
+    g.beginPath(); g.arc(b.x,b.y,b.isChild?BALL_R*0.7:BALL_R,0,7); g.fillStyle=bcol; g.shadowColor=bcol; g.shadowBlur=12; g.fill(); g.shadowBlur=0;
+    if(b.combo>2){ g.fillStyle='#ff5bd0'; g.font='bold 10px Bahnschrift'; g.textAlign='center'; g.fillText('x'+b.combo,b.x,b.y-BALL_R-2); } }
+  for(const q of parts){ g.globalAlpha=clamp(q.life/28,0,1); g.fillStyle=q.col; g.beginPath(); g.arc(q.x,q.y,q.r,0,7); g.fill(); } g.globalAlpha=1;
+  for(const p of pops){ g.save(); g.globalAlpha=clamp(p.life/42+.2,0,1); g.translate(p.x,p.y); g.scale(p.scale,p.scale); g.fillStyle=p.col; g.font='bold '+p.size+'px Bahnschrift'; g.textAlign='center'; g.shadowColor=p.col; g.shadowBlur=8; g.fillText(p.txt,0,0); g.restore(); }
+  g.shadowBlur=0; g.restore(); }
+
+/* ===== 스킬트리 렌더 ===== */
+const COLW=90, ROWH=68, PADX=8, PADY=8;
+const treewrap=document.getElementById('treewrap'), treeSvg=document.getElementById('treeSvg');
+let nodeEls={};
+function nodePos(n){ return {x:PADX+n.col*COLW, y:PADY+n.tier*ROWH}; }
+function buildTree(){
+  // 선(SVG) — 선행 연결
+  let maxTier=0; TREE.forEach(n=>maxTier=Math.max(maxTier,n.tier));
+  const w=PADX*2+5*COLW-(COLW-78), h=PADY*2+(maxTier+1)*ROWH;
+  treeSvg.setAttribute('width',w); treeSvg.setAttribute('height',h);
+  treewrap.style.height=h+'px';   // 내용에 맞춰 높이 고정 → 스크롤 없음
+  let lines='';
+  for(const n of TREE){ if(!n.need) continue; const a=nodePos(NODE[n.need]), b=nodePos(n);
+    lines+=`<line x1="${a.x+39}" y1="${a.y+56}" x2="${b.x+39}" y2="${b.y+4}" stroke="#33244a" stroke-width="2"/>`; }
+  treeSvg.innerHTML=lines;
+  // 노드(DOM)
+  for(const id in nodeEls) nodeEls[id].remove(); nodeEls={};
+  for(const n of TREE){ const p=nodePos(n); const el=document.createElement('div'); el.className='node';
+    el.style.left=p.x+'px'; el.style.top=p.y+'px';
+    el.innerHTML=`<div class="ic">${n.ic}</div><div class="nm">${n.nm}</div><div class="cost"><span class="costval">◈${fmt(n.cost)}</span></div>`;
+    el.onclick=()=>buyNode(n);
+    el.onmouseenter=()=>{ document.getElementById('tip').textContent=n.nm+' — '+n.ds+(n.rep?(' · '+(S.rep[n.id]||0)+'회 · ◈'+fmt(nodeCost(n))):(owned(n.id)?' (보유)':(' · ◈'+fmt(n.cost)))); };
+    treewrap.appendChild(el); nodeEls[n.id]=el; }
+  refreshTree();
+}
+function buyNode(n){ if(!canBuy(n)) return; S.coins-=nodeCost(n);
+  if(n.rep){ S.rep[n.id]=(S.rep[n.id]||0)+1; const cv=nodeEls[n.id].querySelector('.costval'); }
+  else S.tree.push(n.id);
+  n.ap(); blip(680+TREE.indexOf(n)*8,.1,'square',.05); buildBoard(); refreshTree(); save(); }
+function refreshTree(){
+  for(const n of TREE){ const el=nodeEls[n.id]; if(!el) continue;
+    let cls='node';
+    if(n.rep){ cls+= !prereqOk(n)?' locked' : (S.coins>=nodeCost(n)?' afford':' avail');
+      const cv=el.querySelector('.costval'); if(cv) cv.textContent='◈'+fmt(nodeCost(n))+((S.rep[n.id]||0)?' ·'+(S.rep[n.id]):''); }
+    else { if(owned(n.id)) cls+=' owned'; else if(!prereqOk(n)) cls+=' locked'; else cls+=(S.coins>=n.cost?' afford':' avail'); }
+    el.className=cls; }
+  const db=document.getElementById('btnDescend'), t=depthTarget(S.depth), ready=S.depthEarned>=t;
+  db.disabled=!ready; db.textContent= ready? '▼ 다음 깊이로 (준비됨!)' : '다음 깊이 '+fmt(S.depthEarned)+' / '+fmt(t);
+  const pb=document.getElementById('prestigeBox');
+  if(S.totalEarned>=PRESTIGE_MIN){ pb.classList.add('show'); document.getElementById('pgain').textContent=prestigeGain();
+    const pm=document.getElementById('pmult'); if(pm) pm.textContent=(1+(S.stars+prestigeGain())*0.15).toFixed(2);
+    document.getElementById('btnPrestige').disabled=prestigeGain()<1; } else pb.classList.remove('show');
+}
+function refreshTalTray(){ const tr=document.getElementById('taltray'); tr.innerHTML='';
+  for(const t of TAL){ if(S.tal[t.k]>0){ const e=document.createElement('span'); e.className='taltag'; e.innerHTML=t.ic+' '+t.nm+' <b>'+S.tal[t.k]+'</b>'; tr.appendChild(e); } } }
+function refreshBallRow(){ const row=document.getElementById('ballrow'); row.innerHTML='';
+  for(const b of BALLTYPES){ const un=S.ballsUn.includes(b.id), eq=S.ballType===b.id, afford=!un&&S.coins>=b.cost;
+    const e=document.createElement('div'); e.className='ball'+(eq?' equipped':un?'':(afford?' buy':' locked'));
+    e.innerHTML=`<span class="dot" style="background:${b.col}"></span>${b.nm}`+(un?'':` <span class="c">◈${fmt(b.cost)}</span>`);
+    e.title=b.ds;
+    e.onclick=()=>{ if(un){ S.ballType=b.id; } else if(S.coins>=b.cost){ S.coins-=b.cost; S.ballsUn.push(b.id); S.ballType=b.id; blip(760,.1,'square',.05); } refreshBallRow(); save(); };
+    row.appendChild(e); } }
+
+/* ===== 하강 + 드래프트 ===== */
+document.getElementById('btnDescend').onclick=()=>{ if(S.depthEarned<depthTarget(S.depth)) return; openDraft(); };
+function openDraft(){
+  const pool=TAL.slice(); for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [pool[i],pool[j]]=[pool[j],pool[i]];}
+  const three=pool.slice(0,3); const d=document.getElementById('draft'); d.className='show';
+  d.innerHTML='<h2>깊이 '+(S.depth+1)+' 도달</h2><div class="sub">탤런트 하나 — 영구</div><div id="dcards"></div>';
+  const wrap=d.querySelector('#dcards');
+  three.forEach(t=>{ const c=document.createElement('div'); c.className='tcard';
+    c.innerHTML=`<div class="ic">${t.ic}</div><div class="nm">${t.nm}</div><div class="ds">${t.ds}</div><div class="lv">Lv ${S.tal[t.k]} → ${S.tal[t.k]+1}</div>`;
+    c.onclick=()=>{ S.tal[t.k]++; S.depth++; S.depthEarned=0; d.className=''; buildBoard(); refreshTree(); refreshTalTray(); toast('깊이 '+S.depth+' · '+t.nm); [523,659,784,1046].forEach((f,i)=>setTimeout(()=>blip(f,.16,'triangle',.06),i*70)); save(); };
+    wrap.appendChild(c); }); }
+function toast(t){ const el=document.getElementById('toast'); el.textContent=t; el.style.transition='none'; el.style.opacity='1'; requestAnimationFrame(()=>{ el.style.transition='opacity 2s'; el.style.opacity='0'; }); }
+
+/* ===== 프레스티지 ===== */
+document.getElementById('btnPrestige').onclick=()=>{ const gv=prestigeGain(); if(gv<1) return;
+  S.stars+=gv; S.coins=0; S.totalEarned=0; S.depth=1; S.depthEarned=0; S.tree=[]; S.rep={}; S.ballType='std'; S.ballsUn=['std']; avgPay=0;
+  for(const k in S.lv) S.lv[k]=0; for(const k in S.tb) S.tb[k]=0; for(const k in S.tal) S.tal[k]=0;
+  buildBoard(); refreshTree(); refreshTalTray(); refreshBallRow(); toast('★ +'+gv+'  배수 ×'+starMult().toFixed(2)); [523,659,784,1046,1318].forEach((f,i)=>setTimeout(()=>blip(f,.18,'triangle',.06),i*80)); save(); };
+
+/* ===== 세이브 / 오프라인 ===== */
+const KEY='nakha_save_v05';
+function save(){ try{ S.lastSeen=now(); localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+function load(){ try{ const raw=localStorage.getItem(KEY); if(!raw) return false; const o=JSON.parse(raw);
+    Object.assign(S,o);
+    S.lv=Object.assign({pegVal:0,gold:0,auto:0,combo:0,bin:0,launcher:0,balls:0},o.lv||{});
+    S.tb=Object.assign({goldMult:0,goldCombo:0,rest:0,jackpot:0,depthBonus:0,offline:0},o.tb||{});
+    S.tal=Object.assign({goldVein:0,elastic:0,chain:0,deep:0,twin:0,jackpot:0},o.tal||{});
+    S.tree=Array.isArray(o.tree)?o.tree:[]; S.rep=o.rep&&typeof o.rep==='object'?o.rep:{};
+    S.ballsUn=Array.isArray(o.ballsUn)?o.ballsUn:['std']; S.ballType=o.ballType||'std'; if(!S.ballsUn.includes(S.ballType)) S.ballType='std';
+    if(o.lastSeen && o.lastCps){ const dt=clamp((now()-o.lastSeen)/1000,0,8*3600); const gain=o.lastCps*dt*(0.4+S.tb.offline);
+      if(gain>1){ S.coins+=gain; S.totalEarned+=gain; S.depthEarned+=gain; setTimeout(()=>toast('오프라인 수익 +'+fmt(gain)),400); } }
+    return true; }catch(e){ return false; } }
+document.getElementById('btnWipe').onclick=()=>{ if(!confirm('세이브를 지우고 처음부터?')) return; localStorage.removeItem(KEY); location.reload(); };
+window.addEventListener('beforeunload', save); setInterval(save, 10000);
+
+/* ===== 루프 ===== */
+let frameN=0, shownCoins=0;
+function frame(){ step(); draw(); frameN++;
+  shownCoins+=(S.coins-shownCoins)*0.25; if(Math.abs(S.coins-shownCoins)<1) shownCoins=S.coins;
+  document.getElementById('coins').textContent=fmt(shownCoins);
+  document.getElementById('depthTag').textContent=zoneName(S.depth)+' · 깊이 '+S.depth;
+  document.getElementById('goalT').textContent=goalText();
+  document.getElementById('depthfill').style.width=clamp(S.depthEarned/depthTarget(S.depth)*100,0,100)+'%';
+  if(frameN%15===0){ cpsBuf.push(cpsAcc); if(cpsBuf.length>4) cpsBuf.shift(); cpsAcc=0;
+    const cps=cpsBuf.reduce((a,b)=>a+b,0)/(cpsBuf.length*0.25); S.lastCps=cps;
+    document.getElementById('cps').textContent=fmt(cps);
+    document.getElementById('pv').textContent=fmt((1+S.lv.pegVal)*depthMult());
+    document.getElementById('stars').textContent=S.stars; document.getElementById('mult').textContent=starMult().toFixed(2);
+    refreshTree(); refreshBallRow(); }
+  requestAnimationFrame(frame); }
+
+cv.addEventListener('mousemove',e=>{const r=cv.getBoundingClientRect(); launchX=clamp((e.clientX-r.left)*(W/r.width),BALL_R,W-BALL_R);});
+cv.addEventListener('click',e=>{const r=cv.getBoundingClientRect(); dropBall(clamp((e.clientX-r.left)*(W/r.width),BALL_R,W-BALL_R));});
+document.addEventListener('keydown',e=>{ if(e.key===' '){e.preventDefault(); dropBall(launchX);} });
+document.getElementById('btnSound').onclick=e=>{ ac(); sfxOn=!sfxOn; e.target.textContent=sfxOn?'🔊':'🔇'; };
+
+load(); buildBoard(); buildTree(); refreshTalTray(); refreshBallRow(); frame();
+</script>
+</body>
+</html>
