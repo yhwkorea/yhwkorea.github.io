@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>실해석학 배경지식 — Math Test 노트</title>
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <a class="back-link" href="../../">← yhwkorea</a>
+    <div class="brand">Math Test 노트</div>
+    <div class="brand-sub">대학원 수학 자격시험 답안 노트</div>
+    <nav>
+      <h5>Contents</h5>
+      <ul>
+        <li><a href="../index.html">홈</a></li>
+        <li><a href="../lattice/lattice-answers.html">Lattice 답안</a></li>
+<li><a href="real-analysis.html" class="active">실해석학</a></li>
+      </ul>
+    </nav>
+  </aside>
+  <main class="content">
+    <div class="content-inner">
+      <div class="eyebrow">실해석학</div>
+      <h1 class="page-title">n차원 공의 부피와 λ₁ 전이부등식</h1>
+      <p class="page-sub">
+        Lattice 2(c) (<a href="../lattice/lattice-answers.html#lattice-2">λ₁(L)·λ₁(L*)≤n</a>)
+        에서 "순수 해석학적 사실이라 인용"으로 남겨뒀던 부분을 여기서 실제로 증명합니다.
+        격자 이론과 무관한, 순수하게 미적분·감마함수에 관한 내용이라 별도 페이지로
+        분리했습니다.
+      </p>
+
+      <h2 id="ball-volume">1. n차원 단위공의 부피 공식</h2>
+      <p>
+        \(V_n\)을 \(\mathbb{R}^n\)의 단위공(반지름 1인 유클리드 공)의 부피라 하자.
+        목표: \(V_n = \dfrac{\pi^{n/2}}{\Gamma(n/2+1)}\)을 증명한다
+        (\(\Gamma(s):=\int_0^\infty t^{s-1}e^{-t}\,dt\), 감마함수의 표준 정의).
+      </p>
+      <p><strong>증명 (가우스 적분 트릭).</strong> 다음 적분을 두 가지 방법으로 계산한다:</p>
+      <div class="katex-display-wrap">
+      \[
+      I := \int_{\mathbb{R}^n} e^{-\|x\|^2}\,dx.
+      \]
+      </div>
+      <p><strong>방법 1 (Fubini, 좌표별로 분리).</strong></p>
+      \[
+      I = \int_{\mathbb{R}^n} e^{-\sum_i x_i^2}\,dx = \prod_{i=1}^n\int_{\mathbb{R}} e^{-x_i^2}\,dx_i = \left(\int_{\mathbb{R}} e^{-t^2}\,dt\right)^n = \pi^{n/2}
+      \]
+      <p>
+        (마지막 등식은 가우스 적분 \(\int_{\mathbb{R}}e^{-t^2}dt=\sqrt\pi\) — 이 자체는
+        극좌표로 2차원 적분 \(\left(\int e^{-t^2}dt\right)^2=\int_{\mathbb{R}^2}e^{-\|x\|^2}dx
+        =\int_0^{2\pi}\!\!\int_0^\infty e^{-r^2}r\,dr\,d\theta=2\pi\cdot\frac12=\pi\)로 계산하는
+        고전적인 트릭 — 여기서는 표준 결과로 인용).
+      </p>
+      <p><strong>방법 2 (구면좌표, 반지름별로 적분).</strong> 반지름 \(r\)인 구면의
+        "넓이"는 \(nV_nr^{n-1}\)이다 (부피 \(V_nr^n\)을 \(r\)로 미분한 것 — 부피가
+        반지름의 함수로서 구면적분의 누적이라는 co-area 공식의 가장 기본적인 형태).
+        따라서</p>
+      \[
+      I = \int_0^\infty e^{-r^2}\cdot nV_nr^{n-1}\,dr = nV_n\int_0^\infty r^{n-1}e^{-r^2}\,dr.
+      \]
+      <p>
+        치환 \(t=r^2\) (\(dt=2r\,dr\), \(r^{n-1}dr = r^{n-2}\cdot r\,dr = t^{(n-2)/2}\cdot
+        \tfrac12 dt\))를 적용하면
+      </p>
+      \[
+      \int_0^\infty r^{n-1}e^{-r^2}\,dr = \frac12\int_0^\infty t^{n/2-1}e^{-t}\,dt = \frac12\Gamma(n/2).
+      \]
+      <p>따라서 \(I = nV_n\cdot\frac12\Gamma(n/2) = V_n\cdot\frac{n}{2}\Gamma(n/2) =
+        V_n\,\Gamma(n/2+1)\) (감마함수의 함수방정식 \(\Gamma(s+1)=s\,\Gamma(s)\), 부분적분으로
+        표준적으로 증명되는 사실).</p>
+      <p><strong>두 방법을 비교하면</strong> \(\pi^{n/2} = V_n\,\Gamma(n/2+1)\), 즉</p>
+      \[
+      V_n = \frac{\pi^{n/2}}{\Gamma(n/2+1)}. \qquad\blacksquare
+      \]
+
+      <h2 id="ball-recurrence">2. 재귀식 $V_n = V_{n-2}\cdot\dfrac{2\pi}{n}$</h2>
+      <p><strong>증명.</strong> 감마함수 함수방정식으로</p>
+      \[
+      \frac{V_n}{V_{n-2}} = \frac{\pi^{n/2}/\Gamma(n/2+1)}{\pi^{(n-2)/2}/\Gamma(n/2)} = \pi\cdot\frac{\Gamma(n/2)}{\Gamma(n/2+1)} = \pi\cdot\frac{1}{n/2} = \frac{2\pi}{n}. \qquad\blacksquare
+      \]
+      <p>기저값: \(V_1=2\) (구간 \([-1,1]\)의 길이), \(V_2=\pi\) (단위원판의 넓이) — 직접
+        적분으로 확인 가능한 기초 사실.</p>
+
+      <h2 id="ball-volume-inequality">3. 핵심 부등식: $4/V_n^{2/n}\le n$ (모든 $n\ge1$)</h2>
+      <p><span class="marginnote">Lattice 2(c) — <a href="../lattice/lattice-answers.html#lattice-2">λ₁(L)·λ₁(L*)≤n</a> — 증명의 마지막 단계에서 이 부등식을 씁니다.</span>동치인 형태로 쓰면 목표는 \(V_n \ge \left(\dfrac4n\right)^{n/2}\).</p>
+      <p><strong>증명 (2단 귀납법).</strong> \(f(n):=V_n\cdot(n/4)^{n/2}\)이라 하면 목표는
+        \(f(n)\ge1\).</p>
+      <p><strong>기저.</strong> \(f(1)=V_1\cdot(1/4)^{1/2}=2\cdot\frac12=1\).
+        \(f(2)=V_2\cdot(2/4)^{1}=\pi\cdot\frac12=\frac\pi2\approx1.571\ge1\).</p>
+      <p><strong>귀납 단계 ($n\ge3$).</strong> \(f(n-2)\ge1\)을 가정, 즉
+        \(V_{n-2}\ge\left(\dfrac{4}{n-2}\right)^{(n-2)/2}\). 재귀식(§2)으로</p>
+      \[
+      V_n = V_{n-2}\cdot\frac{2\pi}{n} \ge \left(\frac{4}{n-2}\right)^{(n-2)/2}\cdot\frac{2\pi}{n}.
+      \]
+      <p>이것이 \(\left(\dfrac4n\right)^{n/2}\) 이상임을 보이면 된다. 비율을 계산하면
+        (대수적으로 정리 — \(4^{(n-2)/2-n/2}=4^{-1}\) 를 이용):</p>
+      \[
+      \frac{V_{n-2}\cdot(2\pi/n)}{(4/n)^{n/2}} \ge \frac{\pi}{2n}\cdot\frac{n^{n/2}}{(n-2)^{(n-2)/2}} = \frac{\pi}{2}\left(\frac{n}{n-2}\right)^{(n-2)/2}.
+      \]
+      <p>
+        \(\left(\dfrac{n}{n-2}\right)^{(n-2)/2} = \left(1+\dfrac{2}{n-2}\right)^{(n-2)/2}\)는
+        밑이 \(1\)보다 크고 지수가 양수이므로 항상 \(\ge1\). 따라서 위 비율은
+        \(\ge\pi/2 \approx 1.571 > 1\). 즉 \(V_n \ge (4/n)^{n/2}\)이 성립 — 귀납 단계
+        완료.
+      </p>
+      <p>
+        기저(\(n=1,2\))와 귀납 단계(\(n\ge3\)이면 \(n-2\)에서 유도)가 모두 확인되었으므로
+        강한 귀납법으로 <strong>모든 \(n\ge1\)에서 \(V_n\ge(4/n)^{n/2}\)</strong>, 즉
+        \(4/V_n^{2/n}\le n\). \(\blacksquare\)
+      </p>
+      <div class="warn-box">
+        <span class="label">참고</span> 이 증명은 Stirling 근사(감마함수의 점근 전개) 없이,
+        가우스 적분 트릭 + 초등적인 2단 귀납법만으로 끝납니다 — 처음에 "표준적인 부등식,
+        Stirling 근사"라고 인용했던 것보다 훨씬 간단한 경로가 있었습니다.
+      </div>
+
+      <hr>
+      <p style="color:var(--ink-faint);font-size:0.85rem;">
+        이 페이지가 이 시리즈에서 유일하게 "격자 이론이 아닌" 순수 미적분 내용입니다 —
+        다른 모든 인용은 이렇게 별도 배경지식 페이지로 풀어내거나(가능한 경우),
+        정말로 이 시리즈 범위를 넘는 별도 논문급 결과(Regev의 최악-평균 환원 등)일
+        경우에만 인용으로 남깁니다.
+      </p>
+    </div>
+  </main>
+</div>
+<script src="../assets/katex/katex.min.js"></script>
+<script src="../assets/katex/auto-render.min.js"></script>
+<script>
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: "\\[", right: "\\]", display: true},
+      {left: "\\(", right: "\\)", display: false},
+      {left: "$$", right: "$$", display: true},
+      {left: "$", right: "$", display: false}
+    ]
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,300 @@
+:root {
+  --bg: #FAF9F4;
+  --surface: #FFFFFF;
+  --surface-alt: #F0EEE5;
+  --ink: #20242B;
+  --ink-soft: #565C66;
+  --ink-faint: #8B8F79;
+  --border: #DCD8C9;
+  --accent: #2F4F7C;
+  --accent-ink: #1E3757;
+  --accent-soft: #E4E9F1;
+  --warn: #9C5B32;
+  --warn-soft: #F3E7DC;
+  --cite: #6B6350;
+  --cite-soft: #EFEBDD;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14161B;
+    --surface: #1B1E25;
+    --surface-alt: #20232B;
+    --ink: #E8E6DD;
+    --ink-soft: #A3A8B3;
+    --ink-faint: #6B7280;
+    --border: #333842;
+    --accent: #93AEDD;
+    --accent-ink: #C3D3EE;
+    --accent-soft: #212B3B;
+    --warn: #E3A576;
+    --warn-soft: #2E241C;
+    --cite: #C9BE9E;
+    --cite-soft: #2A2718;
+  }
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: Georgia, "Noto Serif KR", "Batang", "바탕", "Times New Roman", serif;
+  font-size: 1.05rem;
+  line-height: 1.75;
+}
+h1, h2, h3, h4 {
+  font-family: Georgia, Cambria, "Batang", "바탕", "Noto Serif KR", serif;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.3;
+}
+a { color: var(--accent-ink); }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.layout { display: flex; min-height: 100vh; }
+.sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 22px 18px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Malgun Gothic", "맑은 고딕", "Apple SD Gothic Neo", sans-serif;
+}
+.sidebar .back-link {
+  display: inline-block;
+  font-size: 0.78rem;
+  color: var(--ink-faint);
+  text-decoration: none;
+  margin-bottom: 14px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+.sidebar .back-link:hover { color: var(--ink-soft); }
+.sidebar .brand {
+  font-family: Georgia, serif;
+  font-weight: 700;
+  font-size: 1.15rem;
+  margin-bottom: 4px;
+}
+.sidebar .brand-sub {
+  font-size: 0.78rem;
+  color: var(--ink-faint);
+  margin-bottom: 20px;
+}
+.sidebar nav h5 {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin: 18px 0 6px;
+}
+.sidebar nav ul { list-style: none; margin: 0; padding: 0; }
+.sidebar nav li a {
+  display: block;
+  padding: 5px 8px;
+  border-radius: 6px;
+  text-decoration: none;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+.sidebar nav li a:hover { background: var(--surface-alt); color: var(--ink); }
+.sidebar nav li a.active { background: var(--accent-soft); color: var(--accent-ink); font-weight: 600; }
+
+.content {
+  flex: 1;
+  min-width: 0;
+  padding: 40px clamp(20px, 5vw, 64px);
+}
+/* Wide enough to hold the 600px reading column plus a right-hand
+   sidenote gutter; children below constrain themselves to the
+   600px measure so sidenotes have room to float into the gutter. */
+.content-inner { max-width: 860px; margin: 0 auto; counter-reset: sidenote-counter; }
+
+.content-inner > p,
+.content-inner > ul,
+.content-inner > ol,
+.content-inner > blockquote,
+.content-inner > h2,
+.content-inner > h3,
+.content-inner > h4,
+.content-inner > .problem-block,
+.content-inner > .warn-box {
+  max-width: 600px;
+}
+
+.eyebrow {
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 10px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+h1.page-title { font-size: 1.9rem; margin: 0 0 6px; max-width: 600px; }
+.page-sub { color: var(--ink-soft); margin: 0 0 32px; max-width: 65ch; }
+
+.problem-block {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 10px;
+  padding: 20px 24px;
+  margin: 24px 0;
+}
+.problem-quote {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin: 10px 0 18px;
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+}
+blockquote {
+  margin: 16px 0;
+  padding: 4px 20px;
+  border-left: 3px solid var(--border);
+  color: var(--ink-soft);
+  font-size: 0.97rem;
+}
+.warn-box {
+  background: var(--warn-soft);
+  border: 1px solid var(--warn);
+  border-radius: 8px;
+  padding: 10px 16px;
+  margin: 14px 0;
+  font-size: 0.93rem;
+}
+.warn-box .label { color: var(--warn); font-weight: 700; font-size: 0.8rem; letter-spacing: 0.02em; }
+
+/* Legacy inline citation pill — still usable, but sidenote/marginnote
+   below are preferred for anything that links to a cited proof. */
+.cite-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--cite-soft);
+  border: 1px solid var(--cite);
+  color: var(--cite);
+  border-radius: 999px;
+  padding: 3px 12px;
+  font-size: 0.82rem;
+  text-decoration: none;
+  margin: 4px 0;
+}
+.cite-link:hover { filter: brightness(0.95); }
+.cite-link .arrow { font-size: 0.9em; }
+
+/* Tufte-style sidenotes: a small superscript marker in the running
+   text (.sidenote-number) paired with a note that floats into the
+   right-hand margin (.sidenote / .marginnote). .sidenote is numbered
+   and meant for asides; .marginnote is unnumbered and used here for
+   cross-page citation links, since it reads as "see also" rather
+   than "footnote n". */
+.sidenote-number { counter-increment: sidenote-counter; }
+.sidenote-number::after {
+  content: counter(sidenote-counter);
+  position: relative;
+  top: -0.5em;
+  font-size: 0.7em;
+  margin-left: 1px;
+  color: var(--accent);
+  font-weight: 600;
+}
+.sidenote, .marginnote {
+  float: right;
+  clear: right;
+  width: 200px;
+  margin-right: -224px;
+  margin-top: 0.2em;
+  margin-bottom: 0.6em;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Malgun Gothic", "맑은 고딕", sans-serif;
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+.sidenote a, .marginnote a { color: var(--accent-ink); }
+.sidenote::before {
+  content: counter(sidenote-counter) " · ";
+  color: var(--accent);
+  font-weight: 700;
+}
+.marginnote::before {
+  content: "→ ";
+  color: var(--cite);
+  font-weight: 700;
+}
+
+@media (max-width: 1150px) {
+  .sidenote, .marginnote {
+    float: none;
+    display: block;
+    width: auto;
+    max-width: 600px;
+    margin: 10px 0 16px;
+    padding-left: 12px;
+    border-left: 2px solid var(--border);
+  }
+}
+@media (max-width: 900px) {
+  .layout { flex-direction: column; }
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: static;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+  .content-inner { max-width: 100%; }
+  .content-inner > p,
+  .content-inner > ul,
+  .content-inner > ol,
+  .content-inner > blockquote,
+  .content-inner > h2,
+  .content-inner > h3,
+  .content-inner > h4,
+  .content-inner > .problem-block,
+  .content-inner > .warn-box {
+    max-width: 100%;
+  }
+}
+
+details.translation { margin: 8px 0 0; }
+details.translation summary {
+  cursor: pointer;
+  list-style: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  width: fit-content;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Malgun Gothic", "맑은 고딕", sans-serif;
+  font-size: 0.8rem;
+  color: var(--accent-ink);
+  background: var(--accent-soft);
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  padding: 3px 12px;
+  user-select: none;
+}
+details.translation summary::-webkit-details-marker { display: none; }
+details.translation summary::before { content: "▸"; font-size: 0.7em; }
+details.translation[open] summary::before { content: "▾"; }
+details.translation summary:hover { filter: brightness(0.96); }
+details.translation p {
+  margin: 8px 0 0;
+  padding: 10px 14px;
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.92rem;
+  color: var(--ink-soft);
+}
+
+.overflow-x { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; }
+hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+
+.katex-display { overflow-x: auto; overflow-y: hidden; padding: 4px 0; }

@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lattice 답안 — Math Test 노트</title>
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <a class="back-link" href="../../">← yhwkorea</a>
+    <div class="brand">Math Test 노트</div>
+    <div class="brand-sub">대학원 수학 자격시험 답안 노트</div>
+    <nav>
+      <h5>Contents</h5>
+      <ul>
+        <li><a href="../index.html">홈</a></li>
+        <li><a href="lattice-answers.html" class="active">Lattice 답안 (1~9)</a></li>
+<li><a href="../background/real-analysis.html">실해석학</a></li>
+      </ul>
+    </nav>
+  </aside>
+  <main class="content">
+    <div class="content-inner">
+      <div class="eyebrow">Lattice · 답안</div>
+<h1 id="lattice-답안">Lattice — 답안</h1>
+<p>이 문서는 가이드(전략 힌트)가 아니라 <strong>실제 최종 답안</strong>입니다. 문제를 먼저 스스로 풀어본 뒤 채점용으로 쓰세요 — 안 보고 풀 수 있는지가 진짜 시험 대비입니다.</p>
+<hr />
+<h2 id="lattice-1">Lattice 1</h2>
+<blockquote>
+<p><strong>문제:</strong> Provide a definition of each of the following terms. - A lattice <span class="math inline">\(L \subset \mathbb{R}^n\)</span> - The dual lattice <span class="math inline">\(L^*\)</span> - The volume <span class="math inline">\(\det(L)\)</span> - The fundamental parallelepiped of a basis matrix <span class="math inline">\(B\)</span> - The first minimum <span class="math inline">\(\lambda_1(L)\)</span></p>
+<details class="translation"><summary>번역 보기</summary><p>다음 각 용어의 정의를 제시하시오. - 격자 \(L \subset \mathbb{R}^n\) - 쌍대격자 \(L^*\) - 부피 \(\det(L)\) - 기저행렬 \(B\)의 기본평행육면체 - 첫 최솟값 \(\lambda_1(L)\)</p></details>
+</blockquote>
+<p><strong>답안.</strong></p>
+<p><strong>1. 격자 <span class="math inline">\(L \subset \mathbb{R}^n\)</span>.</strong> 선형독립인 벡터 <span class="math inline">\(b_1,\ldots,b_k \in \mathbb{R}^n\)</span> (<span class="math inline">\(1\le k\le n\)</span>)이 존재하여</p>
+<p><span class="math display">\[
+L = \{\, c_1b_1 + \cdots + c_kb_k \ :\ c_1,\ldots,c_k \in \mathbb{Z} \,\}
+\]</span></p>
+<p>로 쓸 수 있는 <span class="math inline">\(\mathbb{R}^n\)</span>의 부분집합. <span class="math inline">\(\{b_1,\ldots,b_k\}\)</span>를 <span class="math inline">\(L\)</span>의 <strong>기저</strong>라 한다. <span class="math inline">\(k=n\)</span>이면 <strong>풀랭크(full-rank)</strong> 격자라 한다.</p>
+<p><em>동치인 정의 (둘 중 하나만 쓰면 되지만 둘 다 알아두면 안전):</em> <span class="math inline">\(L\)</span>은 <span class="math inline">\(\mathbb{R}^n\)</span>의 <strong>이산적(discrete)인 가법 부분군</strong>이다 — 즉 (i) 덧셈에 대해 닫혀 있고 역원을 가지며, (ii) 어떤 <span class="math inline">\(\varepsilon&gt;0\)</span>이 있어 <span class="math inline">\(L\)</span>의 서로 다른 두 점은 항상 거리 <span class="math inline">\(\ge\varepsilon\)</span>만큼 떨어져 있다.</p>
+<blockquote>
+<p>⚠ <strong>감점 포인트:</strong> “정수결합들의 집합”이라고만 쓰고 <strong>선형독립</strong> 조건이나 <strong>이산성</strong> 조건을 빠뜨리면 감점. 선형독립이 없으면 기저의 개수 <span class="math inline">\(k\)</span>가 잘 안 정의되고, 이산성이 없으면 (부분군 정의를 쓴 경우) <span class="math inline">\(\mathbb{Q}^n\)</span> 같은 반례가 격자로 잘못 분류됩니다.</p>
+</blockquote>
+<p><strong>2. 쌍대격자 <span class="math inline">\(L^*\)</span>.</strong></p>
+<p><span class="math display">\[
+L^* := \{\, y \in \operatorname{span}(L) \ :\ \langle y,x\rangle \in \mathbb{Z},\ \forall x \in L \,\}.
+\]</span></p>
+<blockquote>
+<p>⚠ <strong>감점 포인트:</strong> <span class="math inline">\(\operatorname{span}(L)\)</span> 대신 <span class="math inline">\(\mathbb{R}^n\)</span>이라고 쓰면, <span class="math inline">\(L\)</span>이 풀랭크가 아닐 때 <span class="math inline">\(L\)</span>과 수직인 방향의 벡터까지 전부 포함되어버려 틀립니다 (그런 벡터는 모든 <span class="math inline">\(x\in L\)</span>과 내적이 <span class="math inline">\(0\in\mathbb{Z}\)</span>라 조건을 만족은 하지만, 통상적인 쌍대격자 정의에서는 제외합니다). 시험에서 <span class="math inline">\(L\)</span>이 풀랭크라고 명시돼 있으면 <span class="math inline">\(\operatorname{span}(L)=\mathbb{R}^n\)</span>이라 <span class="math inline">\(\mathbb{R}^n\)</span>이라고 써도 틀리지 않지만, 일반적으로 쓰려면 <span class="math inline">\(\operatorname{span}(L)\)</span>이 안전합니다.</p>
+</blockquote>
+<p><strong>3. 부피 <span class="math inline">\(\det(L)\)</span>.</strong> 기저행렬 <span class="math inline">\(B \in \mathbb{R}^{n\times k}\)</span>(열이 기저벡터, 풀랭크면 <span class="math inline">\(n\times n\)</span> 정방행렬)에 대해</p>
+<p><span class="math display">\[
+\det(L) := \sqrt{\det(B^\top B)} \qquad (\text{풀랭크인 경우: } \det(L) = |\det(B)|).
+\]</span></p>
+<p>이 값은 기저 선택에 무관하다 (서로 다른 두 기저는 유니모듈러 정수행렬 <span class="math inline">\(U\)</span> (<span class="math inline">\(\det U=\pm1\)</span>)로 연결되므로 <span class="math inline">\(\det(B&#39;) = \det(B)\det(U) = \pm\det(B)\)</span>, 절댓값은 불변).</p>
+<p><strong>4. 기본평행육면체.</strong> 기저행렬 <span class="math inline">\(B\)</span>(풀랭크, <span class="math inline">\(n\times n\)</span>)에 대해</p>
+<p><span class="math display">\[
+\mathcal{P}(B) := \{\, Bx \ :\ x \in [0,1)^n \,\}.
+\]</span></p>
+<p>기하적으로 <span class="math inline">\(\mathbb{R}^n\)</span>을 격자 평행이동들로 빈틈없이(겹치지 않게) 덮는 “기본 타일” — <span class="math inline">\(\mathbb{R}^n = \bigsqcup_{v\in L} (\mathcal{P}(B)+v)\)</span>.</p>
+<p><strong>5. 첫 최솟값.</strong></p>
+<p><span class="math display">\[
+\lambda_1(L) := \min\{\, \|v\| \ :\ v \in L,\ v \neq 0 \,\}
+\]</span></p>
+<p>(유클리드 노름 기준). <span class="math inline">\(L\)</span>의 이산성에 의해 원점 근방에는 유한 개의 격자점만 있으므로 이 최솟값은 실제로 존재한다(단순히 하한이 아니라 min).</p>
+<hr />
+<h2 id="lattice-2">Lattice 2</h2>
+<blockquote>
+<p><strong>문제:</strong> Let <span class="math inline">\(L\subset\mathbb{R}^n\)</span> be a full-rank lattice with basis matrix <span class="math inline">\(B\in\mathbb{R}^{n\times n}\)</span> (columns are basis vectors). - Describe a basis matrix of the dual lattice <span class="math inline">\(L^*\)</span> in terms of <span class="math inline">\(B\)</span>. - Prove that <span class="math inline">\(\det(L^*) = 1/\det(L)\)</span>. - Show that <span class="math inline">\(\lambda_1(L)\cdot\lambda_1(L^*) \le n\)</span>. - Prove that <span class="math inline">\(L_1\cap L_2 = (L_1^*+L_2^*)^*\)</span>.</p>
+<details class="translation"><summary>번역 보기</summary><p>\(L\subset\mathbb{R}^n\)을 기저행렬 \(B\in\mathbb{R}^{n\times n}\)(열이 기저벡터)을 갖는 풀랭크 격자라 하자. - \(B\)를 이용해 쌍대격자 \(L^*\)의 기저행렬을 나타내라. - \(\det(L^*) = 1/\det(L)\)임을 증명하라. - \(\lambda_1(L)\cdot\lambda_1(L^*) \le n\)임을 보여라. - \(L_1\cap L_2 = (L_1^*+L_2^*)^*\)임을 증명하라.</p></details>
+</blockquote>
+<p><strong>답안.</strong></p>
+<p><strong>(a) 쌍대기저.</strong> <span class="math inline">\(B\)</span>가 <span class="math inline">\(n\times n\)</span> 가역이므로</p>
+<p><span class="math display">\[
+B^* := (B^{-1})^\top = (B^\top)^{-1}
+\]</span></p>
+<p>이 <span class="math inline">\(L^*\)</span>의 기저다. <em>검증:</em> <span class="math inline">\(B^{*\top}B = \big((B^\top)^{-1}\big)^\top B = B^{-1}B = I\)</span> 이므로 <span class="math inline">\(\langle b_i^*,b_j\rangle=\delta_{ij}\)</span>. 임의의 <span class="math inline">\(y=\sum c_i b_i^*\in\operatorname{span}(B^*)\)</span>에 대해 <span class="math inline">\(\langle y,b_j\rangle=c_j\)</span>이므로, <span class="math inline">\(y\in L^*\)</span>인 것은 정확히 모든 <span class="math inline">\(c_j\in\mathbb{Z}\)</span>인 것과 동치 — 즉 <span class="math inline">\(B^*\)</span>의 정수결합이 <span class="math inline">\(L^*\)</span> 전체와 일치한다.</p>
+<p><strong>(b) <span class="math inline">\(\det(L^*)=1/\det(L)\)</span>.</strong></p>
+<p><span class="math display">\[
+\det(L^*) = |\det(B^*)| = |\det((B^\top)^{-1})| = \frac{1}{|\det(B^\top)|} = \frac{1}{|\det(B)|} = \frac{1}{\det(L)}.
+\]</span></p>
+<p><strong>(c) <span class="math inline">\(\lambda_1(L)\cdot\lambda_1(L^*)\le n\)</span>.</strong></p>
+<p><em>증명.</em> <span class="math inline">\(V_n\)</span>을 <span class="math inline">\(\mathbb{R}^n\)</span> 단위공(반지름 <span class="math inline">\(1\)</span>인 유클리드 공)의 부피라 하자. 반지름 <span class="math inline">\(r\)</span>인 공의 부피는 <span class="math inline">\(V_nr^n\)</span>이므로, <span class="math inline">\(V_nr^n &gt; 2^n\det(L)\)</span>을 만족하는 <span class="math inline">\(r\)</span>에 대해 Minkowski 1st theorem(Lattice 4)으로 그 공은 <span class="math inline">\(L\)</span>의 0이 아닌 원소를 포함한다. 이 조건을 만족하는 <span class="math inline">\(r\)</span>의 하한(정확히 등식을 주는 <span class="math inline">\(r_0=2(\det(L)/V_n)^{1/n}\)</span>)에 임의로 가깝게 다가가면</p>
+<p><span class="math display">\[
+\lambda_1(L) \le 2\left(\frac{\det(L)}{V_n}\right)^{1/n}.
+\]</span></p>
+<p>같은 논증을 <span class="math inline">\(L^*\)</span>에 적용하면 <span class="math inline">\(\lambda_1(L^*) \le 2\left(\dfrac{\det(L^*)}{V_n}\right)^{1/n} = 2\left(\dfrac{1}{\det(L)V_n}\right)^{1/n}\)</span> (부분 (b) 사용). 두 부등식을 곱하면</p>
+<p><span class="math display">\[
+\lambda_1(L)\lambda_1(L^*) \le \frac{4}{V_n^{2/n}}.
+\]</span></p>
+<p><strong>남은 것은</strong> <span class="math inline">\(4/V_n^{2/n}\le n\)</span><span class="sidenote-number"></span><span class="sidenote"><em>n</em>차원 단위공의 부피에 관한 순수 해석학적 사실 — 격자 이론과 무관하므로 별도 증명. <a href="../background/real-analysis.html#ball-volume-inequality">실해석학: 증명 보기 ↗</a></span> (모든 <span class="math inline">\(n\ge1\)</span>에서)뿐입니다.</p>
+<p>이를 대입하면 <span class="math inline">\(\lambda_1(L)\lambda_1(L^*) \le n\)</span>. <span class="math inline">\(\blacksquare\)</span></p>
+<blockquote>
+<p>⚠ <strong>감점 포인트:</strong> Minkowski 1st를 <span class="math inline">\(L\)</span>과 <span class="math inline">\(L^*\)</span> 양쪽에 각각 적용하는 것까지는 대부분 맞히지만, 마지막에 “<span class="math inline">\(4/V_n^{2/n}\le n\)</span>”이 왜 성립하는지 언급 없이 “명백히 <span class="math inline">\(n\)</span>이 나온다”고 뭉개면 감점 대상입니다. 이 부등식은 자명하지 않습니다 — 최소한 이 부등식이 순수 부피 계산(공의 부피 공식)에서 나오는 별개의 해석학적 사실임을 명시하세요.</p>
+</blockquote>
+<p><strong>(d) <span class="math inline">\(L_1\cap L_2 = (L_1^*+L_2^*)^*\)</span>.</strong></p>
+<p><em>증명.</em> 먼저 다음 보조 등식을 보인다: <span class="math inline">\((L_1+L_2)^* = L_1^*\cap L_2^*\)</span>.</p>
+<p><span class="math inline">\(y\in(L_1+L_2)^*\)</span>이면 <span class="math inline">\(L_1\subset L_1+L_2\)</span>, <span class="math inline">\(L_2\subset L_1+L_2\)</span>이므로 <span class="math inline">\(y\)</span>는 <span class="math inline">\(L_1\)</span>, <span class="math inline">\(L_2\)</span> 양쪽 모두와 정수내적 — 즉 <span class="math inline">\(y\in L_1^*\cap L_2^*\)</span>. 역으로 <span class="math inline">\(y\in L_1^*\cap L_2^*\)</span>이면 임의의 <span class="math inline">\(x_1+x_2\in L_1+L_2\)</span>에 대해 <span class="math inline">\(\langle y,x_1+x_2\rangle=\langle y,x_1\rangle+\langle y,x_2\rangle\in\mathbb{Z}\)</span>이므로 <span class="math inline">\(y\in(L_1+L_2)^*\)</span>. 따라서 <span class="math inline">\((L_1+L_2)^*=L_1^*\cap L_2^*\)</span>.</p>
+<p>이제 이 등식에서 <span class="math inline">\(L_1,L_2\)</span>를 각각 <span class="math inline">\(L_1^*,L_2^*\)</span>로 <strong>치환</strong>하면</p>
+<p><span class="math display">\[
+(L_1^*+L_2^*)^* = L_1^{**}\cap L_2^{**} = L_1\cap L_2
+\]</span></p>
+<p>(이중쌍대 <span class="math inline">\(L^{**}=L\)</span>은 표준 사실 — <span class="math inline">\(L^{**}\supseteq L\)</span>은 정의에서 자명, <span class="math inline">\(L^{**}\subseteq L\)</span>은 <span class="math inline">\(L\)</span>이 격자이므로 <span class="math inline">\(\operatorname{span}(L)\)</span> 안에서 <span class="math inline">\(L\)</span>을 “채우는” 더 큰 격자가 없다는 사실에서 나온다). <span class="math inline">\(\blacksquare\)</span></p>
+<blockquote>
+<p>⚠ <strong>감점 포인트:</strong> 직접 원소를 비교하며 <span class="math inline">\(L_1\cap L_2\subseteq(L_1^*+L_2^*)^*\)</span>와 역방향을 각각 보이려 하면 훨씬 오래 걸리고 실수하기 쉽습니다. “치환 + 이중쌍대” 트릭이 이 문제의 핵심 아이디어입니다.</p>
+</blockquote>
+<hr />
+<h2 id="lattice-3">Lattice 3</h2>
+<blockquote>
+<p><strong>문제:</strong> You may assume the following definitions for a basis <span class="math inline">\(B=(b_1,\ldots,b_n)\)</span>: Gram–Schmidt vectors <span class="math inline">\(b_i^*\)</span> and coefficients <span class="math inline">\(\mu_{i,j}\)</span>; size reduction <span class="math inline">\(|\mu_{i,j}|\le1/2\)</span> for all <span class="math inline">\(i&gt;j\)</span>; Lovász condition (parameter <span class="math inline">\(\delta\in(1/4,1)\)</span>) <span class="math inline">\(\delta\|b_{i-1}^*\|^2 \le \|b_i^*\|^2+\mu_{i,i-1}^2\|b_{i-1}^*\|^2\)</span>; the standard LLL algorithm repeatedly size-reduces and, if Lovász is violated at index <span class="math inline">\(k\)</span>, swaps <span class="math inline">\(b_{k-1},b_k\)</span> and updates Gram–Schmidt. Prove that the algorithm terminates in polynomial time in the bit-length of the input.</p>
+<details class="translation"><summary>번역 보기</summary><p>기저 \(B=(b_1,\ldots,b_n)\)에 대해 다음 정의를 가정해도 좋다: Gram–Schmidt 벡터 \(b_i^*\)와 계수 \(\mu_{i,j}\); 모든 \(i&gt;j\)에 대한 크기축소(size reduction) 조건 \(|\mu_{i,j}|\le1/2\); Lovász 조건(매개변수 \(\delta\in(1/4,1)\)) \(\delta\|b_{i-1}^*\|^2 \le \|b_i^*\|^2+\mu_{i,i-1}^2\|b_{i-1}^*\|^2\); 표준 LLL 알고리즘은 반복적으로 크기축소를 수행하고, 인덱스 \(k\)에서 Lovász 조건이 위반되면 \(b_{k-1},b_k\)를 교환한 뒤 Gram–Schmidt를 갱신한다. 이 알고리즘이 입력의 비트길이에 대해 다항시간 안에 종료함을 증명하라.</p></details>
+</blockquote>
+<p><strong>답안.</strong></p>
+<p><strong>포텐셜 함수 정의.</strong> <span class="math inline">\(L_i := L\cap\operatorname{span}(b_1,\ldots,b_i)\)</span>의 격자 부피를 써서</p>
+<p><span class="math display">\[
+D := \prod_{i=1}^n \det(L_i)^2.
+\]</span></p>
+<p><strong>(i) <span class="math inline">\(D\in\mathbb{Z}_{&gt;0}\)</span>.</strong> 각 <span class="math inline">\(\det(L_i)\)</span>는 정수 성분 부분격자의 부피이므로 <span class="math inline">\(\det(L_i)^2 = \det(B_i^\top B_i)\)</span> (<span class="math inline">\(B_i\)</span>는 처음 <span class="math inline">\(i\)</span>개 기저벡터로 이루어진 정수 행렬)는 정수(정수행렬의 그람행렬의 행렬식). 양의 정수들의 곱이므로 <span class="math inline">\(D\)</span>는 양의 정수.</p>
+<p><strong>(ii) swap 한 번에 <span class="math inline">\(D\)</span>는 <span class="math inline">\(\delta\)</span>배 이하로 감소.</strong> swap이 인덱스 <span class="math inline">\(k\)</span>에서 일어나면, <span class="math inline">\(i\ne k-1\)</span>인 모든 <span class="math inline">\(i\)</span>에서 <span class="math inline">\(L_i\)</span>(따라서 <span class="math inline">\(\det(L_i)\)</span>)는 불변이다(swap 전후로 처음 <span class="math inline">\(i\)</span>개 벡터가 생성하는 부분공간과 그 안의 격자가 그대로 유지되므로 — <span class="math inline">\(i&lt;k-1\)</span>이면 자명히 불변, <span class="math inline">\(i\ge k\)</span>이면 <span class="math inline">\(\operatorname{span}(b_1,\ldots,b_i)\)</span> 자체가 swap으로 안 바뀜). <span class="math inline">\(i=k-1\)</span>에서만 값이 바뀌는데, swap이 일어났다는 것은 Lovász 조건 위반, 즉</p>
+<p><span class="math display">\[
+\|b_k^*+\mu_{k,k-1}b_{k-1}^*\|^2 &lt; \delta\|b_{k-1}^*\|^2
+\]</span></p>
+<p>이고, 좌변은 정확히 swap 후 새 <span class="math inline">\((k-1)\)</span>번째 GS 벡터의 노름 제곱이므로 <span class="math inline">\(\det(L_{k-1})_{\text{새}}^2 &lt; \delta\det(L_{k-1})_{\text{이전}}^2\)</span> (부피는 GS 벡터 노름들의 곱, Lattice 4 참고). 다른 인덱스는 불변이므로 <span class="math inline">\(D_{\text{새}} &lt; \delta\, D_{\text{이전}}\)</span>.</p>
+<p><strong>(iii) 초기 <span class="math inline">\(D\)</span>는 다항 크기.</strong> 각 <span class="math inline">\(\det(L_i)\le\prod_{j\le i}\|b_j\|\)</span> (Hadamard 부등식 — 기저벡터들의 노름의 곱이 부피의 상한이라는 표준 사실)이고, 입력 좌표의 크기가 비트길이 <span class="math inline">\(B\)</span>로 유계면 <span class="math inline">\(\|b_j\|\)</span>는 다항(<span class="math inline">\(2^{O(B)}\)</span>이 아니라 <span class="math inline">\(\operatorname{poly} (2^B)\)</span>, 즉 <span class="math inline">\(\det(L_i)\)</span> 자체가 입력 비트길이에 대해 지수적으로 큰 수가 아니라 그 <strong>비트길이</strong>가 다항)이므로 <span class="math inline">\(D\)</span>의 비트길이는 입력 비트길이의 다항식.</p>
+<p><strong>종료성.</strong> <span class="math inline">\(D\ge1\)</span>이 항상 유지되고 매 swap마다 <span class="math inline">\(\delta&lt;1\)</span>배로 줄어드므로, swap 횟수는</p>
+<p><span class="math display">\[
+\#\text{swaps} \le \log_{1/\delta}(D_{\text{초기}}) = O(\text{입력 비트길이}).
+\]</span></p>
+<p><strong>추가로</strong> 각 단계에서 등장하는 수(<span class="math inline">\(\mu_{i,j}\)</span>, <span class="math inline">\(\|b_i^*\|^2\)</span>)의 비트 길이가 알고리즘 진행 내내 다항적으로 유계임을 보이면(각 값이 <span class="math inline">\(\det(L_i)\)</span>들의 비 형태로 표현되고, 그 <span class="math inline">\(\det(L_i)\)</span>들 자체가 다항 비트길이임을 (ii)의 단조감소성으로 계속 통제할 수 있음), 각 반복의 산술 연산 자체도 다항시간 — 전체적으로 다항시간 알고리즘. <span class="math inline">\(\blacksquare\)</span></p>
+<hr />
+<h2 id="lattice-4">Lattice 4</h2>
+<blockquote>
+<p><strong>문제:</strong> Let <span class="math inline">\(L\subset\mathbb{R}^n\)</span> be a full-rank lattice and let <span class="math inline">\(\lambda_1(L)\le\cdots\le\lambda_n(L)\)</span> be its successive minima. State and prove Minkowski’s first theorem. State and prove Minkowski’s second theorem. Let <span class="math inline">\(\{b_i^*\}\)</span> be a Gram-Schmidt orthogonalized basis. Show that <span class="math inline">\(\lambda_1 \ge \min_i \|b_i^*\|\)</span> and <span class="math inline">\(\det(L) \le \prod_i \|b_i^*\|\)</span>.</p>
+<details class="translation"><summary>번역 보기</summary><p>\(L\subset\mathbb{R}^n\)을 풀랭크 격자라 하고 \(\lambda_1(L)\le\cdots\le\lambda_n(L)\)을 그 연속최솟값이라 하자. Minkowski 제1정리를 서술하고 증명하라. Minkowski 제2정리를 서술하고 증명하라. \(\{b_i^*\}\)를 Gram-Schmidt 직교화된 기저라 하자. \(\lambda_1 \ge \min_i \|b_i^*\|\)와 \(\det(L) \le \prod_i \|b_i^*\|\)임을 보여라.</p></details>
+</blockquote>
+<p><strong>답안.</strong></p>
+<p><strong>Minkowski’s First Theorem.</strong> <span class="math inline">\(C\subset\mathbb{R}^n\)</span>이 유계, 볼록, 원점대칭이고 <span class="math inline">\(\operatorname{vol}(C) &gt; 2^n\det(L)\)</span>이면 <span class="math inline">\(C\)</span>는 <span class="math inline">\(L\)</span>의 0이 아닌 원소를 포함한다.</p>
+<p><em>증명.</em> <span class="math inline">\(S:=\frac12C\)</span>라 하면 <span class="math inline">\(\operatorname{vol}(S)=\operatorname{vol}(C)/2^n&gt;\det(L)\)</span>. Blichfeldt(Lattice 5)로 서로 다른 <span class="math inline">\(x,y\in S\)</span>가 존재해 <span class="math inline">\(x-y\in L\)</span>. <span class="math inline">\(x,y\in S\Rightarrow 2x,2y\in C\)</span>. <span class="math inline">\(C\)</span>가 원점대칭이므로 <span class="math inline">\(-2y\in C\)</span>. <span class="math inline">\(C\)</span>가 볼록이므로 <span class="math inline">\(2x,-2y\in C\)</span>의 중점 <span class="math inline">\(\frac12(2x)+\frac12(-2y)=x-y\in C\)</span>. <span class="math inline">\(x\ne y\)</span>이므로 <span class="math inline">\(x-y\ne0\)</span>. 따라서 <span class="math inline">\(x-y\in C\cap(L\smallsetminus\{0\})\)</span>. <span class="math inline">\(\blacksquare\)</span></p>
+<p><strong>Minkowski’s Second Theorem.</strong></p>
+<p><span class="math display">\[
+\frac{2^n}{n!}\det(L) \;\le\; \prod_{i=1}^n\lambda_i(L) \;\le\; 2^n\det(L).
+\]</span></p>
+<p><em>증명 스케치.</em> <span class="math inline">\(v_1,\ldots,v_n\in L\)</span>을 연속최솟값을 차례로 달성하는 선형독립 벡터들이라 하자(<span class="math inline">\(\|v_i\|=\lambda_i\)</span>, 이런 벡터열이 존재한다는 것은 연속최솟값의 정의로부터 나오는 표준 사실). <strong>상한:</strong> <span class="math inline">\(C_t:=\{x : \|x\|\le t\}\)</span>에 대해, <span class="math inline">\(t=\lambda_n\)</span>일 때 <span class="math inline">\(v_1,\ldots,v_n\in C_t\)</span>이 선형독립이므로 <span class="math inline">\(C_t\)</span>의 부피는 <span class="math inline">\(v_i\)</span>들이 만드는 평행육면체의 부피 이상이고, 이를 각 <span class="math inline">\(\lambda_i\)</span>의 크기별로 스케일한 상자로 감싸는 논증을 반복하면 <span class="math inline">\(\operatorname{vol}(\{x:\|x\|\le1\})\cdot\prod\lambda_i \le\)</span> (적절한 상수)가 나오고, Minkowski 1st를 반복 적용해 정리하면 상한이 나온다. <strong>하한:</strong> 부피 <span class="math inline">\(\prod\lambda_i\)</span> 스케일의 상자가 격자와 겹치는 방식에 대한 부피 겹침(포장) 논증으로 얻는다. <em>(이 증명은 Cassels, “An Introduction to the Geometry of Numbers” 등 표준 교재의 여러 페이지에 걸친 고전적 증명으로, 이 답안에서는 증명의 뼈대만 제시하고 세부는 인용으로 남깁니다 — 실제 시험에서는 정리를 정확히 서술하고 상한 증명의 핵심 아이디어(연속최솟값 벡터열 + Minkowski 1st의 반복 적용)까지는 재현하되, 하한의 정밀한 부피 겹침 논증은 시간 배분에 따라 생략 가능한지 감독관에게 확인하는 것이 현실적입니다.)</em></p>
+<p><strong><span class="math inline">\(\lambda_1\ge\min_i\|b_i^*\|\)</span>.</strong></p>
+<p><em>증명.</em> 최단벡터 <span class="math inline">\(v=\sum_ic_ib_i\ne0\)</span> (<span class="math inline">\(c_i\in\mathbb{Z}\)</span>)에서 계수가 0이 아닌 가장 큰 인덱스를 <span class="math inline">\(k\)</span>라 하자. <span class="math inline">\(v\)</span>를 GS 기저로 표현하면 <span class="math inline">\(k\)</span>번째 성분은 정확히 <span class="math inline">\(c_kb_k^*\)</span>이다 (Gram-Schmidt 구성상 <span class="math inline">\(b_j\,(j\le k)\in\operatorname{span}(b_1^*,\ldots,b_k^*)\)</span>이고 <span class="math inline">\(b_k\)</span>의 <span class="math inline">\(b_k^*\)</span> 방향 계수가 <span class="math inline">\(1\)</span>이므로). 따라서</p>
+<p><span class="math display">\[
+\|v\|^2 \ge |c_k|^2\|b_k^*\|^2 \ge \|b_k^*\|^2 \ge \min_i\|b_i^*\|^2
+\]</span></p>
+<p>(<span class="math inline">\(c_k\)</span>가 0이 아닌 정수이므로 <span class="math inline">\(|c_k|\ge1\)</span>). <span class="math inline">\(\blacksquare\)</span></p>
+<p><strong><span class="math inline">\(\det(L)\le\prod_i\|b_i^*\|\)</span> (실은 등식).</strong></p>
+<p><em>증명.</em> GS 분해에서 <span class="math inline">\(B=B^*M\)</span> (<span class="math inline">\(M\)</span>은 대각이 <span class="math inline">\(1\)</span>인 상삼각행렬, <span class="math inline">\(\mu_{ij}\)</span>들로 구성)이므로 <span class="math inline">\(\det(B)=\det(B^*)\det(M)=\det(B^*)\)</span>. <span class="math inline">\(B^*\)</span>의 열들은 서로 직교하므로 <span class="math inline">\(\det(B^{*\top}B^*)=\prod_i\|b_i^*\|^2\)</span>. 따라서</p>
+<p><span class="math display">\[
+\det(L)^2=\det(B^\top B)=\det(B)^2=\det(B^*)^2=\prod_i\|b_i^*\|^2,
+\]</span></p>
+<p>즉 <span class="math inline">\(\det(L)=\prod_i\|b_i^*\|\)</span> (등식). 부등식은 이 등식의 자명한 따름정리. <span class="math inline">\(\blacksquare\)</span></p>
+<blockquote>
+<p>⚠ <strong>감점 포인트:</strong> 마지막 항은 문제가 “<span class="math inline">\(\le\)</span>”로 물었지만 실제로는 <strong>등식</strong>입니다. 등식을 증명하고 “따라서 특히 <span class="math inline">\(\le\)</span>도 성립”이라고 적으면 만점, <span class="math inline">\(\le\)</span>만 겨우 보이면 부분점수만 받을 위험이 있습니다.</p>
+</blockquote>
+<hr />
+<h2 id="lattice-5">Lattice 5</h2>
+<blockquote>
+<p><strong>문제:</strong> Let <span class="math inline">\(L\subset\mathbb{R}^n\)</span> be a full-rank lattice, and let <span class="math inline">\(C\subset\mathbb{R}^n\)</span> be a bounded, measurable, convex, centrally symmetric set. Prove Blichfeldt’s lemma: if <span class="math inline">\(\operatorname{vol}(S) &gt; \det(L)\)</span>, then there exist distinct <span class="math inline">\(x,y\in S\)</span> such that <span class="math inline">\(x-y\in L\)</span>.</p>
+<details class="translation"><summary>번역 보기</summary><p>\(L\subset\mathbb{R}^n\)을 풀랭크 격자라 하고, \(C\subset\mathbb{R}^n\)을 유계, 가측, 볼록, 원점대칭 집합이라 하자. Blichfeldt의 보조정리를 증명하라: \(\operatorname{vol}(S) &gt; \det(L)\)이면, \(x-y\in L\)을 만족하는 서로 다른 \(x,y\in S\)가 존재한다.</p></details>
+</blockquote>
+<p><strong>답안.</strong></p>
+<p><em>증명.</em> 기저행렬 <span class="math inline">\(B\)</span>에 대한 기본평행육면체 <span class="math inline">\(\mathcal{P}:=\mathcal{P}(B)\)</span>로 <span class="math inline">\(\mathbb{R}^n=\bigsqcup_{v\in L}(\mathcal{P}+v)\)</span>를 만든다(Lattice 1). <span class="math inline">\(S\)</span>도 이에 맞춰 분할: <span class="math inline">\(S_v := S\cap(\mathcal{P}+v)\)</span>, <span class="math inline">\(\operatorname{vol}(S)=\sum_v\operatorname{vol}(S_v)\)</span> (가산가법성).</p>
+<p><span class="math inline">\(T_v := S_v-v\subset\mathcal{P}\)</span> (평행이동 불변으로 <span class="math inline">\(\operatorname{vol}(T_v)= \operatorname{vol}(S_v)\)</span>).</p>
+<p><strong>귀류법.</strong> 모든 <span class="math inline">\(u\ne v\)</span>에서 <span class="math inline">\(T_u\cap T_v=\emptyset\)</span>이라 가정하면, <span class="math inline">\(\{T_v\}\)</span>는 <span class="math inline">\(\mathcal{P}\)</span> 내부의 서로소 집합족이므로</p>
+<p><span class="math display">\[
+\operatorname{vol}(S) = \sum_v\operatorname{vol}(T_v) = \operatorname{vol}\Big(\bigcup_vT_v\Big) \le \operatorname{vol}(\mathcal{P}) = \det(L),
+\]</span></p>
+<p>이는 가정 <span class="math inline">\(\operatorname{vol}(S)&gt;\det(L)\)</span>과 모순. 따라서 어떤 <span class="math inline">\(u\ne v\)</span>에서 <span class="math inline">\(T_u\cap T_v\ne\emptyset\)</span>; 그 교점 <span class="math inline">\(z\)</span>에서 <span class="math inline">\(x:=z+u\in S\)</span>, <span class="math inline">\(y:=z+v\in S\)</span>, <span class="math inline">\(x-y=u-v\in L\smallsetminus\{0\}\)</span>. <span class="math inline">\(\blacksquare\)</span></p>
+<hr />
+<h2 id="lattice-6">Lattice 6</h2>
+<blockquote>
+<p><strong>문제:</strong> Let <span class="math inline">\(q\ge2\)</span>, let <span class="math inline">\(A\in\mathbb{Z}_q^{m\times n}\)</span>, and define <span class="math inline">\(\Lambda_q^\perp(A):=\{x\in\mathbb{Z}^n : Ax\equiv0\ (\mathrm{mod}\ q)\}\)</span>. Assume that <span class="math inline">\(A\)</span> has rank <span class="math inline">\(m\)</span> over <span class="math inline">\(\mathbb{Z}_q\)</span>. 1. Prove that <span class="math inline">\(\Lambda_q^\perp(A)\)</span> is a full-rank sublattice of <span class="math inline">\(\mathbb{Z}^n\)</span>. 2. Show that the homomorphism <span class="math inline">\(\varphi:\mathbb{Z}^n\to\mathbb{Z}_q^m,\ x\mapsto Ax  \bmod q\)</span>, is surjective. 3. Deduce that <span class="math inline">\([\mathbb{Z}^n:\Lambda_q^\perp(A)]=q^m\)</span> and <span class="math inline">\(\det(\Lambda_q^\perp(A))=q^m\)</span>. 4. Define <span class="math inline">\(\Lambda_q(A^\top):=\{A^\top s+qz : s\in\mathbb{Z}^m,\ z\in\mathbb{Z}^n\}\)</span>. Prove that <span class="math inline">\((\Lambda_q^\perp(A))^* = \frac1q\Lambda_q(A^\top)\)</span>.</p>
+<details class="translation"><summary>번역 보기</summary><p>\(q\ge2\)이고 \(A\in\mathbb{Z}_q^{m\times n}\)이라 하고 \(\Lambda_q^\perp(A):=\{x\in\mathbb{Z}^n : Ax\equiv0\ (\mathrm{mod}\ q)\}\)로 정의하자. \(A\)가 \(\mathbb{Z}_q\) 위에서 계수(rank) \(m\)을 갖는다고 가정한다. 1. \(\Lambda_q^\perp(A)\)가 \(\mathbb{Z}^n\)의 풀랭크 부분격자임을 증명하라. 2. 준동형사상 \(\varphi:\mathbb{Z}^n\to\mathbb{Z}_q^m,\ x\mapsto Ax \bmod q\)가 전사임을 보여라. 3. \([\mathbb{Z}^n:\Lambda_q^\perp(A)]=q^m\)이고 \(\det(\Lambda_q^\perp(A))=q^m\)임을 유도하라. 4. \(\Lambda_q(A^\top):=\{A^\top s+qz : s\in\mathbb{Z}^m,\ z\in\mathbb{Z}^n\}\)로 정의하자. \((\Lambda_q^\perp(A))^* = \frac1q\Lambda_q(A^\top)\)임을 증명하라.</p></details>
+</blockquote>
+<p><strong>답안.</strong></p>
+<p><strong>1.</strong> <span class="math inline">\(x\in q\mathbb{Z}^n\)</span>이면 <span class="math inline">\(Ax=A(qx&#39;)=q(Ax&#39;)\equiv0\pmod q\)</span>이므로 <span class="math inline">\(q\mathbb{Z}^n\subseteq\Lambda_q^\perp(A)\)</span>. 정의상 <span class="math inline">\(\Lambda_q^\perp(A)\subseteq \mathbb{Z}^n\)</span>도 성립. <span class="math inline">\(q\mathbb{Z}^n\)</span>이 이미 풀랭크이고, 풀랭크 격자를 포함하면서 그 초격자인 부분집합도 풀랭크이므로 <span class="math inline">\(\Lambda_q^\perp(A)\)</span>는 풀랭크.</p>
+<p><strong>2.</strong> <span class="math inline">\(\varphi\)</span>는 <span class="math inline">\(\mathbb{Z}_q\)</span>-선형사상(체 위에서의 선형사상)이고 <span class="math inline">\(\operatorname{rank}(A)=m\)</span>은 정확히 이 선형사상의 치역의 차원이 <span class="math inline">\(m\)</span>(목표공간 전체 차원)이라는 뜻이므로 전사.</p>
+<p><strong>3.</strong> 1차 동형정리로 <span class="math inline">\(\mathbb{Z}^n/\Lambda_q^\perp(A)\cong\operatorname{im}(\varphi) =\mathbb{Z}_q^m\)</span> (커널이 정의상 <span class="math inline">\(\Lambda_q^\perp(A)\)</span>이므로). 따라서 <span class="math inline">\([\mathbb{Z}^n:\Lambda_q^\perp(A)]=|\mathbb{Z}_q^m|=q^m\)</span>. 부분격자의 지수-부피 공식 <span class="math inline">\(\det(L&#39;)=[L:L&#39;]\cdot\det(L)\)</span>을 <span class="math inline">\(L=\mathbb{Z}^n\)</span> (<span class="math inline">\(\det=1\)</span>)에 적용하면 <span class="math inline">\(\det(\Lambda_q^\perp(A))=q^m\)</span>.</p>
+<p><strong>4.</strong> <strong>포함관계:</strong> <span class="math inline">\(y=(A^\top s+qz)/q\)</span>, <span class="math inline">\(x\in\Lambda_q^\perp(A)\)</span>에 대해</p>
+<p><span class="math display">\[
+\langle x,y\rangle = \frac{x^\top A^\top s}{q}+x^\top z = \frac{(Ax)^\top s}{q}+x^\top z.
+\]</span></p>
+<p><span class="math inline">\(Ax\equiv0\pmod q\)</span>이므로 <span class="math inline">\((Ax)^\top s/q\in\mathbb{Z}\)</span>, 따라서 <span class="math inline">\(\langle x,y\rangle\in\mathbb{Z}\)</span> — 즉 <span class="math inline">\(\frac1q\Lambda_q(A^\top)\subseteq (\Lambda_q^\perp(A))^*\)</span>.</p>
+<p><strong>부피로 등호 확정:</strong> 두 격자 모두 풀랭크이고 하나가 다른 하나에 포함되므로, 부피가 같음을 보이면 (풀랭크 격자 <span class="math inline">\(L&#39;\subseteq L&#39;&#39;\)</span>에서 <span class="math inline">\(\det(L&#39;)=\det(L&#39;&#39;)\Rightarrow [L&#39;&#39;:L&#39;]=1\Rightarrow L&#39;=L&#39;&#39;\)</span>) 등호가 확정된다. <span class="math inline">\(\det((\Lambda_q^\perp(A))^*)=1/q^m\)</span> (부분 3 + Lattice 2(b)). <span class="math inline">\(\Lambda_q(A^\top)\)</span>는 <span class="math inline">\(q\mathbb{Z}^n\)</span>의 초격자이고, <span class="math inline">\(A^\top:\mathbb{Z}_q^m\to\mathbb{Z}_q^n\)</span>의 치역 크기가 <span class="math inline">\(q^m\)</span>이므로(단사 — <span class="math inline">\(\operatorname{rank}(A)=m\le n\)</span>이고 <span class="math inline">\(A^\top\)</span>의 열공간 차원도 <span class="math inline">\(m\)</span>) 지수는 <span class="math inline">\([\mathbb{Z}^n:\Lambda_q(A^\top)]=q^n/q^m=q^{n-m}\)</span>, 따라서 <span class="math inline">\(\det(\Lambda_q(A^\top))=q^{n-m}\)</span>. 스케일링 <span class="math inline">\(\det(cL)=c^n\det(L)\)</span>으로</p>
+<p><span class="math display">\[
+\det\!\left(\frac1q\Lambda_q(A^\top)\right) = \left(\frac1q\right)^n q^{n-m} = q^{-m}.
+\]</span></p>
+<p>두 값이 일치하므로 <span class="math inline">\(\frac1q\Lambda_q(A^\top)=(\Lambda_q^\perp(A))^*\)</span>. <span class="math inline">\(\blacksquare\)</span></p>
+<hr />
+<h2 id="lattice-7">Lattice 7</h2>
+<blockquote>
+<p><strong>문제:</strong> Let <span class="math inline">\(L \subset \mathbb{Z}^m\)</span> be a rank-<span class="math inline">\(n\)</span> lattice. Show that <span class="math inline">\(\det(L^\perp) = \det((L^\perp)^\perp)\)</span>.</p>
+<details class="translation"><summary>번역 보기</summary><p>\(L \subset \mathbb{Z}^m\)을 계수(rank) \(n\)인 격자라 하자. \(\det(L^\perp) = \det((L^\perp)^\perp)\)임을 보여라.</p></details>
+</blockquote>
+<p><strong>답안.</strong></p>
+<p><em>증명.</em> Lattice 2(b)의 일반화로 <span class="math inline">\(\det(L^\perp)=1/\det(L)\)</span>이 성립한다(같은 논증, <span class="math inline">\(\perp\)</span> 표기가 쌍대의 다른 표기일 뿐). 같은 식을 <span class="math inline">\(L^\perp\)</span>에 다시 적용하면</p>
+<p><span class="math display">\[
+\det((L^\perp)^\perp) = \frac{1}{\det(L^\perp)} = \frac{1}{1/\det(L)} = \det(L).
+\]</span></p>
+<p>두 값이 모두 <span class="math inline">\(\det(L)\)</span>과 같으므로 <span class="math inline">\(\det(L^\perp)=\det((L^\perp)^\perp)\)</span>. <span class="math inline">\(\blacksquare\)</span></p>
+<hr />
+<h2 id="lattice-8">Lattice 8</h2>
+<blockquote>
+<p><strong>문제:</strong> Show that the Hermite normal form is unique.</p>
+<details class="translation"><summary>번역 보기</summary><p>에르미트 표준형(Hermite normal form)이 유일함을 보여라.</p></details>
+</blockquote>
+<p><strong>답안.</strong></p>
+<p><em>증명.</em> 같은 격자 <span class="math inline">\(L\subset\mathbb{Z}^n\)</span>을 나타내는 두 HNF <span class="math inline">\(H,H&#39;\)</span>가 있다고 가정하고, 왼쪽 열(첫 좌표)부터 귀납적으로 같음을 보인다.</p>
+<p><strong>기저 단계.</strong> <span class="math inline">\(L\cap\mathbb{Z}e_1\)</span>(첫 좌표축과의 교집합)은 <span class="math inline">\(\mathbb{Z}\)</span>의 부분군이므로 <span class="math inline">\(d_1\mathbb{Z}\)</span> 꼴 (<span class="math inline">\(d_1\ge0\)</span>). <span class="math inline">\(d_1&gt;0\)</span>이면(그렇지 않으면 첫 열이 전부 0) <span class="math inline">\(H,H&#39;\)</span>의 첫 열의 첫 성분은 둘 다 이 교집합을 생성하는 <strong>최소 양의 정수</strong> <span class="math inline">\(d_1\)</span>이어야 한다 — HNF의 정의(피벗은 양의 정수, 그 열의 나머지는 0)로 첫 열은 <span class="math inline">\((d_1,0,\ldots,0)^\top\)</span> 꼴로 유일하게 고정.</p>
+<p><strong>귀납 단계.</strong> <span class="math inline">\(k-1\)</span>번째 열까지 <span class="math inline">\(H,H&#39;\)</span>가 일치한다고 가정하자. <span class="math inline">\(L\)</span>을 처음 <span class="math inline">\(k\)</span>개 좌표부분공간 <span class="math inline">\(\mathbb{R}^k\times\{0\}\)</span>으로 투영한 상 <span class="math inline">\(\pi_k(L)\)</span>을 생각하면, HNF의 구성상 <span class="math inline">\(k\)</span>번째 열의 피벗(대각 성분)은 정확히 <span class="math inline">\(\pi_k(L)\cap(\{0\}^{k-1}\times \mathbb{Z}\times\{0\})\)</span>을 생성하는 최소 양의 정수로 유일하게 결정된다(귀납가정으로 처음 <span class="math inline">\(k-1\)</span>열이 같으므로 <span class="math inline">\(\pi_k(L)\)</span> 자체가 <span class="math inline">\(H,H&#39;\)</span> 양쪽에서 동일하게 결정됨). 그 열의 피벗 위 성분들은 “<span class="math inline">\(0\)</span> 이상 피벗 미만”이라는 모듈러 축소 조건 때문에, <span class="math inline">\(\pi_k(L)\)</span> 안에서 그 열에 대응하는 벡터를 대표하는 <strong>유일한</strong> 나머지로 결정된다.</p>
+<p>귀납적으로 모든 열이 일치하므로 <span class="math inline">\(H=H&#39;\)</span>. <span class="math inline">\(\blacksquare\)</span></p>
+<blockquote>
+<p>⚠ <strong>감점 포인트:</strong> “피벗은 양수, 위는 0 이상 피벗 미만”이라는 HNF의 정의 조건 자체가 유일성의 근거라는 점을 명시해야 합니다 — 이 두 조건이 없으면(그냥 상삼각 정수행렬이기만 하면) 얼마든지 다른 표현이 가능합니다.</p>
+</blockquote>
+<hr />
+<h2 id="lattice-9">Lattice 9</h2>
+<blockquote>
+<p><strong>문제:</strong> Let <span class="math inline">\(L \subset \mathbb{R}^n\)</span> be a full-rank lattice. For <span class="math inline">\(s&gt;0\)</span>, define <span class="math inline">\(\rho_s(x):=\exp(-\pi\|x\|_2^2/s^2)\)</span>, <span class="math inline">\(\rho_s(S):=\sum_{x\in S} \rho_s(x)\)</span> for every countable set <span class="math inline">\(S\subseteq\mathbb{R}^n\)</span>. For <span class="math inline">\(0&lt;\varepsilon&lt;1\)</span>, the smoothing parameter of <span class="math inline">\(L\)</span> is defined by <span class="math inline">\(\eta_\varepsilon(L):=\inf\{s&gt;0 : \rho_{1/s}(L^*\smallsetminus\{0\}) \le \varepsilon\}\)</span>. 1. Prove that for every <span class="math inline">\(a&gt;0\)</span>, <span class="math inline">\(\eta_\varepsilon(aL)=a\,\eta_\varepsilon(L)\)</span>. 2. Let <span class="math inline">\(0&lt;\varepsilon_1\le\varepsilon_2&lt;1\)</span>. Prove that <span class="math inline">\(\eta_{\varepsilon_2}(L) \le  \eta_{\varepsilon_1}(L)\)</span>. 3. You may use the Poisson summation formula: for every <span class="math inline">\(c\in\mathbb{R}^n\)</span>, <span class="math inline">\(\rho_s(L+c) = \frac{s^n}{\det(L)} \sum_{y\in L^*} \rho_{1/s}(y) e^{2\pi i\langle  y,c\rangle}\)</span>. Prove that if <span class="math inline">\(s\ge\eta_\varepsilon(L)\)</span>, then for every <span class="math inline">\(c\in\mathbb{R}^n\)</span>, <span class="math inline">\(\left|\rho_s(L+c) - \frac{s^n}{\det(L)}\right| \le  \varepsilon\frac{s^n}{\det(L)}\)</span>. In particular, <span class="math inline">\((1-\varepsilon)\frac{s^n}  {\det(L)} \le \rho_s(L+c) \le (1+\varepsilon)\frac{s^n}{\det(L)}\)</span>. 4. Deduce that for all <span class="math inline">\(c,c&#39;\in\mathbb{R}^n\)</span>, <span class="math inline">\(\frac{1-\varepsilon}{1+\varepsilon}  \le \frac{\rho_s(L+c)}{\rho_s(L+c&#39;)} \le \frac{1+\varepsilon}{1-\varepsilon}\)</span>. 5. Let <span class="math inline">\(L&#39;\subseteq L\)</span> be a full-rank sublattice of index <span class="math inline">\(N=[L:L&#39;]\)</span>, and let <span class="math inline">\(X\)</span> be sampled from the discrete Gaussian distribution <span class="math inline">\(D_{L,s}\)</span>, defined by <span class="math inline">\(\Pr[X=x] = \rho_s(x)/\rho_s(L)\)</span> (<span class="math inline">\(x\in L\)</span>). Assume that <span class="math inline">\(s\ge\eta_\varepsilon(L&#39;)\)</span>. Prove that for every coset <span class="math inline">\(c+L&#39; \in L/L&#39;\)</span>, <span class="math inline">\(\frac{1-\varepsilon}{N(1+\varepsilon)}  \le \Pr[X\in c+L&#39;] \le \frac{1+\varepsilon}{N(1-\varepsilon)}\)</span>.</p>
+<details class="translation"><summary>번역 보기</summary><p>\(L \subset \mathbb{R}^n\)을 풀랭크 격자라 하자. \(s&gt;0\)에 대해 \(\rho_s(x):=\exp(-\pi\|x\|_2^2/s^2)\), 임의의 가산집합 \(S\subseteq\mathbb{R}^n\)에 대해 \(\rho_s(S):=\sum_{x\in S} \rho_s(x)\)로 정의한다. \(0&lt;\varepsilon&lt;1\)에 대해 \(L\)의 매끄러움 매개변수(smoothing parameter)는 \(\eta_\varepsilon(L):=\inf\{s&gt;0 : \rho_{1/s}(L^*\smallsetminus\{0\}) \le \varepsilon\}\)로 정의된다. 1. 모든 \(a&gt;0\)에 대해 \(\eta_\varepsilon(aL)=a\,\eta_\varepsilon(L)\)임을 증명하라. 2. \(0&lt;\varepsilon_1\le\varepsilon_2&lt;1\)이라 하자. \(\eta_{\varepsilon_2}(L) \le \eta_{\varepsilon_1}(L)\)임을 증명하라. 3. 다음 Poisson 합산 공식을 사용해도 좋다: 모든 \(c\in\mathbb{R}^n\)에 대해 \(\rho_s(L+c) = \frac{s^n}{\det(L)} \sum_{y\in L^*} \rho_{1/s}(y) e^{2\pi i\langle y,c\rangle}\). \(s\ge\eta_\varepsilon(L)\)이면 모든 \(c\in\mathbb{R}^n\)에 대해 \(\left|\rho_s(L+c) - \frac{s^n}{\det(L)}\right| \le \varepsilon\frac{s^n}{\det(L)}\)임을 증명하라. 특히 \((1-\varepsilon)\frac{s^n}{\det(L)} \le \rho_s(L+c) \le (1+\varepsilon)\frac{s^n}{\det(L)}\)이다. 4. 모든 \(c,c&#39;\in\mathbb{R}^n\)에 대해 \(\frac{1-\varepsilon}{1+\varepsilon} \le \frac{\rho_s(L+c)}{\rho_s(L+c&#39;)} \le \frac{1+\varepsilon}{1-\varepsilon}\)임을 유도하라. 5. \(L&#39;\subseteq L\)을 지수 \(N=[L:L&#39;]\)인 풀랭크 부분격자라 하고, \(X\)는 \(\Pr[X=x] = \rho_s(x)/\rho_s(L)\) (\(x\in L\))로 정의되는 이산 가우시안 분포 \(D_{L,s}\)에서 표본추출된다고 하자. \(s\ge\eta_\varepsilon(L&#39;)\)이라 가정한다. 모든 잉여류(coset) \(c+L&#39; \in L/L&#39;\)에 대해 \(\frac{1-\varepsilon}{N(1+\varepsilon)} \le \Pr[X\in c+L&#39;] \le \frac{1+\varepsilon}{N(1-\varepsilon)}\)임을 증명하라.</p></details>
+</blockquote>
+<p><strong>답안.</strong></p>
+<p><strong>1.</strong> <span class="math inline">\((aL)^*=(1/a)L^*\)</span>이므로 <span class="math inline">\(\rho_{1/s}((aL)^*\smallsetminus\{0\}) =\rho_{1/s}((1/a)(L^*\smallsetminus\{0\}))=\rho_{a/s}(L^*\smallsetminus\{0\})\)</span> (스케일링: <span class="math inline">\(\rho_{1/s}(y/a)=\exp(-\pi\|y/a\|^2s^2)=\exp(-\pi\|y\|^2(s/a)^2)=\rho_{a/s}(y)\)</span>). 정의의 <span class="math inline">\(\inf\)</span>에서 <span class="math inline">\(s=as&#39;\)</span>로 치환하면 조건 <span class="math inline">\(\rho_{a/(as&#39;)}(L^*\smallsetminus\{0\})\le \varepsilon\)</span>, 즉 <span class="math inline">\(\rho_{1/s&#39;}(L^*\smallsetminus\{0\})\le\varepsilon\)</span>이 되어 <span class="math inline">\(L\)</span>에 대한 조건과 정확히 같은 형태 — <span class="math inline">\(\eta_\varepsilon(aL)=a\cdot\eta_\varepsilon(L)\)</span>.</p>
+<p><strong>2.</strong> <span class="math inline">\(\{s : \rho_{1/s}(L^*\smallsetminus\{0\})\le\varepsilon_1\} \subseteq \{s : \rho_{1/s}(L^*\smallsetminus\{0\})\le\varepsilon_2\}\)</span> (더 느슨한 조건일수록 집합이 커짐). 큰 집합 위의 <span class="math inline">\(\inf\)</span>는 작은 집합 위의 <span class="math inline">\(\inf\)</span> 이하이므로 <span class="math inline">\(\eta_{\varepsilon_2}(L)\le \eta_{\varepsilon_1}(L)\)</span>.</p>
+<p><strong>3.</strong> Poisson summation에서 <span class="math inline">\(y=0\)</span> 항을 분리하면 (<span class="math inline">\(\rho_{1/s}(0)=1\)</span>)</p>
+<p><span class="math display">\[
+\rho_s(L+c) = \frac{s^n}{\det(L)}\left[1+\sum_{y\in L^*\smallsetminus\{0\}}\rho_{1/s}(y)e^{2\pi i\langle y,c\rangle}\right].
+\]</span></p>
+<p>절댓값을 취하면</p>
+<p><span class="math display">\[
+\left|\sum_{y\ne0}\rho_{1/s}(y)e^{2\pi i\langle y,c\rangle}\right| \le \sum_{y\ne0}\rho_{1/s}(y) = \rho_{1/s}(L^*\smallsetminus\{0\}) \le \varepsilon
+\]</span></p>
+<p>(<span class="math inline">\(s\ge\eta_\varepsilon(L)\)</span>이므로 정의에 의해 마지막 부등식). 따라서 <span class="math inline">\(\left|\rho_s(L+c)-\frac{s^n}{\det(L)}\right|\le\varepsilon\frac{s^n}{\det(L)}\)</span>, 이를 풀면 <span class="math inline">\((1-\varepsilon)\frac{s^n}{\det(L)}\le\rho_s(L+c)\le(1+\varepsilon)\frac{s^n} {\det(L)}\)</span>. <span class="math inline">\(\blacksquare\)</span></p>
+<p><strong>4.</strong> 부분 3의 상하한을 <span class="math inline">\(c\)</span>와 <span class="math inline">\(c&#39;\)</span> 각각에 적용해 나누면 즉시</p>
+<p><span class="math display">\[
+\frac{1-\varepsilon}{1+\varepsilon} \le \frac{\rho_s(L+c)}{\rho_s(L+c&#39;)} \le \frac{1+\varepsilon}{1-\varepsilon}.
+\]</span></p>
+<p><strong>5.</strong> <span class="math inline">\(L\)</span>을 <span class="math inline">\(L&#39;\)</span>의 <span class="math inline">\(N\)</span>개 서로소 coset <span class="math inline">\(c_1+L&#39;,\ldots,c_N+L&#39;\)</span>으로 분할한다. 부분 3의 경계를 <strong><span class="math inline">\(L\)</span>이 아니라 <span class="math inline">\(L&#39;\)</span>에</strong> 적용(조건이 <span class="math inline">\(s\ge\eta_\varepsilon(L&#39;)\)</span>이므로 정확히 이 형태로 성립)하면, 각 coset에서</p>
+<p><span class="math display">\[
+(1-\varepsilon)\frac{s^n}{\det(L&#39;)} \le \rho_s(c_i+L&#39;) \le (1+\varepsilon)\frac{s^n}{\det(L&#39;)} \qquad (i=1,\ldots,N).
+\]</span></p>
+<p>분자 <span class="math inline">\(\rho_s(X\in c+L&#39;)=\rho_s(c+L&#39;)\)</span>는 이 부등식으로 바로 눌리고, 분모 <span class="math inline">\(\rho_s(L)=\sum_{i=1}^N\rho_s(c_i+L&#39;)\)</span>은 <span class="math inline">\(N\)</span>개 항이 각각 같은 부등식을 만족하므로</p>
+<p><span class="math display">\[
+N(1-\varepsilon)\frac{s^n}{\det(L&#39;)} \le \rho_s(L) \le N(1+\varepsilon)\frac{s^n}{\det(L&#39;)}.
+\]</span></p>
+<p><span class="math inline">\(\Pr[X\in c+L&#39;]=\rho_s(c+L&#39;)/\rho_s(L)\)</span>의 분자를 상한/하한으로, 분모를 하한/상한으로 짝지어 나누면 (<span class="math inline">\(s^n/\det(L&#39;)\)</span>가 약분되어)</p>
+<p><span class="math display">\[
+\frac{1-\varepsilon}{N(1+\varepsilon)} \le \Pr[X\in c+L&#39;] \le \frac{1+\varepsilon}{N(1-\varepsilon)}. \qquad\blacksquare
+\]</span></p>
+<blockquote>
+<p>⚠ <strong>감점 포인트:</strong> 부분 5에서 부분 3을 <span class="math inline">\(L\)</span>이 아니라 <span class="math inline">\(L&#39;\)</span>에 적용해야 한다는 것을 놓치기 쉽습니다 — 조건 자체가 <span class="math inline">\(s\ge\eta_\varepsilon(L&#39;)\)</span>(<span class="math inline">\(L\)</span>이 아니라!)이므로 <span class="math inline">\(L&#39;\)</span> 위의 가우시안 질량 경계만 이 조건으로 정당화됩니다.</p>
+</blockquote>
+<hr />
+<p><em>(다음: Algebra 1번부터 — 원하시면 이어서 만들겠습니다.)</em></p>
+
+    </div>
+  </main>
+</div>
+<script src="../assets/katex/katex.min.js"></script>
+<script src="../assets/katex/auto-render.min.js"></script>
+<script>
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: "\\[", right: "\\]", display: true},
+      {left: "\\(", right: "\\)", display: false},
+      {left: "$$", right: "$$", display: true},
+      {left: "$", right: "$", display: false}
+    ]
+  });
+</script>
+</body>
+</html>
