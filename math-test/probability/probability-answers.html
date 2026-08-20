@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Probability 답안 — Math Test 노트</title>
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <a class="back-link" href="../../">← yhwkorea</a>
+    <div class="brand">Math Test 노트</div>
+    <div class="brand-sub">대학원 수학 자격시험 답안 노트</div>
+    <nav>
+      <h5>Contents</h5>
+      <ul>
+        <li><a href="../index.html">홈</a></li>
+        <li><a href="../lattice/lattice-answers.html">Lattice 답안 (1~9)</a></li>
+        <li><a href="../algebra/algebra-answers.html">Algebra 답안 (1~16)</a></li>
+        <li><a href="probability-answers.html" class="active">Probability 답안 (1~10)</a></li>
+        <li><a href="../linear-algebra/linear-algebra-answers.html">Linear Algebra 답안 (1~17)</a></li>
+        <li><a href="../background/real-analysis.html">실해석학</a></li>
+      </ul>
+    </nav>
+  </aside>
+  <main class="content">
+    <div class="content-inner">
+      <div class="eyebrow">Probability · 답안</div>
+<h1 id="probability-답안">Probability — 답안</h1>
+<p>이 문서는 가이드(전략 힌트)가 아니라 <strong>실제 최종 답안</strong>입니다. 문제를 먼저 스스로 풀어본 뒤 채점용으로 쓰세요.</p>
+<hr />
+<h2 id="probability-1">Probability 1</h2>
+<blockquote>
+<p><strong>문제:</strong> Let <span class="math inline">\(A \leftarrow \mathbb{F}_q^{n\times n}\)</span> be uniform. Compute <span class="math inline">\(\Pr[A\in GL_n(\mathbb{F}_q)]\)</span> in closed form.</p>
+<details class="translation"><summary>번역 보기</summary><p>\(A \leftarrow \mathbb{F}_q^{n\times n}\)가 균등분포를 따른다고 하자. \(\Pr[A\in GL_n(\mathbb{F}_q)]\)를 닫힌 형태로 계산하라.</p></details>
+</blockquote>
+<p><strong>답안.</strong></p>
+<p><span class="math inline">\(A\)</span>의 행을 <span class="math inline">\(1\)</span>행부터 <span class="math inline">\(n\)</span>행까지 순서대로 균등독립으로 채운다고 생각하자. <span class="math inline">\(A\)</span>가 가역인 것은 <span class="math inline">\(n\)</span>개 행이 선형독립인 것과 동치. <span class="math inline">\(k\)</span>번째 행이 앞선 <span class="math inline">\(k-1\)</span>개 행과 함께 선형독립이려면, <span class="math inline">\(k\)</span>번째 행이 앞선 행들이 생성하는 부분공간(그 부분공간이 이미 선형독립이라는 조건 위에서 크기 <span class="math inline">\(q^{k-1}\)</span>)에 속하지 않아야 한다 — <span class="math inline">\(q^n\)</span>개 벡터 중 <span class="math inline">\(q^n-q^{k-1}\)</span>개가 유효.</p>
+<p>조건부확률의 연쇄법칙으로</p>
+<p><span class="math display">\[\Pr[A\in GL_n(\mathbb{F}_q)] = \prod_{k=1}^n\Pr[k\text{번째 행이 앞선 행들과 독립}\mid
+\text{앞선 행들이 독립}] = \prod_{k=1}^n\frac{q^n-q^{k-1}}{q^n} = \prod_{k=1}^n(1-q^{k-1-n}).\]</span></p>
+<p><span class="math inline">\(k=1,\ldots,n\)</span>에서 지수 <span class="math inline">\(k-1-n\)</span>은 <span class="math inline">\(-n,-(n-1),\ldots,-1\)</span>을 정확히 한 번씩 훑으므로 재배열하면</p>
+<p><span class="math display">\[\Pr[A\in GL_n(\mathbb{F}_q)] = \prod_{i=1}^n\left(1-\frac{1}{q^i}\right). \qquad\blacksquare\]</span></p>
+<hr />
+<h2 id="probability-2">Probability 2</h2>
+<blockquote>
+<p><strong>문제:</strong> Let <span class="math inline">\(X\)</span> be a Poisson random variable with parameter <span class="math inline">\(\lambda&gt;0\)</span>, i.e. <span class="math inline">\(\Pr[X=k]=e^{-\lambda}\lambda^k/k!\)</span>, <span class="math inline">\(k=0,1,2,\ldots\)</span>. Prove that <span class="math inline">\(\sum_{k=0}^\infty \Pr[X=k]=1\)</span>. Using only the definition of expectation and basic series manipulations, compute <span class="math inline">\(E[X]\)</span> and <span class="math inline">\(\mathrm{Var}(X)\)</span> (hint: first compute <span class="math inline">\(E[X(X-1)]\)</span>). Let <span class="math inline">\(X,Y\)</span> be independent with <span class="math inline">\(X\sim\mathrm{Pois}(\lambda_1)\)</span>, <span class="math inline">\(Y\sim\mathrm{Pois}(\lambda_2)\)</span>. Show <span class="math inline">\(X+Y\)</span> is also Poisson and determine its parameter.</p>
+<details class="translation"><summary>번역 보기</summary><p>\(X\)를 매개변수 \(\lambda&gt;0\)인 포아송 확률변수라 하자, 즉 \(\Pr[X=k]=e^{-\lambda}\lambda^k/k!\) (\(k=0,1,2,\ldots\)). 이것이 실제로 확률분포를 정의함, 즉 \(\sum_{k=0}^\infty \Pr[X=k]=1\)임을 증명하라 (\(e^\lambda=\sum_{k=0}^\infty \lambda^k/k!\)는 증명 없이 사용해도 좋다). 기댓값의 정의와 기본적인 급수 조작만 사용해 \(E[X]\)와 \(\mathrm{Var}(X)\)를 계산하라 (힌트: \(E[X(X-1)]\)을 먼저 계산하면 편리할 수 있다). \(X\)와 \(Y\)가 독립이고 \(X\sim\mathrm{Pois}(\lambda_1)\), \(Y\sim\mathrm{Pois}(\lambda_2)\)라 하자. \(X+Y\)도 포아송분포를 따름을 보이고 그 매개변수를 구하라.</p></details>
+</blockquote>
+<p><strong>답안.</strong></p>
+<p><strong>정규화.</strong> <span class="math inline">\(\sum_{k=0}^\infty e^{-\lambda}\lambda^k/k! = e^{-\lambda}\sum_{k=0}^\infty \lambda^k/k! = e^{-\lambda}\cdot e^\lambda=1\)</span>.</p>
+<p><strong><span class="math inline">\(E[X]\)</span>.</strong> <span class="math inline">\(k=0\)</span> 항은 기여가 <span class="math inline">\(0\)</span>이므로</p>
+<p><span class="math display">\[E[X]=\sum_{k=1}^\infty k\,e^{-\lambda}\frac{\lambda^k}{k!}=\lambda e^{-\lambda}
+\sum_{k=1}^\infty\frac{\lambda^{k-1}}{(k-1)!}=\lambda e^{-\lambda}\sum_{j=0}^\infty
+\frac{\lambda^j}{j!}=\lambda e^{-\lambda}e^\lambda=\lambda\]</span></p>
+<p>(재인덱싱 <span class="math inline">\(j=k-1\)</span>으로 다시 Poisson 정규화 합이 등장).</p>
+<p><strong><span class="math inline">\(E[X(X-1)]\)</span>.</strong> 같은 재인덱싱을 두 번:</p>
+<p><span class="math display">\[E[X(X-1)]=\sum_{k=2}^\infty k(k-1)e^{-\lambda}\frac{\lambda^k}{k!}=\lambda^2e^{-\lambda}
+\sum_{k=2}^\infty\frac{\lambda^{k-2}}{(k-2)!}=\lambda^2e^{-\lambda}e^\lambda=\lambda^2.\]</span></p>
+<p><strong><span class="math inline">\(\mathrm{Var}(X)\)</span>.</strong> <span class="math inline">\(E[X^2]=E[X(X-1)]+E[X]=\lambda^2+\lambda\)</span>이므로 <span class="math inline">\(\mathrm{Var}(X)=E[X^2]-E[X]^2=\lambda^2+\lambda-\lambda^2=\lambda\)</span>.</p>
+<p><strong>독립합.</strong> <span class="math inline">\(n=0,1,2,\ldots\)</span>에 대해</p>
+<p><span class="math display">\[\Pr[X+Y=n]=\sum_{k=0}^n\Pr[X=k]\Pr[Y=n-k]=\sum_{k=0}^n e^{-\lambda_1}\frac{\lambda_1^k}{k!}
+\cdot e^{-\lambda_2}\frac{\lambda_2^{n-k}}{(n-k)!}
+=\frac{e^{-(\lambda_1+\lambda_2)}}{n!}\sum_{k=0}^n\binom{n}{k}\lambda_1^k\lambda_2^{n-k}\]</span></p>
+<p>이고, 이항정리로 <span class="math inline">\(\sum_{k=0}^n\binom{n}{k}\lambda_1^k\lambda_2^{n-k}=(\lambda_1+\lambda_2)^n\)</span>. 따라서 <span class="math inline">\(\Pr[X+Y=n]=e^{-(\lambda_1+\lambda_2)}(\lambda_1+\lambda_2)^n/n!\)</span> — 정확히 <span class="math inline">\(\mathrm{Pois}(\lambda_1+\lambda_2)\)</span>의 pmf. <span class="math inline">\(\blacksquare\)</span></p>
+<hr />
+<h2 id="probability-3">Probability 3</h2>
+<blockquote>
+<p><strong>문제:</strong> Let <span class="math inline">\((X,Y)\)</span> have joint pdf <span class="math inline">\(f_{X,Y}(x,y)=c\)</span> if <span class="math inline">\(x\ge0,y\ge0,x+y\le2\)</span>, and <span class="math inline">\(0\)</span> otherwise. Determine <span class="math inline">\(c\)</span>. Compute the marginal densities. Compute <span class="math inline">\(E[X],E[Y], \mathrm{Cov}(X,Y)\)</span>, and state the sign of the correlation.</p>
+<details class="translation"><summary>번역 보기</summary><p>\((X,Y)\)가 결합 pdf \(f_{X,Y}(x,y) = c\) (\(x\ge0, y\ge0, x+y\le2\)일 때, 그 외에는 \(0\))를 갖는 결합연속 확률변수 쌍이라 하자 (\(c&gt;0\)은 어떤 상수). \(f_{X,Y}\)가 유효한 결합 pdf가 되도록 하는 \(c\) 값을 구하라. 모든 \(x,y\in\mathbb{R}\)에서 성립하는 조각별 공식으로 주변밀도 \(f_X(x)\)와 \(f_Y(y)\)를 계산하라. \(E[X]\), \(E[Y]\), \(\mathrm{Cov}(X,Y)\)를 계산하라. \(X\)와 \(Y\)가 양의 상관, 음의 상관, 무상관 중 무엇인지 밝히고 간단히 근거를 대라.</p></details>
+</blockquote>
+<p><strong>답안.</strong></p>
+<p><strong><span class="math inline">\(c\)</span>.</strong> 지지집합은 꼭짓점 <span class="math inline">\((0,0),(2,0),(0,2)\)</span>인 직각삼각형, 넓이 <span class="math inline">\(=\tfrac12\cdot2\cdot2=2\)</span>. 전체 적분이 <span class="math inline">\(1\)</span>이어야 하므로 <span class="math inline">\(c\cdot2=1\)</span>, <span class="math inline">\(c=1/2\)</span>.</p>
+<p><strong>주변분포.</strong> <span class="math inline">\(x\in[0,2]\)</span>에서 <span class="math inline">\(f_X(x)=\int_0^{2-x}\tfrac12\,dy=\tfrac{2-x}{2}\)</span>; <span class="math inline">\(x\notin[0,2]\)</span>에서 <span class="math inline">\(f_X(x)=0\)</span>. 대칭으로 <span class="math inline">\(f_Y(y)=\tfrac{2-y}{2}\)</span> (<span class="math inline">\(y\in[0,2]\)</span>, 그 외 <span class="math inline">\(0\)</span>).</p>
+<p><strong><span class="math inline">\(E[X]\)</span>.</strong> <span class="math display">\[E[X]=\int_0^2 x\cdot\frac{2-x}{2}\,dx=\frac12\int_0^2(2x-x^2)dx=\frac12\Big[x^2-\frac{x^3}{3}
+\Big]_0^2=\frac12\Big(4-\frac83\Big)=\frac23.\]</span> 대칭으로 <span class="math inline">\(E[Y]=2/3\)</span>.</p>
+<p><strong><span class="math inline">\(E[XY]\)</span>.</strong> <span class="math display">\[E[XY]=\frac12\int_0^2 x\int_0^{2-x}y\,dy\,dx=\frac12\int_0^2x\cdot\frac{(2-x)^2}{2}dx
+=\frac14\int_0^2\big(4x-4x^2+x^3\big)dx=\frac14\Big[2x^2-\frac43x^3+\frac{x^4}4\Big]_0^2\]</span> <span class="math display">\[=\frac14\Big(8-\frac{32}{3}+4\Big)=\frac14\cdot\frac43=\frac13.\]</span></p>
+<p><strong>공분산.</strong> <span class="math inline">\(\mathrm{Cov}(X,Y)=E[XY]-E[X]E[Y]=\dfrac13-\dfrac49=-\dfrac19&lt;0\)</span>.</p>
+<p><strong>부호.</strong> 음의 상관관계. 기하적으로 자연스럽다: 제약 <span class="math inline">\(x+y\le2\)</span> 때문에 <span class="math inline">\(X\)</span>가 크면 <span class="math inline">\(Y\)</span>가 놓일 수 있는 범위가 좁아져(위쪽으로 눌려) 함께 커지기 어렵다. <span class="math inline">\(\blacksquare\)</span></p>
+<hr />
+<h2 id="probability-4">Probability 4</h2>
+<blockquote>
+<p><strong>문제:</strong> Let <span class="math inline">\(X_1,\ldots,X_n\)</span> be independent, each uniform on <span class="math inline">\([0,1]\)</span>. Define <span class="math inline">\(S_n=X_1+\cdots+X_n\)</span> (Irwin–Hall distribution). Find the mean and variance of <span class="math inline">\(S_n\)</span>.</p>
+<details class="translation"><summary>번역 보기</summary><p>\(X_1,X_2,\ldots,X_n\)이 각각 \([0,1]\) 위에서 균등분포를 따르는 독립 확률변수라 하자. \(S_n=X_1+X_2+\cdots+X_n\)으로 정의한다. 이때 \(S_n\)은 매개변수 \(n\)인 Irwin–Hall 분포를 따른다고 한다. \(S_n\)의 평균과 분산을 구하라.</p></details>
+</blockquote>
+<p><strong>답안.</strong></p>
+<p>Irwin–Hall의 밀도함수는 조각별 다항식으로 복잡하지만, 평균·분산은 밀도를 몰라도 나온다. 균등분포 <span class="math inline">\(\mathrm{Unif}[0,1]\)</span>의 <span class="math inline">\(E[X_i]=1/2\)</span>, <span class="math inline">\(\mathrm{Var}(X_i)=1/12\)</span> (표준 계산: <span class="math inline">\(\int_0^1x\,dx=1/2\)</span>, <span class="math inline">\(\int_0^1x^2dx-1/4=1/3-1/4=1/12\)</span>).</p>
+<p>기댓값의 선형성(독립성 불필요): <span class="math inline">\(E[S_n]=\sum_iE[X_i]=n/2\)</span>.</p>
+<p>독립인 확률변수의 합의 분산은 분산의 합: <span class="math inline">\(\mathrm{Var}(S_n)=\sum_i\mathrm{Var}(X_i)=n/12\)</span>. <span class="math inline">\(\blacksquare\)</span></p>
+<blockquote>
+<p>⚠ <strong>감점 포인트:</strong> 이름에 낚여 Irwin–Hall의 실제 조각별 밀도함수부터 적분하려 들면 시간 낭비입니다 — 평균·분산은 선형성/독립성만으로 끝나는 문제입니다.</p>
+</blockquote>
+<hr />
+<h2 id="probability-5">Probability 5</h2>
+<blockquote>
+<p><strong>문제:</strong> Let <span class="math inline">\(X\)</span> have finite mean <span class="math inline">\(\mu=E[X]\)</span> and finite variance <span class="math inline">\(\sigma^2=\mathrm{Var}(X)\)</span>. Prove that for every <span class="math inline">\(t&gt;0\)</span>, <span class="math inline">\(\Pr(|X-\mu|\ge t)\le\sigma^2/t^2\)</span> (Chebyshev’s inequality).</p>
+<details class="translation"><summary>번역 보기</summary><p>\(X\)가 유한한 평균 \(\mu=E[X]\)와 유한한 분산 \(\sigma^2=\mathrm{Var}(X)\)를 갖는 확률변수라 하자. 모든 \(t&gt;0\)에 대해 \(\Pr(|X-\mu|\ge t) \le \sigma^2/t^2\)임을 증명하라. 이를 체비셰프 부등식이라 한다.</p></details>
+</blockquote>
+<p><strong>답안.</strong> <span class="math inline">\((X-\mu)^2\ge0\)</span>이므로 Markov(Probability 6)를 <span class="math inline">\((X-\mu)^2\)</span>와 임계값 <span class="math inline">\(t^2\)</span>에 적용:</p>
+<p><span class="math display">\[\Pr\big((X-\mu)^2\ge t^2\big)\le\frac{E[(X-\mu)^2]}{t^2}=\frac{\sigma^2}{t^2}.\]</span></p>
+<p><span class="math inline">\((X-\mu)^2\ge t^2 \iff |X-\mu|\ge t\)</span> (<span class="math inline">\(t&gt;0\)</span>이므로 양변에 제곱근)이므로 <span class="math inline">\(\Pr(|X-\mu|\ge t)\le\sigma^2/t^2\)</span>. <span class="math inline">\(\blacksquare\)</span></p>
+<hr />
+<h2 id="probability-6">Probability 6</h2>
+<blockquote>
+<p><strong>문제:</strong> Let <span class="math inline">\(X\)</span> be a nonnegative random variable with finite expectation. Prove that for every <span class="math inline">\(a&gt;0\)</span>, <span class="math inline">\(\Pr(X\ge a)\le E[X]/a\)</span> (Markov’s inequality).</p>
+<details class="translation"><summary>번역 보기</summary><p>\(X\)가 유한한 기댓값을 갖는 음이 아닌 확률변수라 하자. 모든 \(a&gt;0\)에 대해 \(\Pr(X\ge a) \le E[X]/a\)임을 증명하라. 이를 마르코프 부등식이라 한다.</p></details>
+</blockquote>
+<p><strong>답안.</strong> 모든 <span class="math inline">\(x\ge0\)</span>에서 점별 부등식 <span class="math inline">\(x\ge a\cdot\mathbb{1}[x\ge a]\)</span>이 성립한다: <span class="math inline">\(x&lt;a\)</span>이면 우변이 <span class="math inline">\(0\le x\)</span>; <span class="math inline">\(x\ge a\)</span>이면 우변이 <span class="math inline">\(a\le x\)</span>. <span class="math inline">\(x=X\)</span>를 대입하고 기댓값을 취하면(기댓값의 단조성)</p>
+<p><span class="math display">\[E[X]\ge a\cdot E[\mathbb{1}[X\ge a]]=a\cdot\Pr(X\ge a).\]</span></p>
+<p><span class="math inline">\(a&gt;0\)</span>으로 나누면 <span class="math inline">\(\Pr(X\ge a)\le E[X]/a\)</span>. <span class="math inline">\(\blacksquare\)</span></p>
+<hr />
+<h2 id="probability-7">Probability 7</h2>
+<blockquote>
+<p><strong>문제:</strong> Let <span class="math inline">\(X\)</span> be a random variable and <span class="math inline">\(\varphi:\mathbb{R}\to\mathbb{R}\)</span> convex, with <span class="math inline">\(E[X],E[\varphi(X)]\)</span> finite. Prove <span class="math inline">\(\varphi(E[X])\le E[\varphi(X)]\)</span> (Jensen’s inequality).</p>
+<details class="translation"><summary>번역 보기</summary><p>\(X\)를 확률변수, \(\varphi:\mathbb{R}\to\mathbb{R}\)을 볼록함수라 하자. \(E[X]\)와 \(E[\varphi(X)]\)가 유한하다고 가정한다. \(\varphi(E[X]) \le E[\varphi(X)]\)임을 증명하라. 이를 옌센 부등식이라 한다.</p></details>
+</blockquote>
+<p><strong>답안.</strong> 볼록함수는 임의의 점 <span class="math inline">\(\mu:=E[X]\)</span>에서 지지선(supporting line)을 갖는다: 어떤 <span class="math inline">\(c\in\mathbb{R}\)</span>(그 점에서의 기울기 혹은 부분기울기)에 대해 <strong>모든</strong> <span class="math inline">\(x\in\mathbb{R}\)</span>에서</p>
+<p><span class="math display">\[\varphi(x)\ge\varphi(\mu)+c(x-\mu)\]</span></p>
+<p>(볼록함수의 정의적 성질 — 그래프가 어느 접선/지지선 위에 놓임). <span class="math inline">\(x=X\)</span>를 대입하고 기댓값을 취하면(단조성 + 선형성)</p>
+<p><span class="math display">\[E[\varphi(X)]\ge\varphi(\mu)+c\big(E[X]-\mu\big)=\varphi(\mu)+c\cdot0=\varphi(\mu)=
+\varphi(E[X]).\]</span></p>
+<p>우변의 선형항이 <span class="math inline">\(E[X]-\mu=0\)</span>이라 사라지는 것이 핵심 메커니즘. <span class="math inline">\(\blacksquare\)</span></p>
+<hr />
+<h2 id="probability-8">Probability 8</h2>
+<blockquote>
+<p><strong>문제:</strong> Let <span class="math inline">\(X\)</span> be a random variable whose MGF exists. Prove that for every <span class="math inline">\(a\in\mathbb{R}\)</span> and <span class="math inline">\(t&gt;0\)</span>, <span class="math inline">\(\Pr(X\ge a)\le e^{-ta}E[e^{tX}]\)</span>. Deduce <span class="math inline">\(\Pr(X\ge a)\le\inf_{t&gt;0}e^{-ta}E[e^{tX}]\)</span> (Chernoff bound).</p>
+<details class="translation"><summary>번역 보기</summary><p>\(X\)를 확률변수라 하고, 그 적률생성함수(MGF)가 존재한다고 가정하자. 모든 \(a\in\mathbb{R}\)과 모든 \(t&gt;0\)에 대해 \(\Pr(X\ge a) \le e^{-ta}E[e^{tX}]\)임을 증명하라. \(\Pr(X\ge a) \le \inf_{t&gt;0} e^{-ta}E[e^{tX}]\)임을 유도하라. 이를 체르노프 경계라 한다.</p></details>
+</blockquote>
+<p><strong>답안.</strong> <span class="math inline">\(t&gt;0\)</span> 고정. <span class="math inline">\(x\mapsto e^{tx}\)</span>는 순증가함수이므로 <span class="math inline">\(X\ge a\iff e^{tX}\ge e^{ta}\)</span>. <span class="math inline">\(e^{tX}\ge0\)</span>이므로 Markov를 <span class="math inline">\(e^{tX}\)</span>와 임계값 <span class="math inline">\(e^{ta}\)</span>에 적용:</p>
+<p><span class="math display">\[\Pr(X\ge a)=\Pr(e^{tX}\ge e^{ta})\le\frac{E[e^{tX}]}{e^{ta}}=e^{-ta}E[e^{tX}].\]</span></p>
+<p>이 부등식은 <strong>모든</strong> <span class="math inline">\(t&gt;0\)</span>에서 성립하므로, 좌변이 <span class="math inline">\(t\)</span>와 무관함을 이용해 우변의 <span class="math inline">\(\inf\)</span>를 취해도 부등식은 그대로 유지된다: <span class="math inline">\(\Pr(X\ge a)\le\inf_{t&gt;0}e^{-ta}E[e^{tX}]\)</span>. <span class="math inline">\(\blacksquare\)</span></p>
+<hr />
+<h2 id="probability-9">Probability 9</h2>
+<blockquote>
+<p><strong>문제:</strong> Let <span class="math inline">\(X_1,\ldots,X_n\)</span> be independent with <span class="math inline">\(a_i\le X_i\le b_i\)</span> a.s. Define <span class="math inline">\(S_n=\sum X_i\)</span>. Prove that for every <span class="math inline">\(t&gt;0\)</span>, <span class="math inline">\(\Pr(S_n-E[S_n]\ge t)\le\exp(-2t^2/\sum(b_i-a_i)^2)\)</span>, and deduce <span class="math inline">\(\Pr(|S_n-E[S_n]|\ge t)\le2\exp(-2t^2/\sum(b_i-a_i)^2)\)</span> (Hoeffding’s inequality).</p>
+<details class="translation"><summary>번역 보기</summary><p>\(X_1,X_2,\ldots,X_n\)이 각각 거의 확실히 \(a_i\le X_i\le b_i\)를 만족하는 독립 확률변수라 하자. \(S_n=\sum X_i\)로 정의한다. 모든 \(t&gt;0\)에 대해 \(\Pr(S_n-E[S_n]\ge t) \le \exp(-2t^2/\sum(b_i-a_i)^2)\)임을 증명하라. 또한 \(\Pr(|S_n-E[S_n]|\ge t) \le 2\exp(-2t^2/\sum(b_i-a_i)^2)\)임을 유도하라. 이를 회프딩 부등식이라 한다.</p></details>
+</blockquote>
+<p><strong>답안.</strong> <span class="math inline">\(V:=\sum_i(b_i-a_i)^2\)</span>. Chernoff(Probability 8)를 <span class="math inline">\(S_n-E[S_n]\)</span>에 적용, <span class="math inline">\(s&gt;0\)</span>:</p>
+<p><span class="math display">\[\Pr(S_n-E[S_n]\ge t)\le e^{-st}E\big[e^{s(S_n-E[S_n])}\big] = e^{-st}\prod_iE\big[e^{s(X_i-
+E[X_i])}\big]\]</span></p>
+<p>(마지막 등식은 <span class="math inline">\(X_i\)</span>들의 독립성). Hoeffding’s lemma(주어짐): <span class="math inline">\(E[e^{s(X_i-E[X_i])}]\le \exp\!\big(s^2(b_i-a_i)^2/8\big)\)</span>. 곱하면</p>
+<p><span class="math display">\[\Pr(S_n-E[S_n]\ge t)\le\exp\Big(-st+\frac{s^2V}{8}\Big)=:\exp(g(s)).\]</span></p>
+<p><strong><span class="math inline">\(s\)</span>에 대해 최적화.</strong> <span class="math inline">\(g&#39;(s)=-t+sV/4=0\Rightarrow s^*=4t/V\)</span>. 대입:</p>
+<p><span class="math display">\[g(s^*)=-\frac{4t}{V}\cdot t+\frac{(4t/V)^2V}{8}=-\frac{4t^2}{V}+\frac{2t^2}{V}=-\frac{2t^2}{V}.\]</span></p>
+<p>(<span class="math inline">\(g(s)=-st+s^2V/8\)</span>은 계수 <span class="math inline">\(V/8&gt;0\)</span>인 아래로 볼록한 이차식이므로 <span class="math inline">\(s^*\)</span>는 <span class="math inline">\(g\)</span>의 최솟값점 — 즉 <span class="math inline">\(\exp(g(s^*))\)</span>가 이 방법으로 얻을 수 있는 가장 강한 상계다.) 부등식은 모든 <span class="math inline">\(s&gt;0\)</span>에서 성립하므로 특히 <span class="math inline">\(s=s^*\)</span>에서: <span class="math inline">\(\Pr(S_n-E[S_n]\ge t)\le\exp(-2t^2/V)\)</span>.</p>
+<p><strong>양측.</strong> <span class="math inline">\(-(S_n-E[S_n])=\sum(-X_i)-E[\sum(-X_i)]\)</span>도 같은 범위 폭 <span class="math inline">\(b_i-a_i\)</span>(부호만 바뀜)을 가지므로 동일한 논증으로 <span class="math inline">\(\Pr(S_n-E[S_n]\le-t)\le\exp(-2t^2/V)\)</span>. Union bound:</p>
+<p><span class="math display">\[\Pr(|S_n-E[S_n]|\ge t)=\Pr(S_n-E[S_n]\ge t)+\Pr(S_n-E[S_n]\le-t)\le2\exp(-2t^2/V).
+\qquad\blacksquare\]</span></p>
+<hr />
+<h2 id="probability-10">Probability 10</h2>
+<blockquote>
+<p><strong>문제:</strong> Let <span class="math inline">\(X\sim\mathrm{Bin}(n,p)\)</span>, <span class="math inline">\(0&lt;p&lt;1\)</span>. Compute the MGF of <span class="math inline">\(X\)</span>. For <span class="math inline">\(p&lt;a&lt;1\)</span>, prove <span class="math inline">\(\Pr(X\ge an)\le\exp(-nD(a\|p))\)</span> where <span class="math inline">\(D(a\|p):=a\log(a/p)+(1-a)\log((1-a)/(1-p))\)</span>. Derive the analogous lower-tail bound for <span class="math inline">\(0&lt;a&lt;p\)</span>. Prove <span class="math inline">\(D(a\|p)\ge2(a-p)^2\)</span> for <span class="math inline">\(a,p\in(0,1)\)</span>, and deduce Hoeffding’s inequality for Bernoulli sums.</p>
+<details class="translation"><summary>번역 보기</summary><p>\(X\sim\mathrm{Bin}(n,p)\) (\(0&lt;p&lt;1\))라 하자. 1. \(X\)의 적률생성함수를 계산하라. 2. \(p&lt;a&lt;1\)에 대해 \(\Pr(X\ge an) \le \exp(-nD(a\|p))\)임을 증명하라, 여기서 \(D(a\|p):=a \log(a/p)+(1-a)\log((1-a)/(1-p))\). 3. \(0&lt;a&lt;p\)에 대해 유사한 하단꼬리 경계를 유도하라. 4. \(a,p\in(0,1)\)에 대해 \(D(a\|p) \ge 2(a-p)^2\)임을 증명하고, 베르누이 합에 대한 회프딩 부등식을 유도하라.</p></details>
+</blockquote>
+<p><strong>답안.</strong></p>
+<p><strong>1. MGF.</strong> <span class="math inline">\(X=\sum_{i=1}^n Y_i\)</span>, <span class="math inline">\(Y_i\)</span> i.i.d. <span class="math inline">\(\mathrm{Bernoulli}(p)\)</span>. 한 항의 MGF: <span class="math inline">\(E[e^{tY_i}]=p e^t+(1-p)\)</span>. 독립이므로</p>
+<p><span class="math display">\[M_X(t)=E[e^{tX}]=\prod_iE[e^{tY_i}]=(pe^t+1-p)^n.\]</span></p>
+<p><strong>2. 상단 꼬리, <span class="math inline">\(p&lt;a&lt;1\)</span>.</strong> Chernoff(Probability 8): <span class="math inline">\(\Pr(X\ge an)\le e^{-tan}M_X(t)= \exp\big(n[-ta+\log(pe^t+1-p)]\big)\)</span>, 임의의 <span class="math inline">\(t&gt;0\)</span>에서 성립. <span class="math inline">\(h(t):=-ta+\log(pe^t+1-p)\)</span>를 최소화: <span class="math inline">\(h&#39;(t)=-a+\dfrac{pe^t}{pe^t+1-p}=0 \Rightarrow pe^t(1-a)=a(1-p)(1) \Rightarrow e^{t^*}=\dfrac{a(1-p)}{p(1-a)}\)</span> (<span class="math inline">\(a&gt;p\)</span>이므로 <span class="math inline">\(t^*&gt;0\)</span>, Chernoff 적용조건 충족).</p>
+<p>대입: <span class="math inline">\(pe^{t^*}=\dfrac{a(1-p)}{1-a}\)</span>이므로 <span class="math inline">\(pe^{t^*}+1-p=\dfrac{a(1-p)}{1-a}+(1-p) =(1-p)\cdot\dfrac{a+1-a}{1-a}=\dfrac{1-p}{1-a}\)</span>. 따라서</p>
+<p><span class="math display">\[h(t^*)=-a\log\frac{a(1-p)}{p(1-a)}+\log\frac{1-p}{1-a}
+=-a\log\frac ap-a\log\frac{1-p}{1-a}+\log\frac{1-p}{1-a}\]</span> <span class="math display">\[=-a\log\frac ap+(1-a)\log\frac{1-p}{1-a}=-\Big[a\log\frac ap+(1-a)\log\frac{1-a}{1-p}\Big]
+=-D(a\|p).\]</span></p>
+<p>따라서 <span class="math inline">\(\Pr(X\ge an)\le\exp(n\,h(t^*))=\exp(-nD(a\|p))\)</span>. <span class="math inline">\(\blacksquare\)</span></p>
+<p><strong>3. 하단 꼬리, <span class="math inline">\(0&lt;a&lt;p\)</span>.</strong> <span class="math inline">\(n-X\sim\mathrm{Bin}(n,1-p)\)</span>. <span class="math inline">\(a&lt;p\Rightarrow1-a&gt;1-p\)</span>이므로 부분 2를 <span class="math inline">\((p,a)\to(1-p,1-a)\)</span>로 치환해 적용 가능:</p>
+<p><span class="math display">\[\Pr(X\le an)=\Pr(n-X\ge n(1-a))\le\exp\big(-nD(1-a\|1-p)\big).\]</span></p>
+<p>정의를 직접 전개하면 <span class="math inline">\(D(1-a\|1-p)=(1-a)\log\dfrac{1-a}{1-p}+a\log\dfrac ap=D(a\|p)\)</span> (대칭적으로 같은 식) — 따라서 <span class="math inline">\(\Pr(X\le an)\le\exp(-nD(a\|p))\)</span>, 부분 2와 정확히 같은 형태의 경계.</p>
+<p><strong>4. <span class="math inline">\(D(a\|p)\ge2(a-p)^2\)</span>.</strong> <span class="math inline">\(p\in(0,1)\)</span> 고정, <span class="math inline">\(g(a):=D(a\|p)-2(a-p)^2\)</span> (<span class="math inline">\(a\in(0,1)\)</span>).</p>
+<p><span class="math inline">\(g(p)=D(p\|p)-0=p\log1+(1-p)\log1=0\)</span>.</p>
+<p><span class="math inline">\(g&#39;(a)\)</span>: <span class="math inline">\(D(a\|p)\)</span>를 <span class="math inline">\(a\)</span>로 미분하면 (곱미분: <span class="math inline">\(\frac{d}{da}[a\log a]=\log a+1\)</span>, <span class="math inline">\(\frac{d}{da}[(1-a)\log(1-a)]=-\log(1-a)-1\)</span>; <span class="math inline">\(p\)</span>에 관한 항은 <span class="math inline">\(a\)</span>-상수)</p>
+<p><span class="math display">\[\frac{d}{da}D(a\|p)=\log a-\log p-\log(1-a)+\log(1-p)=\log\frac{a(1-p)}{p(1-a)},\]</span></p>
+<p><span class="math display">\[g&#39;(a)=\log\frac{a(1-p)}{p(1-a)}-4(a-p),\qquad g&#39;(p)=\log1-0=0.\]</span></p>
+<p><span class="math inline">\(g&#39;&#39;(a)=\dfrac{1}{a}+\dfrac1{1-a}-4=\dfrac{1}{a(1-a)}-4\)</span>. AM–GM(<span class="math inline">\(a,1-a\)</span>의 산술-기하평균)으로 <span class="math inline">\(a(1-a)\le\big(\tfrac{a+(1-a)}2\big)^2=\tfrac14\)</span>가 모든 <span class="math inline">\(a\in(0,1)\)</span>에서 성립하므로 <span class="math inline">\(\dfrac1{a(1-a)}\ge4\)</span>, 즉 <strong><span class="math inline">\(g&#39;&#39;(a)\ge0\)</span>가 정의역 전체에서 성립</strong> — <span class="math inline">\(g\)</span>는 <span class="math inline">\((0,1)\)</span>에서 볼록.</p>
+<p>볼록함수이면서 <span class="math inline">\(g(p)=0,\ g&#39;(p)=0\)</span>인 <span class="math inline">\(p\)</span>는 <span class="math inline">\(g\)</span>의 전역 최솟값점(볼록함수의 임계점은 항상 전역 최소). 따라서 <span class="math inline">\(g(a)\ge g(p)=0\)</span> 모든 <span class="math inline">\(a\in(0,1)\)</span>에서 — <span class="math inline">\(D(a\|p)\ge2(a-p)^2\)</span>. <span class="math inline">\(\blacksquare\)</span></p>
+<p><strong>Hoeffding 회수.</strong> <span class="math inline">\(Y_i\sim\mathrm{Bernoulli}(p)\)</span> i.i.d., <span class="math inline">\(X=\sum Y_i\)</span>, <span class="math inline">\(a:=p+t/n\)</span> (<span class="math inline">\(t&gt;0\)</span>)로 놓으면 <span class="math inline">\(an=np+t=E[X]+t\)</span>이므로 부분 2와 부분 4를 결합:</p>
+<p><span class="math display">\[\Pr(X-E[X]\ge t)=\Pr(X\ge an)\le\exp(-nD(a\|p))\le\exp\big(-2n(a-p)^2\big)
+=\exp\Big(-2n\cdot\frac{t^2}{n^2}\Big)=\exp\Big(-\frac{2t^2}{n}\Big).\]</span></p>
+<p><span class="math inline">\(Y_i\in[0,1]\)</span>이므로 <span class="math inline">\(\sum(b_i-a_i)^2=n\cdot1^2=n\)</span> — 이것이 정확히 Probability 9의 Hoeffding 경계를 베르누이 특수 케이스로 재현한 것. <span class="math inline">\(\blacksquare\)</span></p>
+
+    </div>
+  </main>
+</div>
+<script src="../assets/katex/katex.min.js"></script>
+<script src="../assets/katex/auto-render.min.js"></script>
+<script>
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: "\\[", right: "\\]", display: true},
+      {left: "\\(", right: "\\)", display: false},
+      {left: "$$", right: "$$", display: true},
+      {left: "$", right: "$", display: false}
+    ]
+  });
+</script>
+</body>
+</html>
