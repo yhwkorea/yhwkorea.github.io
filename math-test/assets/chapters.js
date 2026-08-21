@@ -11,10 +11,10 @@
     const details = document.createElement('details');
     details.className = 'chapter';
     const summary = document.createElement('summary');
-    summary.append(heading);
     const body = document.createElement('div');
     body.className = 'chapter-body';
     content.insertBefore(details, heading);
+    summary.append(heading);
     details.append(summary, body);
     while (details.nextSibling && details.nextSibling !== nextHeading) {
       body.append(details.nextSibling);
