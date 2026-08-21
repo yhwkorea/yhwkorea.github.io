@@ -219,6 +219,24 @@ blockquote {
   font-weight: 700;
 }
 
+/* Concept pages: why a structure exists and where it is used. */
+.concept-purpose {
+  float: right; clear: right; width: 210px; margin-right: -234px; margin-bottom: 18px;
+  padding: 12px 14px; border: 1px solid var(--border); border-radius: 9px;
+  background: var(--surface); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: .78rem; line-height: 1.5; color: var(--ink-soft);
+}
+.concept-purpose strong { display: block; color: var(--accent-ink); font-size: .74rem; }
+.concept-purpose p { margin: 3px 0 10px; }
+.concept-purpose p:last-child { margin-bottom: 0; }
+.worked-example {
+  max-width: 600px; margin: 18px 0 24px; padding: 15px 18px;
+  border: 1px solid var(--border); border-left: 3px solid var(--cite);
+  border-radius: 9px; background: var(--cite-soft);
+}
+.worked-example > strong { color: var(--cite); font-size: .9rem; }
+.worked-example p { margin: 6px 0 0; font-size: .94rem; }
+
 @media (max-width: 1150px) {
   .sidenote, .marginnote {
     float: none;
@@ -229,6 +247,11 @@ blockquote {
     padding-left: 12px;
     border-left: 2px solid var(--border);
   }
+  .concept-purpose {
+    float: none; width: auto; max-width: 600px; margin: 10px 0 18px;
+    display: grid; grid-template-columns: 90px 1fr; column-gap: 10px;
+  }
+  .concept-purpose p { margin: 0 0 8px; }
 }
 @media (max-width: 900px) {
   .layout { flex-direction: column; }
@@ -251,6 +274,7 @@ blockquote {
   .content-inner > .warn-box {
     max-width: 100%;
   }
+  .worked-example, .concept-purpose { max-width: 100%; }
 }
 
 details.translation { margin: 8px 0 0; }

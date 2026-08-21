@@ -19,11 +19,37 @@
     </nav></aside><main class="content"><div class="content-inner"><div class="eyebrow">Mathematical Foundations · Algebra</div><h1 id="대수학-기초-연산에서-체까지">대수학 기초 — 연산에서 체까지</h1>
 <p>SQIsign에서 <span class="math inline">\(\mathbb F_{p^2}\)</span>, <span class="math inline">\(\mathbb Z[i]\)</span>, <span class="math inline">\(\operatorname{End}(E)\)</span> 같은 대상을 읽으려면 먼저 군·환·아이디얼·체가 무엇인지 알아야 합니다. 이 장은 그 구조들이 어떤 공리를 추가할 때 차례로 나타나는지 설명합니다.</p>
 <h2 id="연산이란-무엇인가">1. 연산이란 무엇인가</h2>
+<aside class="concept-purpose">
+<strong>왜 등장했나?</strong>
+<p>
+“두 대상을 결합한다”는 계산에서 구체적인 숫자를 지우고 공통 규칙만 남기기 위해 등장했습니다.
+</p>
+<strong>어디에 쓰이나?</strong>
+<p>
+타원곡선 점의 덧셈, endomorphism의 합성과 덧셈을 하나의 언어로 다룹니다.
+</p>
+</aside>
 <p>집합 <span class="math inline">\(S\)</span> 위의 <strong>이항연산(binary operation)</strong>은 함수</p>
 <p><span class="math display">\[\star:S\times S\longrightarrow S\]</span></p>
 <p>입니다. 두 원소 <span class="math inline">\(a,b\)</span>를 입력하면 같은 집합의 원소 <span class="math inline">\(a\star b\)</span> 하나를 출력합니다. 출력이 다시 <span class="math inline">\(S\)</span>에 있다는 조건을 <strong>닫힘성</strong>이라 합니다.</p>
 <p>연산 기호가 <span class="math inline">\(+\)</span>나 <span class="math inline">\(\cdot\)</span>이라고 해서 반드시 평소 정수 연산인 것은 아닙니다. 예를 들어 <span class="math inline">\(\mathbb Z/5\mathbb Z\)</span>의 덧셈은 정수로 더한 뒤 5로 나눈 나머지를 취하는 함수입니다.</p>
+<div class="worked-example">
+<strong>계산으로 보기 — 같은 기호, 다른 연산</strong>
+<p>
+정수에서는 <span class="math inline">\(4+3=7\)</span>이지만 <span class="math inline">\(\mathbb Z/5\mathbb Z\)</span>에서는 <span class="math inline">\(4+3=2\)</span>입니다. 계산 결과를 5로 나눈 나머지로 되돌리는 것까지가 이 집합에서 정의한 <span class="math inline">\(+\)</span> 연산입니다. 반면 <span class="math inline">\(a\star b:=a-b\)</span>는 <span class="math inline">\(\mathbb Z\)</span> 위 이항연산이지만 결합적이지 않습니다: <span class="math inline">\((5\star3)\star1=1\)</span>인 반면 <span class="math inline">\(5\star(3\star1)=3\)</span>입니다.
+</p>
+</div>
 <h2 id="군-연산-하나가-있는-구조">2. 군: 연산 하나가 있는 구조</h2>
+<aside class="concept-purpose">
+<strong>왜 등장했나?</strong>
+<p>
+되돌릴 수 있는 대칭과 이동의 공통 구조를 표현하려고 등장했습니다.
+</p>
+<strong>어디에 쓰이나?</strong>
+<p>
+타원곡선 점 <span class="math inline">\(E(F)\)</span>가 아벨군을 이루고, isogeny는 이 군 구조를 보존합니다.
+</p>
+</aside>
 <p><strong>정의.</strong> 집합 <span class="math inline">\(G\)</span>와 이항연산 <span class="math inline">\(\star\)</span>가 다음을 만족하면 <span class="math inline">\((G,\star)\)</span>를 <strong>군(group)</strong>이라 합니다.</p>
 <ol type="1">
 <li><strong>결합법칙:</strong> <span class="math inline">\((a\star b)\star c=a\star(b\star c)\)</span>.</li>
@@ -32,9 +58,25 @@
 </ol>
 <p><span class="math inline">\(a\star b=b\star a\)</span>까지 성립하면 <strong>아벨군</strong> 또는 가환군이라 합니다. 군에는 기본 연산이 하나뿐입니다. 덧셈 기호를 쓰면 항등원을 <span class="math inline">\(0\)</span>, 역원을 <span class="math inline">\(-a\)</span>라 쓰고, 곱셈 기호를 쓰면 항등원을 <span class="math inline">\(1\)</span>, 역원을 <span class="math inline">\(a^{-1}\)</span>이라 쓰는 관습이 있습니다.</p>
 <p><strong>예제.</strong> <span class="math inline">\((\mathbb Z,+)\)</span>는 아벨군입니다. 하지만 <span class="math inline">\((\mathbb Z,\times)\)</span>는 군이 아닙니다. 예를 들어 2의 곱셈 역원 <span class="math inline">\(1/2\)</span>가 <span class="math inline">\(\mathbb Z\)</span>에 없기 때문입니다.</p>
+<div class="worked-example">
+<strong>계산으로 보기 — <span class="math inline">\(\mathbb Z/5\mathbb Z\)</span>의 덧셈군</strong>
+<p>
+<span class="math inline">\([2]\)</span>를 계속 더하면 <span class="math inline">\([2],[4],[1],[3],[0]\)</span> 순서로 모든 원소를 지나 항등원으로 돌아옵니다. <span class="math inline">\([2]\)</span>의 역원은 <span class="math inline">\([3]\)</span>입니다. 실제로 <span class="math inline">\([2]+[3]=[5]=[0]\)</span>입니다. 이처럼 유한한 점들을 반복해서 더하는 구조가 나중에 타원곡선의 torsion 계산으로 이어집니다.
+</p>
+</div>
 <p><strong>부분군.</strong> <span class="math inline">\(H\subseteq G\)</span>가 같은 연산으로 군을 이루면 <span class="math inline">\(H\)</span>를 부분군이라 합니다. 이를 확인하는 간단한 판정법은 <span class="math inline">\(H\ne\varnothing\)</span>이고 모든 <span class="math inline">\(a,b\in H\)</span>에 대해 <span class="math inline">\(a\star b^{-1}\in H\)</span>인지 보는 것입니다.</p>
 <p><strong>준동형.</strong> 군 준동형 <span class="math inline">\(f:G\to H\)</span>는 <span class="math inline">\(f(ab)=f(a)f(b)\)</span>를 만족하는 함수입니다. 커널 <span class="math inline">\(\ker f=\{g:f(g)=e_H\}\)</span>은 <span class="math inline">\(G\)</span>의 부분군이고, <span class="math inline">\(f\)</span>가 잃어버리는 정보를 측정합니다. 타원곡선의 isogeny도 대수적 사상이면서 군 준동형입니다.</p>
 <h2 id="환-덧셈과-곱셈이-함께-있는-구조">3. 환: 덧셈과 곱셈이 함께 있는 구조</h2>
+<aside class="concept-purpose">
+<strong>왜 등장했나?</strong>
+<p>
+더하기와 곱하기가 동시에 존재하고 분배법칙으로 연결되는 계산을 추상화하려고 등장했습니다.
+</p>
+<strong>어디에 쓰이나?</strong>
+<p>
+<span class="math inline">\(\mathbb Z[i]\)</span>, 다항식환, 행렬환, 초특이 곡선의 <span class="math inline">\(\operatorname{End}(E)\)</span>를 표현합니다.
+</p>
+</aside>
 <p><strong>정의.</strong> 집합 <span class="math inline">\(R\)</span>에 두 이항연산 <span class="math inline">\(+\)</span>와 <span class="math inline">\(\cdot\)</span>이 있고 다음을 만족하면 <strong>환(ring)</strong>이라 합니다.</p>
 <ol type="1">
 <li><span class="math inline">\((R,+)\)</span>는 아벨군이다.</li>
@@ -46,7 +88,24 @@
 <h3 id="곱셈-역원은-일부에만-있다">곱셈 역원은 일부에만 있다</h3>
 <p>환에서는 모든 0 아닌 원소가 나눗셈을 허용할 필요가 없습니다. <span class="math inline">\(u\in R\)</span>에 <span class="math inline">\(uv=vu=1\)</span>인 <span class="math inline">\(v\)</span>가 존재할 때만 <span class="math inline">\(u\)</span>를 <strong>단원(unit)</strong>이라 합니다. 예를 들어 <span class="math inline">\(\mathbb Z\)</span>의 단원은 <span class="math inline">\(1,-1\)</span>뿐입니다.</p>
 <p>0이 아닌 <span class="math inline">\(a,b\)</span>인데 <span class="math inline">\(ab=0\)</span>이면 이들을 <strong>영인자</strong>라 합니다. <span class="math inline">\(\mathbb Z/6\mathbb Z\)</span>에서는 <span class="math inline">\(\bar2\bar3=\bar0\)</span>이므로 <span class="math inline">\(\bar2,\bar3\)</span>이 영인자입니다.</p>
+<div class="worked-example">
+<strong>계산으로 보기 — 다항식환에서 두 연산</strong>
+<p>
+<span class="math inline">\(\mathbb F_5[x]\)</span>에서 <span class="math inline">\(f=x+2\)</span>, <span class="math inline">\(g=x^2+4\)</span>라 하면 <span class="math inline">\(f+g=x^2+x+1\)</span>이고 <span class="math inline">\(fg=x^3+2x^2+4x+8=x^3+2x^2+4x+3\)</span>입니다. 마지막 등식은 계수를 5로 나눈 나머지로 바꾼 것입니다. 다항식의 덧셈과 곱셈이 한 구조 안에 함께 있습니다.
+</p>
+</div>
 <h2 id="아이디얼-몫환을-만들-수-있는-부분집합">4. 아이디얼: 몫환을 만들 수 있는 부분집합</h2>
+<aside class="concept-purpose">
+<strong>왜 등장했나?</strong>
+<p>
+환에서 일부 원소를 0으로 취급해도 덧셈과 곱셈이 모순 없이 남게 하려고 등장했습니다.
+</p>
+<strong>어디에 쓰이나?</strong>
+<p>
+몫환 <span class="math inline">\(F[x]/(f)\)</span>로 유한체를 만들고, 사원수 좌아이디얼로 SQIsign의 isogeny를 표현합니다.
+</p>
+</aside>
+<p>먼저 만들고 싶은 결과부터 보겠습니다. 정수에서 “6의 배수만큼 차이 나는 수는 같다”고 약속하면 <span class="math inline">\(1,7,13\)</span>은 모두 같은 원소가 되고 <span class="math inline">\(\mathbb Z/6\mathbb Z\)</span>가 됩니다. 이때 <span class="math inline">\([a]+[b]:=[a+b]\)</span>, <span class="math inline">\([a][b]:=[ab]\)</span>라고 계산하고 싶습니다. 어떤 부분집합을 0으로 취급해도 이 계산이 가능할까요? 그 조건을 정확히 모은 것이 아이디얼입니다.</p>
 <p>가환환 <span class="math inline">\(R\)</span>의 부분집합 <span class="math inline">\(I\)</span>가 다음을 만족하면 <strong>아이디얼(ideal)</strong>이라 합니다.</p>
 <ol type="1">
 <li><span class="math inline">\((I,+)\)</span>는 <span class="math inline">\((R,+)\)</span>의 부분군이다.</li>
@@ -61,13 +120,41 @@
 <p><span class="math inline">\(R/I\)</span>에서 <span class="math inline">\(a\)</span>와 <span class="math inline">\(a+i\)</span>를 같은 원소로 취급하고</p>
 <p><span class="math display">\[(a+I)(b+I):=ab+I\]</span></p>
 <p>로 곱셈을 정의하고 싶습니다. 대표원을 <span class="math inline">\(a+i\)</span>, <span class="math inline">\(b+j\)</span>로 바꾸면 곱은 <span class="math inline">\(ab+aj+ib+ij\)</span>가 됩니다. 이 값과 <span class="math inline">\(ab\)</span>의 차가 <span class="math inline">\(I\)</span>에 있으려면 <span class="math inline">\(aj,ib,ij\in I\)</span>여야 합니다. 바로 아이디얼의 흡수 조건이 이를 보장합니다. 그래서 군의 정규부분군에 대응하는 환의 개념은 단순한 부분환이 아니라 아이디얼입니다.</p>
+<div class="worked-example">
+<strong>계산으로 보기 — 대표원을 바꿔도 같은 결과</strong>
+<p>
+<span class="math inline">\(I=6\mathbb Z\)</span>라 하겠습니다. <span class="math inline">\([2]=[8]\)</span>, <span class="math inline">\([3]=[15]\)</span>입니다. 대표원 <span class="math inline">\(2,3\)</span>으로 곱하면 <span class="math inline">\(2\cdot3=6\)</span>이므로 <span class="math inline">\([6]=[0]\)</span>입니다. 다른 대표원 <span class="math inline">\(8,15\)</span>로 곱하면 <span class="math inline">\(8\cdot15=120\)</span>이고 역시 <span class="math inline">\([120]=[0]\)</span>입니다. 차이는 <span class="math inline">\(120-6=114\in6\mathbb Z\)</span>입니다. 아이디얼의 흡수성이 어떤 대표원을 골라도 결과가 같은 잉여류로 가게 합니다.
+</p>
+</div>
+<div class="warn-box">
+<span class="label">아이디얼이 아닌 것을 쓰면</span>
+<p>
+<span class="math inline">\(\mathbb Z\)</span>에서 짝수가 아닌 “양의 정수”를 전부 0으로 취급해 보려 하면 <span class="math inline">\(1\)</span>과 <span class="math inline">\(2\)</span>가 모두 0 취급인데 그 차 <span class="math inline">\(-1\)</span>은 양의 정수가 아닙니다. 같은 원소라는 관계부터 대칭적이지 않아 몫을 만들 수 없습니다.
+</p>
+</div>
 <h2 id="정역과-체">5. 정역과 체</h2>
+<aside class="concept-purpose">
+<strong>왜 등장했나?</strong>
+<p>
+환 중에서 소거가 가능한 경우와 0이 아닌 원소로 항상 나눌 수 있는 경우를 구분하려고 등장했습니다.
+</p>
+<strong>어디에 쓰이나?</strong>
+<p>
+타원곡선 좌표 공식의 나눗셈은 체에서 계산하며, <span class="math inline">\(\mathbb F_p\)</span>와 <span class="math inline">\(\mathbb F_{p^2}\)</span>가 그 무대입니다.
+</p>
+</aside>
 <p><strong>정역(integral domain)</strong>은 <span class="math inline">\(1\ne0\)</span>이고 영인자가 없는 가환환입니다. 정역에서는 <span class="math inline">\(a\ne0\)</span>일 때 <span class="math inline">\(ab=ac\Rightarrow b=c\)</span>라는 소거법칙이 성립합니다.</p>
 <p><strong>체(field)</strong>는 <span class="math inline">\(1\ne0\)</span>인 가환환으로서 모든 <span class="math inline">\(a\ne0\)</span>이 곱셈 역원을 갖는 구조입니다. 따라서 체의 기본 연산은 덧셈과 곱셈 두 개이고,</p>
 <p><span class="math display">\[a-b:=a+(-b),\qquad a/b:=a\cdot b^{-1}\quad(b\ne0)\]</span></p>
 <p>로 뺄셈과 나눗셈을 유도합니다.</p>
 <p><span class="math display">\[\text{체}\Longrightarrow\text{정역}\Longrightarrow\text{가환환}\Longrightarrow\text{환}.\]</span></p>
 <p>역방향은 일반적으로 거짓입니다. <span class="math inline">\(\mathbb Z\)</span>는 정역이지만 <span class="math inline">\(2^{-1}\notin\mathbb Z\)</span>라 체가 아닙니다. <span class="math inline">\(\mathbb Z/6\mathbb Z\)</span>는 가환환이지만 영인자가 있어 정역이 아닙니다.</p>
+<div class="worked-example">
+<strong>계산으로 보기 — 체에서는 실제로 나눌 수 있다</strong>
+<p>
+<span class="math inline">\(\mathbb F_7\)</span>에서 <span class="math inline">\(3^{-1}=5\)</span>입니다. <span class="math inline">\(3\cdot5=15\equiv1\pmod7\)</span>이기 때문입니다. 따라서 <span class="math inline">\(4/3\)</span>은 새 연산이 아니라 <span class="math inline">\(4\cdot3^{-1}=4\cdot5=20\equiv6\pmod7\)</span>입니다. 반면 <span class="math inline">\(\mathbb Z/6\mathbb Z\)</span>에서는 <span class="math inline">\(2\)</span>의 역원이 없습니다. <span class="math inline">\(2\)</span>를 무엇과 곱해도 홀수인 <span class="math inline">\(1\)</span>이 될 수 없기 때문입니다.
+</p>
+</div>
 <p><strong>정리.</strong> 가환환 <span class="math inline">\(R\)</span>이 체인 것과 아이디얼이 <span class="math inline">\((0)\)</span>과 <span class="math inline">\(R\)</span>뿐인 것은 동치입니다.</p>
 <p><strong>증명.</strong> <span class="math inline">\(R\)</span>이 체이고 <span class="math inline">\(I\ne(0)\)</span>이면 <span class="math inline">\(0\ne a\in I\)</span>를 잡을 수 있습니다. 흡수성으로 <span class="math inline">\(a^{-1}a=1\in I\)</span>이므로 <span class="math inline">\(I=R\)</span>입니다. 반대로 비자명한 아이디얼이 없다고 하자. <span class="math inline">\(0\ne a\in R\)</span>이면 <span class="math inline">\((a)\ne(0)\)</span>이므로 <span class="math inline">\((a)=R\)</span>입니다. 따라서 <span class="math inline">\(1=ra\)</span>인 <span class="math inline">\(r\)</span>이 존재해 <span class="math inline">\(a\)</span>가 역원을 갖습니다. <span class="math inline">\(\square\)</span></p>
 <h2 id="sqisign에서-어디에-쓰이는가">6. SQIsign에서 어디에 쓰이는가</h2>
