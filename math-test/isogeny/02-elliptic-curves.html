@@ -2,12 +2,24 @@
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>타원곡선 — PQC 학습 가이드</title><link rel="stylesheet" href="../assets/katex/katex.min.css"><link rel="stylesheet" href="../assets/style.css"></head>
 <body><div class="layout"><aside class="sidebar"><div class="brand">PQC 학습 가이드</div><div class="brand-sub">Isogeny에서 SQIsign까지</div><nav>
-<h5>학습 순서</h5><ul><li><a href="../index.html">← 학습 홈</a></li><li><a href="01-finite-fields.html">1 · 유한체</a></li>
-<li><a href="02-elliptic-curves.html" class="active">2 · 타원곡선</a></li>
-<li><a href="03-isogenies.html">3 · Isogeny</a></li>
-<li><a href="isogeny-textbook.html">4 · SQIsign</a></li></ul>
-<h5>참고 자료</h5><ul><li><a href="../index.html#qualifying-answers">수학 자격시험 답안</a></li></ul>
-</nav></aside><main class="content"><div class="content-inner"><div class="eyebrow">Isogeny Foundations · 타원곡선</div><nav class="subject-tabs" aria-label="분야별 가이드"><a href="../foundations/algebra.html">대수학</a><a href="01-finite-fields.html">유한체</a><a href="02-elliptic-curves.html" class="active">타원곡선</a><a href="03-isogenies.html">Isogeny</a><a href="isogeny-textbook.html">SQIsign</a></nav><h1 id="대수곡선과-타원곡선-sqisign-그래프의-꼭짓점">대수곡선과 타원곡선 — SQIsign 그래프의 꼭짓점</h1>
+      <h5>학습 가이드</h5>
+      <ul>
+        <li><a href="../index.html">학습 홈</a></li>
+        <li><a href="../foundations/algebra.html">대수학</a></li>
+        <li><a href="../isogeny/01-finite-fields.html">유한체</a></li>
+        <li><a href="../isogeny/02-elliptic-curves.html" class="active">타원곡선</a></li>
+        <li><a href="../isogeny/03-isogenies.html">Isogeny</a></li>
+        <li><a href="../isogeny/isogeny-textbook.html">SQIsign</a></li>
+      </ul>
+      <h5>참고 자료</h5>
+      <ul>
+        <li><a href="../lattice/lattice-answers.html">Lattice 답안 (1–9)</a></li>
+        <li><a href="../algebra/algebra-answers.html">Algebra 답안 (1–16)</a></li>
+        <li><a href="../probability/probability-answers.html">Probability 답안 (1–10)</a></li>
+        <li><a href="../linear-algebra/linear-algebra-answers.html">Linear Algebra 답안 (1–17)</a></li>
+        <li><a href="../background/real-analysis.html">실해석학 보충</a></li>
+      </ul>
+    </nav></aside><main class="content"><div class="content-inner"><div class="eyebrow">Isogeny Foundations · 타원곡선</div><nav class="subject-tabs" aria-label="분야별 가이드"><a href="../foundations/algebra.html">대수학</a><a href="01-finite-fields.html">유한체</a><a href="02-elliptic-curves.html" class="active">타원곡선</a><a href="03-isogenies.html">Isogeny</a><a href="isogeny-textbook.html">SQIsign</a></nav><h1 id="대수곡선과-타원곡선-sqisign-그래프의-꼭짓점">대수곡선과 타원곡선 — SQIsign 그래프의 꼭짓점</h1>
 <p>이 장은 “곡선”이라는 말을 그림이 아니라 방정식의 해집합으로 정의하고, 왜 무한원점과 매끄러움 조건이 필요한지 설명합니다.</p>
 <h2 id="아핀평면과-대수곡선">1. 아핀평면과 대수곡선</h2>
 <p>체 <span class="math inline">\(F\)</span> 위의 <strong>아핀평면</strong>은 <span class="math inline">\(\mathbb A^2(F):=F^2\)</span>입니다. 다항식 <span class="math inline">\(f(x,y)\in F[x,y]\)</span>의 영점집합</p>
