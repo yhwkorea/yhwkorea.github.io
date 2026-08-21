@@ -3,67 +3,79 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Math Test 노트</title>
+<title>PQC 학습 가이드</title>
 <link rel="stylesheet" href="assets/katex/katex.min.css">
 <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
 <div class="layout">
   <aside class="sidebar">
-    <a class="back-link" href="../">← yhwkorea</a>
-    <div class="brand">Math Test 노트</div>
-    <div class="brand-sub">대학원 수학 자격시험 답안 노트</div>
+    <div class="brand">PQC 학습 가이드</div>
+    <div class="brand-sub">원리에서 구현까지 이어 읽기</div>
     <nav>
-      <h5>Contents</h5>
+      <h5>가이드</h5>
       <ul>
-        <li><a href="index.html" class="active">홈</a></li>
-        <li><a href="lattice/lattice-answers.html">Lattice 답안 (1~9)</a></li>
-<li><a href="algebra/algebra-answers.html">Algebra 답안 (1~16)</a></li>
-<li><a href="probability/probability-answers.html">Probability 답안 (1~10)</a></li>
-<li><a href="linear-algebra/linear-algebra-answers.html">Linear Algebra 답안 (1~17)</a></li>
-<li><a href="background/real-analysis.html">실해석학</a></li>
+        <li><a href="index.html" class="active">학습 홈</a></li>
+        <li><a href="isogeny/isogeny-textbook.html">Isogeny · SQIsign</a></li>
+      </ul>
+      <h5>참고 자료</h5>
+      <ul>
+        <li><a href="#qualifying-answers">수학 자격시험 답안</a></li>
+        <li><a href="background/real-analysis.html">실해석학 보충</a></li>
       </ul>
     </nav>
   </aside>
   <main class="content">
     <div class="content-inner">
-      <div class="eyebrow">Math Qualifying Test</div>
-      <h1 class="page-title">대학원 수학 자격시험 답안 노트</h1>
+      <div class="eyebrow">PQC Learning Path</div>
+      <h1 class="page-title">공식보다 먼저, 전체 구조를 잡는 가이드</h1>
       <p class="page-sub">
-        격자(Lattice) · 대수 · 확률 · 선형대수를 다루는 자격시험 문제를 실제
-        최종 답안 형태로 정리합니다. 인용으로 남기는 대신, 답안 안에서 쓰는
-        해석학적 사실은 별도 페이지에서 처음부터 완전히 증명해 링크로 연결합니다.
+        이 사이트의 본문은 PQC를 처음 배우는 사람이 “왜 이 수학이 필요한가”부터
+        실제 스킴의 작동 원리까지 이어서 이해하도록 만든 학습 가이드입니다.
+        시험 답안은 학습 중 정의나 증명을 확인할 때 꺼내 보는 참고 자료로 분리했습니다.
       </p>
 
-      <div class="problem-block">
-        <strong>지금 있는 내용:</strong> <a href="lattice/lattice-answers.html">Lattice (1~9)</a> ·
-        <a href="algebra/algebra-answers.html">Algebra (1~16)</a> ·
-        <a href="probability/probability-answers.html">Probability (1~10)</a> ·
-        <a href="linear-algebra/linear-algebra-answers.html">Linear Algebra (1~17)</a> —
-        시험 4개 분야 52문제 전부 답안이 올라와 있습니다. 각 문제 옆에 원문 번역 보기
-        버튼이 있고, 감점 포인트도 함께 정리했습니다. Lattice 2번 문제 (c)의
-        <code>4/V_n^(2/n) ≤ n</code> 부분은 <a href="background/real-analysis.html">실해석학
-        배경지식 페이지</a>로 이어져 그 부등식을 완전히 증명합니다.
+      <section class="guide-hero">
+        <span class="guide-kicker">첫 번째 학습 경로</span>
+        <h2>Isogeny에서 SQIsign까지</h2>
+        <p>타원곡선과 isogeny를 처음 접해도 괜찮습니다. 먼저 SQIsign의 네 곡선과 세 화살표를
+        읽고, 각 화살표를 계산하는 데 필요한 수학을 역순으로 채웁니다.</p>
+        <div class="protocol-map" aria-label="SQIsign 프로토콜 경로">
+          <span>E₀</span><b>φcom</b><span>E₁</span><b>φchall</b><span>E₂</span>
+          <i>비밀 φsecret ↓</i><span>Eₐ</span><b>φresp</b><span>E₂</span>
+        </div>
+        <a class="primary-button" href="isogeny/isogeny-textbook.html">Isogeny 가이드 시작하기 →</a>
+      </section>
+
+      <h2>이 가이드에서 답할 질문</h2>
+      <div class="guide-grid">
+        <article class="guide-card"><span>01</span><h3>곡선과 화살표</h3><p>타원곡선, isogeny, 커널이 왜 그래프의 꼭짓점과 간선이 되는가?</p></article>
+        <article class="guide-card"><span>02</span><h3>두 계산 세계</h3><p>왜 검증자는 곡선 위에서 계산하지만 서명자는 사원수 아이디얼을 사용하는가?</p></article>
+        <article class="guide-card"><span>03</span><h3>지식의 증명</h3><p>공개키가 곡선 하나뿐인데, 어떻게 endomorphism ring을 안다는 사실을 증명하는가?</p></article>
+        <article class="guide-card"><span>04</span><h3>짧은 서명</h3><p>거대한 비밀 계산의 결과가 왜 작은 커널 데이터와 정수들로 압축되는가?</p></article>
       </div>
 
-      <h2>앞으로 추가할 내용</h2>
-      <ul>
-        <li>공리부터 증명하는 심화 노트 4편 (분야별 대표 정리 하나씩)</li>
-      </ul>
+      <section id="qualifying-answers" class="answer-library">
+        <div>
+          <div class="eyebrow">Reference Library</div>
+          <h2>수학 자격시험 답안 모음</h2>
+          <p>가이드 본문을 읽다가 정의, 정리 또는 계산을 확인할 때 사용합니다.</p>
+        </div>
+        <details class="answer-drawer">
+          <summary>답안 52문제 보기</summary>
+          <div class="answer-buttons">
+            <a href="lattice/lattice-answers.html"><strong>Lattice</strong><small>1–9 · 격자와 Gaussian</small></a>
+            <a href="algebra/algebra-answers.html"><strong>Algebra</strong><small>1–16 · 환과 유한체</small></a>
+            <a href="probability/probability-answers.html"><strong>Probability</strong><small>1–10 · 확률 부등식</small></a>
+            <a href="linear-algebra/linear-algebra-answers.html"><strong>Linear Algebra</strong><small>1–17 · 행렬과 스펙트럼</small></a>
+          </div>
+        </details>
+      </section>
     </div>
   </main>
 </div>
 <script src="assets/katex/katex.min.js"></script>
 <script src="assets/katex/auto-render.min.js"></script>
-<script>
-  renderMathInElement(document.body, {
-    delimiters: [
-      {left: "\\[", right: "\\]", display: true},
-      {left: "\\(", right: "\\)", display: false},
-      {left: "$$", right: "$$", display: true},
-      {left: "$", right: "$", display: false}
-    ]
-  });
-</script>
+<script>renderMathInElement(document.body,{delimiters:[{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false},{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false}]});</script>
 </body>
 </html>

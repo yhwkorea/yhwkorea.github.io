@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Isogeny · SQIsign 가이드 — PQC 학습 가이드</title>
+<link rel="stylesheet" href="../assets/katex/katex.min.css">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand">PQC 학습 가이드</div>
+    <div class="brand-sub">원리에서 구현까지 이어 읽기</div>
+    <nav>
+      <h5>가이드</h5>
+      <ul>
+        <li><a href="../index.html">학습 홈</a></li>
+        <li><a href="isogeny-textbook.html" class="active">Isogeny · SQIsign</a></li>
+      </ul>
+      <h5>참고 자료</h5>
+      <ul>
+        <li><a href="../index.html#qualifying-answers">수학 자격시험 답안</a></li>
+        <li><a href="../background/real-analysis.html">실해석학 보충</a></li>
+      </ul>
+    </nav>
+  </aside>
+  <main class="content">
+    <div class="content-inner">
+      <div class="eyebrow">Isogeny · SQIsign 학습 가이드</div>
+<h1 id="isogeny-기반-암호-처음-배우는-사람을-위한-챕터">Isogeny 기반 암호 — 처음 배우는 사람을 위한 챕터</h1>
+<p><strong>선행 지식:</strong> <code>~/pqc-guides/math-background/algebra/</code>의 유한체, <span class="math inline">\(\mathbb{Z}[i]\)</span> (Algebra 14). 이 챕터는 LWE/RLWE와 <strong>완전히 다른 수학 계열</strong>(타원곡선, 사원수대수)을 씁니다 — 격자를 몰라도 이 챕터만 따로 읽을 수 있습니다.</p>
+<p><strong>왜 이 챕터가 사용자의 기존 연구와 직결되는가:</strong> 아래 §6의 <span class="math inline">\(\mathbb{Z}[i]\)</span> 연결 지점이 바로 <span class="math inline">\(zi-sieve\)</span>/SQIsign 연구가 다루는 대상입니다. 이 챕터를 다 읽으면 그 연구가 전체 그림에서 어디에 있는지 보입니다.</p>
+<hr />
+<h2 id="먼저-sqisign-그림부터-읽자">0. 먼저 SQIsign 그림부터 읽자</h2>
+<p>이 챕터의 목표는 타원곡선 이론을 순서대로 훑는 것이 아니라, 아래 그림의 <strong>네 곡선과 세 종류의 화살표가 왜 필요한지</strong> 설명하는 것입니다.</p>
+<pre class="text"><code>              commitment                 challenge
+        E₀ ───── φ_com ─────▶ E₁ ───── φ_chall ─────▶ E₂
+        │                                                ▲
+        │ φ_secret                                       │ φ_resp
+        ▼                                                │
+        E_A ──────────────────────────────────────────────┘
+             공개키                                  서명에 담기는 응답</code></pre>
+<p>여기서 공개 기준점은 자기동형사상환을 알고 있는 <span class="math inline">\((E_0,\mathrm{End}(E_0))\)</span>이고, 공개키는 곡선 <span class="math inline">\(E_A\)</span>입니다. 비밀키는 단순히 “숨겨 둔 경로 하나”라기보다 <span class="math inline">\(E_A\)</span>의 endomorphism ring으로 계산할 수 있게 해 주는 witness입니다. 실제 구현은 그 witness를 사원수 아이디얼과 보조 데이터로 저장합니다.</p>
+<h3 id="그림을-읽는-세-단계">그림을 읽는 세 단계</h3>
+<ol type="1">
+<li><strong>Commitment.</strong> 서명자는 무작위 아이디얼 <span class="math inline">\(I_{com}\)</span>을 곡선 쪽으로 옮겨 <span class="math inline">\(\varphi_{com}:E_0\to E_1\)</span>을 만든 뒤 <span class="math inline">\(E_1\)</span>만 공개합니다.</li>
+<li><strong>Challenge.</strong> 상호작용 프로토콜의 검증자 대신 해시가 <span class="math inline">\(K_{chall}=H(m,j(E_1))\in E_1[D_{chall}]\)</span>를 정합니다. 이 커널이 <span class="math inline">\(\varphi_{chall}:E_1\to E_2\)</span>를 결정하므로, 메시지나 commitment를 바꾸면 오른쪽 위 경로도 바뀝니다.</li>
+<li><strong>Response.</strong> 서명자는 비밀 witness를 사용해 <span class="math inline">\(E_A\to E_2\)</span>인 <span class="math inline">\(\varphi_{resp}\)</span>를 계산합니다. 검증자는 이를 복원해 실제 도착점이 challenge가 만든 <span class="math inline">\(E_2\)</span>인지 확인합니다.</li>
+</ol>
+<h3 id="가장-중요한-보안-함정">가장 중요한 보안 함정</h3>
+<p>“<span class="math inline">\(E_A\)</span>에서 <span class="math inline">\(E_2\)</span>로 가는 화살표를 냈으니 비밀을 안다”만으로는 부족합니다. 공격자가 애초에 <span class="math inline">\(E_A\to E_1\)</span>인 경로를 골라 commitment를 만들면, challenge를 뒤에 합성해 <span class="math inline">\(E_A\to E_2\)</span>를 비밀 없이 만들 수 있기 때문입니다. 따라서 실제 SQIsign은 challenge가 response의 부분-isogeny로 그대로 들어가지 못하게 하는 조건을 검증합니다. 이 조건이 빠진 단순한 사각형 그림은 <strong>프로토콜이 아니라 깨지는 초안</strong>입니다.</p>
+<h3 id="이-뒤의-학습-순서">이 뒤의 학습 순서</h3>
+<ul>
+<li>§2–3: 곡선, 커널, isogeny — 그림의 점과 화살표가 무엇인지</li>
+<li>§4: 초특이 isogeny 그래프 — 경로 찾기가 왜 어려운지</li>
+<li>§5–6: endomorphism ring과 사원수 아이디얼 — 서명자가 응답을 계산하는 세계</li>
+<li>§7: Fiat–Shamir, 실제 commitment/challenge/response, 검증</li>
+</ul>
+<p>이 단원은 SQIsign 사양서 v2의 high-level protocol을 학습용으로 다시 배열한 것입니다. 현재 SQIsign은 NIST 추가 전자서명 공모 후보이며 아직 표준으로 확정된 알고리즘은 아닙니다.</p>
+<hr />
+<h2 id="왜-다른-수학이-필요한가">1. 왜 다른 수학이 필요한가</h2>
+<p>LWE/RLWE는 전부 “격자에서 짧은/가까운 벡터 찾기”라는 한 가지 어려움에 기댑니다. 만약 언젠가 격자 문제를 깨는 알고리즘(양자든 고전이든)이 나오면 그 계열 암호는 전부 한꺼번에 무너집니다. <strong>다른 수학적 기반을 가진 암호가 하나쯤 더 있으면</strong> 이런 위험을 분산시킬 수 있습니다 — 한쪽 가정이 깨져도 다른 쪽까지 한꺼번에 무너지진 않도록. Isogeny 기반 암호는 타원곡선들 사이의 <strong>동형사상(isogeny) 그래프 위에서 길찾기</strong>가 어렵다는 사실에 기댑니다 — 격자와 무관한 문제입니다.</p>
+<p>(주의: 초기의 대표 스킴 SIDH는 2022년 Castryck–Decru 공격으로 깨졌습니다. 현재 살아남은 대표 스킴은 CSIDH류와, 이 챕터가 다루는 SQIsign 계열입니다 — SIDH가 왜 깨졌는지는 이 챕터 범위를 넘지만, SQIsign은 SIDH와 다른 방식(아래 §5, §7)이라 그 공격을 받지 않습니다.)</p>
+<hr />
+<h2 id="타원곡선-최소한의-정의">2. 타원곡선: 최소한의 정의</h2>
+<p><strong>정의 2.1.</strong> 체 <span class="math inline">\(F\)</span> (특성 <span class="math inline">\(\neq2,3\)</span>이라 가정, 이 챕터에서는 <span class="math inline">\(F=\mathbb{F}_p\)</span> 또는 그 확장체) 위의 <strong>타원곡선</strong>은</p>
+<p><span class="math display">\[
+E:\ y^2 = x^3+ax+b \qquad (a,b\in F,\ \ 4a^3+27b^2\neq0)
+\]</span></p>
+<p>(판별식 <span class="math inline">\(\neq0\)</span> 조건은 곡선이 매끄러운(특이점 없는) 것을 보장 — <span class="math inline">\(x^3+ax+b\)</span>가 중근을 안 갖는다는 뜻).</p>
+<p><span class="math inline">\(E(F) := \{(x,y)\in F^2 : y^2=x^3+ax+b\} \cup \{\mathcal{O}\}\)</span> (<span class="math inline">\(\mathcal{O}\)</span>는 “무한원점”, 따로 추가하는 항등원).</p>
+<p><strong>정리 2.2 (군 구조, 인용).</strong> <span class="math inline">\(E(F)\)</span>는 다음 “현-접선(chord-tangent)” 규칙으로 아벨군을 이룬다: 직선이 <span class="math inline">\(E\)</span>와 만나는 세 점(중복 포함)의 합은 <span class="math inline">\(\mathcal{O}\)</span>. 즉 <span class="math inline">\(P,Q\)</span>를 지나는 직선이 <span class="math inline">\(E\)</span>와 만나는 세 번째 점을 <span class="math inline">\(-(P+Q)\)</span>로 정의(<span class="math inline">\(x\)</span>축 대칭이 <span class="math inline">\(-\)</span> 연산).</p>
+<p><em>이 챕터에서는 증명 없이 인용합니다 — 결합법칙 증명은 대수기하(Riemann-Roch 정리를 쓰거나, 직접 좌표 계산으로 지루하지만 초등적으로도 가능)의 표준 결과이고, 이 챕터의 초점(동형사상과 그 그래프)과는 별개의 내용입니다.</em></p>
+<p><strong>정의 2.3 (<span class="math inline">\(j\)</span>-불변량).</strong> <span class="math inline">\(j(E) := 1728\dfrac{4a^3}{4a^3+27b^2}\)</span>. 두 곡선이 (<span class="math inline">\(\bar F\)</span> 위에서) 동형인 것은 <span class="math inline">\(j\)</span>-불변량이 같은 것과 동치 — 즉 <span class="math inline">\(j(E)\)</span>가 “곡선을 분류하는 라벨” 역할을 합니다.</p>
+<hr />
+<h2 id="isogeny">3. Isogeny</h2>
+<p><strong>정의 3.1.</strong> 두 타원곡선 <span class="math inline">\(E_1,E_2\)</span> 사이의 <strong>동형사상(isogeny)</strong> <span class="math inline">\(\varphi:E_1\to E_2\)</span>는: (i) 대수적 사상(다항식으로 주어지는 사상)이고, (ii) 군 준동형사상(<span class="math inline">\(\varphi(P+Q)=\varphi(P)+\varphi(Q)\)</span>), (iii) 전사이며 유한한 커널을 갖는다 (상수 사상이 아니다).</p>
+<p><strong>정리 3.2 (커널이 동형사상을 결정한다, 인용).</strong> <span class="math inline">\(E_1\)</span>의 유한 부분군 <span class="math inline">\(K\subset E_1(\bar F)\)</span>가 주어지면, <span class="math inline">\(\mathrm{ker}\,\varphi=K\)</span>인 동형사상 <span class="math inline">\(\varphi:E_1\to E_1/K =: E_2\)</span>가 (동형 아래 유일하게) 존재한다 (구성적으로는 Vélu의 공식으로 <span class="math inline">\(E_2\)</span>의 방정식과 <span class="math inline">\(\varphi\)</span>를 명시적으로 계산할 수 있다 — 이 챕터에서는 존재성만 인용).</p>
+<p><strong>정의 3.3 (차수).</strong> <span class="math inline">\(\varphi\)</span>의 <strong>차수</strong>는 <span class="math inline">\(|\mathrm{ker}\,\varphi|\)</span> (분리가능한 경우 — 이 챕터에서 다루는 경우는 전부 분리가능이라 가정). 차수 <span class="math inline">\(\ell\)</span>인 동형사상을 <strong><span class="math inline">\(\ell\)</span>-동형사상</strong>이라 부른다.</p>
+<p><strong>예제.</strong> <span class="math inline">\([2]:E\to E, P\mapsto P+P\)</span> (배점 사상)은 커널이 <span class="math inline">\(E[2]\)</span> (2-torsion 점들, <span class="math inline">\(y=0\)</span>인 점들과 <span class="math inline">\(\mathcal{O}\)</span>, 크기 <span class="math inline">\(4\)</span> — 일반적 경우)인 차수 <span class="math inline">\(4\)</span>짜리 동형사상. 소수 <span class="math inline">\(\ell\)</span>-동형사상들이 이 챕터의 주인공입니다.</p>
+<hr />
+<h2 id="isogeny-그래프">4. Isogeny 그래프</h2>
+<p>소수 <span class="math inline">\(\ell\)</span>을 고정하자 (<span class="math inline">\(\ell\neq p\)</span>, <span class="math inline">\(p\)</span>는 밑체의 특성). <strong><span class="math inline">\(\ell\)</span>-동형사상 그래프</strong>: 꼭짓점은 곡선의 <span class="math inline">\(j\)</span>-불변량들, 간선은 차수 <span class="math inline">\(\ell\)</span>인 동형사상들.</p>
+<p><strong>핵심 사실 (인용, Pizer 등).</strong> <span class="math inline">\(E\)</span>가 <strong>초특이(supersingular)</strong>(정의: <span class="math inline">\(E(\bar{\mathbb{F}}_p)[p]=\{\mathcal{O}\}\)</span>, 즉 <span class="math inline">\(p\)</span>-torsion이 자명 — “일반적이지 않은” 소수의 경우)일 때, <span class="math inline">\(\ell\)</span>-동형사상 그래프는 <strong>Ramanujan 그래프</strong>(스펙트럼 갭이 최대에 가까운 익스팬더 그래프)다. 초특이 곡선은 정확히 <span class="math inline">\(\lfloor p/12\rfloor\)</span> 개 정도(대략) 존재하며, 모두 <span class="math inline">\(\mathbb{F}_{p^2}\)</span> 위에 정의된다.</p>
+<p><strong>왜 이게 암호에 중요한가.</strong> 익스팬더 그래프 위의 무작위 걷기는 빠르게(짧은 걸음 수로) 그래프 전체에 고르게 퍼집니다. 즉 “<span class="math inline">\(E_1\)</span>에서 랜덤하게 <span class="math inline">\(n\)</span>번 걸어서 <span class="math inline">\(E_2\)</span>에 도착”하는 과정이 좋은 의사난수처럼 행동하고, 반대로 <strong>“<span class="math inline">\(E_1\)</span>과 <span class="math inline">\(E_2\)</span>가 주어졌을 때 그 사이의 경로(=동형사상의 합성)를 찾기”</strong>는 (그래프가 크고 경로가 충분히 길면) 어렵다고 믿어집니다 — 이것이 isogeny 기반 암호의 핵심 가정입니다.</p>
+<hr />
+<h2 id="왜-초특이-곡선인가-자기동형사상환endomorphism-ring">5. 왜 초특이 곡선인가: 자기동형사상환(endomorphism ring)</h2>
+<p><strong>정의 5.1.</strong> <span class="math inline">\(E\)</span>의 <strong>자기동형사상환</strong> <span class="math inline">\(\mathrm{End}(E) := \{\varphi:E\to E\ \text{동형사상}\} \cup\{[0]\}\)</span> (덧셈: 점별 덧셈, 곱셈: 합성).</p>
+<p>일반적인(ordinary) 곡선은 <span class="math inline">\(\mathrm{End}(E)\)</span>가 허수이차체의 order(<span class="math inline">\(\mathbb{Z}[\sqrt{-d}]\)</span> 류 — 계수환이 랭크 <span class="math inline">\(2\)</span>인 가환환)입니다. 반면:</p>
+<p><strong>정리 5.2 (Deuring 대응, 인용).</strong> <span class="math inline">\(E\)</span>가 <span class="math inline">\(\mathbb{F}_{p^2}\)</span> 위의 초특이 곡선이면, <span class="math inline">\(\mathrm{End}(E)\)</span>는 <strong>사원수대수(quaternion algebra)</strong> <span class="math inline">\(B_{p,\infty}\)</span> (<span class="math inline">\(p\)</span>와 <span class="math inline">\(\infty\)</span>에서 분기하는, <span class="math inline">\(\mathbb{Q}\)</span> 위의 유일한 사원수대수) 안의 <strong>극대 order</strong>(랭크 <span class="math inline">\(4\)</span>인 비가환환)이다. 더 나아가:</p>
+<pre><code>\{\text{초특이 곡선 (동형 제외)}\} \;\longleftrightarrow\; \{B_{p,\infty}\text{의 극대 order (켤레 제외)}\}</code></pre>
+<p>이 전단사이고, 두 곡선 사이의 <span class="math inline">\(\ell\)</span>-동형사상은 대응하는 두 order를 잇는 특정 “norm <span class="math inline">\(\ell\)</span>인 (좌)아이디얼”에 대응한다.</p>
+<p><strong>직관.</strong> 사원수대수는 <span class="math inline">\(\{1,i,j,k\}\)</span> 꼴 기저를 가진 (비가환) 4차원 대수입니다. “타원곡선의 자기동형사상 4개(항등원, 그리고 3개의 독립적인 추가 구조)”가 사원수의 4차원 구조와 정확히 대응한다는 것이 Deuring 대응의 요지입니다. 이 대응 덕분에, “곡선 사이 동형사상 찾기”라는 기하 문제가 “사원수 order 사이 아이디얼 찾기”라는 <strong>순수 대수 문제</strong>로 번역됩니다 — 그리고 대수 문제는 (곡선 위에서 직접 계산하는 것보다) 컴퓨터로 다루기 훨씬 쉽습니다. SQIsign을 포함한 현대 isogeny 암호의 계산은 대부분 곡선이 아니라 이 사원수대수 쪽에서 이루어집니다.</p>
+<hr />
+<h2 id="mathbbzi가-등장하는-지점">6. <span class="math inline">\(\mathbb{Z}[i]\)</span>가 등장하는 지점</h2>
+<p><span class="math inline">\(p\equiv3\pmod4\)</span>라 하자 (Algebra 14에서 다룬 바로 그 조건 — <span class="math inline">\(\mathbb{Z}[i]\)</span>에서 <span class="math inline">\(p\)</span>가 소원으로 남는 경우). 곡선</p>
+<p><span class="math display">\[
+E_0:\ y^2=x^3+x
+\]</span></p>
+<p>는 <span class="math inline">\(\mathbb{F}_p\)</span> 위에서 초특이입니다(<span class="math inline">\(p\equiv3\pmod4\)</span>일 때 표준적으로 알려진 사실 — <span class="math inline">\(j(E_0)=1728\)</span>). <span class="math inline">\(E_0\)</span>는 명시적인 자기동형사상을 하나 가집니다:</p>
+<p><span class="math display">\[
+\iota: E_0\to E_0,\qquad (x,y)\mapsto(-x,\,iy)
+\]</span></p>
+<p>여기서 <span class="math inline">\(i\in\mathbb{F}_{p^2}\)</span>는 <span class="math inline">\(i^2=-1\)</span>인 원소 (<span class="math inline">\(p\equiv3\pmod4\)</span>이면 <span class="math inline">\(-1\)</span>이 <span class="math inline">\(\mathbb{F}_p\)</span> 안에서 제곱근이 없으므로 — Algebra 14의 논증과 같은 이유 — <span class="math inline">\(i\)</span>는 <span class="math inline">\(\mathbb{F}_{p^2}\setminus\mathbb{F}_p\)</span>에 있음). <strong>직접 확인:</strong> <span class="math inline">\(\iota(x,y)=(-x,iy)\)</span>가 <span class="math inline">\(E_0\)</span> 위에 있는지: <span class="math inline">\((iy)^2 = i^2y^2=-y^2\)</span>이고, <span class="math inline">\((-x)^3+(-x) = -(x^3+x) = -y^2\)</span> (원래 방정식 <span class="math inline">\(y^2=x^3+x\)</span> 사용)이므로 성립. 그리고 <span class="math inline">\(\iota^2(x,y) = \iota(-x,iy) = (x, i(iy)) = (x,-y) = -(x,y)\)</span>(타원곡선의 역원 공식), 즉 <span class="math inline">\(\iota^2=[-1]\)</span> — 이는 정확히 <span class="math inline">\(i^2=-1\)</span>이라는 <span class="math inline">\(\mathbb{Z}[i]\)</span>의 관계식이 곡선의 자기동형사상 레벨에서 그대로 재현된 것입니다.</p>
+<p><strong>결론.</strong> <span class="math inline">\(\mathbb{Z}[i] \hookrightarrow \mathrm{End}(E_0)\)</span> (<span class="math inline">\(i\mapsto\iota\)</span>로 보내는 환 준동형사상, 단사). 실제로 <span class="math inline">\(p\equiv3\pmod4\)</span>인 경우 <span class="math inline">\(\mathrm{End}(E_0)\)</span>는 <span class="math inline">\(\mathbb{Z}[i]\)</span>를 포함하는 <span class="math inline">\(B_{p,\infty}\)</span>의 극대 order이고, 이 order의 정확한 구조(그리고 그 위에서 짧은 벡터/아이디얼을 찾는 문제 — 격자 챕터의 도구가 다시 등장합니다)를 다루는 것이 <span class="math inline">\(zi-sieve\)</span>류 연구의 대상입니다. 즉:</p>
+<pre><code>math-background/lattice (격자, 짧은 벡터)
+        │  (End(E₀) ⊇ ℤ[i]를 랭크-4 격자로 보면)
+        ▼
+   zi-sieve 연구 (ℤ[i] 관련 order의 격자 구조/체 판정)
+        │  (Deuring 대응으로 order ↔ 곡선)
+        ▼
+   SQIsign의 &quot;시작 곡선&quot; E₀ (§7에서 이 곡선이 왜 특별히 다루기 쉬운지 등장)</code></pre>
+<hr />
+<h2 id="sqisign-개요-지식증명에서-서명까지">7. SQIsign 개요: 지식증명에서 서명까지</h2>
+<p><strong>하드 문제.</strong> 초특이 곡선 <span class="math inline">\(E\)</span>가 주어졌을 때 <span class="math inline">\(\mathrm{End}(E)\)</span>를 계산하기 (동치로, <span class="math inline">\(E_0\)</span>(자기동형사상환을 정확히 아는 §6의 시작 곡선)에서 <span class="math inline">\(E\)</span>로 가는 동형사상을 찾기)는 어렵다고 믿어집니다 — 이게 §4의 “그래프 위 경로 찾기”와 §5의 Deuring 대응으로 “어려운 아이디얼 찾기”와 (Wesolowski 2021년경 증명된 결과로) 본질적으로 동치임이 알려져 있습니다.</p>
+<p><strong>키 생성.</strong> 공개키는 정규화된 곡선 <span class="math inline">\(E_A\)</span>입니다. 개념적으로 비밀 witness는 <span class="math inline">\(\mathrm{End}(E_A)\)</span>이고, 구현에서는 <span class="math inline">\(E_0\to E_A\)</span>인 비밀 isogeny에 대응하는 사원수 아이디얼과 응답 계산에 필요한 보조 데이터를 저장합니다. 따라서 “비밀키=경로”는 좋은 첫 직관이지만, 실제 키 형식을 그대로 말한 것은 아닙니다.</p>
+<p><strong>서명 (Fiat–Shamir로 변환된 식별 프로토콜의 뼈대).</strong></p>
+<ol type="1">
+<li><strong>Commit:</strong> 무작위 <span class="math inline">\(I_{com}\)</span>과 그에 대응하는 <span class="math inline">\(\varphi_{com}:E_0\to E_1\)</span>을 계산하고 정규화된 <span class="math inline">\(E_1\)</span>을 얻습니다.</li>
+<li><strong>Challenge:</strong> <span class="math inline">\(H(m,j(E_1))\)</span>가 <span class="math inline">\(E_1[D_{chall}]\)</span>의 커널 생성점을 정하고, 이것이 <span class="math inline">\(\varphi_{chall}:E_1\to E_2\)</span>를 결정합니다. Fiat–Shamir 때문에 서명에는 challenge를 따로 보낼 필요가 없습니다.</li>
+<li><strong>Response:</strong> 아이디얼 쪽에서 비밀·commitment·challenge 정보를 결합한 뒤 KLPT류 알고리즘으로 계산하기 쉬운 동치 아이디얼을 찾고, 이를 <span class="math inline">\(\varphi_{resp}:E_A\to E_2\)</span>로 번역합니다.</li>
+<li><strong>검증:</strong> 메시지와 commitment에서 challenge를 다시 만들고, 압축된 response를 복원해 출발점이 공개키 <span class="math inline">\(E_A\)</span>, 도착점이 <span class="math inline">\(E_2\)</span>인지 검사합니다. 동시에 challenge가 response에 그대로 포함되는 퇴화된 경우를 거부해야 합니다.</li>
+</ol>
+<p>핵심 도구는 “response” 단계 — 비밀 order <span class="math inline">\(\mathrm{End}(E_A)\)</span>를 알아야 <span class="math inline">\(E_A\to E_2\)</span> 동형사상을 (다항시간에) <strong>계산</strong>할 수 있는데, 이는 대수 쪽(사원수 아이디얼)에서 KLPT 알고리즘류로 처리한 뒤 Deuring 대응으로 다시 곡선으로 옮기는 절차입니다. 이 알고리즘의 세부(KLPT: 주어진 아이디얼류에서 매끄러운 norm을 갖는 대표원 찾기)는 이 챕터의 범위를 넘는 별도 연구 주제라 인용으로 남깁니다 — 다만 이제 그 알고리즘이 <strong>왜 사원수 쪽에서 도는지</strong>(§5), 그리고 <span class="math inline">\(\mathbb{Z}[i]\)</span>가 어디서 시작 지점 역할을 하는지(§6)는 전부 설명됐습니다.</p>
+<p><strong>공식 자료.</strong> <a href="https://csrc.nist.gov/csrc/media/Projects/pqc-dig-sig/documents/round-1/spec-files/sqisign-spec-web.pdf">SQIsign Algorithm Specifications v2 (NIST 제출본)</a>, <a href="https://github.com/SQISign/the-sqisign">공식 구현</a>. 사양은 서명 절차 자체가 계속 개선되는 분야이므로, 파라미터와 직렬화 형식은 이 링크의 현재 버전을 기준으로 확인해야 합니다.</p>
+<hr />
+<h2 id="요약-이-챕터의-의존관계">8. 요약: 이 챕터의 의존관계</h2>
+<pre><code>math-background/algebra (유한체, ℤ[i], Galois)                ← 여기서 필요한 배경
+        │
+        ├─ §2 타원곡선/군 구조                    ← 인용 (대수기하 표준 결과)
+        ├─ §3 동형사상과 커널 대응                 ← 인용 (Vélu)
+        ├─ §4 동형사상 그래프, Ramanujan 성질       ← 인용
+        ├─ §5 Deuring 대응 (곡선 ↔ 사원수 order)   ← 인용, 그러나 &quot;왜 4차원인지&quot; 직관 제공
+        ├─ §6 ℤ[i] ↪ End(E₀)                       ← 완전 증명 (직접 좌표 계산)
+        └─ §7 SQIsign 프로토콜 뼈대                 ← 구조 설명, 알고리즘 세부는 인용
+
+다음: 이 시작 곡선 E₀와 ℤ[i] 구조가 실제 사용자 연구(zi-sieve)와 만나는 지점이므로,
+그 연구의 세부(μ₄ clustering 등)를 이 챕터의 §5-6 위에 올려서 읽으면 왜 그 판정이
+필요한지 배경이 잡힙니다.</code></pre>
+
+    </div>
+  </main>
+</div>
+<script src="../assets/katex/katex.min.js"></script>
+<script src="../assets/katex/auto-render.min.js"></script>
+<script>renderMathInElement(document.body,{delimiters:[{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false},{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false}]});</script>
+</body>
+</html>
