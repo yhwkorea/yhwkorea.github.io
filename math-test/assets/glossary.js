@@ -3,6 +3,17 @@ import('./concepts/index.js').then(({ conceptsById, conceptsByTerm }) => {
 const assetBase = new URL('.', glossaryScript.src);
 const page = (path) => new URL(`../${path}`, assetBase).href;
 
+const guideHome = document.querySelector('.sidebar nav ul li');
+if (guideHome && !document.querySelector('.sidebar a[href*="cryptography.html"]')) {
+  const item = document.createElement('li');
+  const link = document.createElement('a');
+  link.href = page('foundations/cryptography.html');
+  link.textContent = '암호학과 전자서명';
+  if (location.pathname.endsWith('/foundations/cryptography.html')) link.className = 'active';
+  item.append(link);
+  guideHome.after(item);
+}
+
 // 아직 모듈로 옮기지 않은 전문 용어는 이 목록에서 계속 지원한다.
 // 기초 개념부터 concepts/의 독립 파일로 순차 이관한다.
 const legacyEntries = new Map(Object.entries({
