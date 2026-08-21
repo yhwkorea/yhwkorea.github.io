@@ -1,0 +1,5 @@
+{
+  "private": true,
+  "type": "module",
+  "scripts": { "audit:concepts": "node tools/audit-concepts.mjs" }
+}

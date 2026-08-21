@@ -16,8 +16,23 @@ import derivative from './derivative.js';
 import characteristic from './characteristic.js';
 import pointAtInfinity from './point-at-infinity.js';
 import singularPoint from './singular-point.js';
+import affinePlane from './affine-plane.js';
+import projectivePlane from './projective-plane.js';
+import algebraicCurve from './algebraic-curve.js';
+import ellipticCurve from './elliptic-curve.js';
+import morphism from './morphism.js';
+import isogeny from './isogeny.js';
+import kernel from './kernel.js';
+import degree from './degree.js';
+import torsion from './torsion.js';
+import endomorphism from './endomorphism.js';
+import supersingular from './supersingular.js';
+import quaternionAlgebra from './quaternion-algebra.js';
+import order from './order.js';
+import fiatShamir from './fiat-shamir.js';
+import func from './function.js';
 
-export const concepts = [digitalSignature, hashFunction, pqc, sqisign, derivative, partialDerivative, characteristic, pointAtInfinity, singularPoint, set, relation, equivalenceClass, group, ring, commutativeRing, ideal, quotientRing, field];
+export const concepts = [digitalSignature, hashFunction, pqc, sqisign, fiatShamir, derivative, partialDerivative, characteristic, affinePlane, projectivePlane, algebraicCurve, singularPoint, pointAtInfinity, ellipticCurve, torsion, morphism, isogeny, kernel, degree, endomorphism, supersingular, quaternionAlgebra, order, set, func, relation, equivalenceClass, group, ring, commutativeRing, ideal, quotientRing, field];
 export const conceptsById = new Map(concepts.map((concept) => [concept.id, concept]));
 export const conceptsByTerm = new Map(concepts.flatMap((concept) => concept.terms.map((term) => [term, concept])));
 

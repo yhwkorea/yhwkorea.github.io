@@ -1,0 +1,1 @@
+export default { id:'function', title:'함수', terms:['함수','function'], summary:'각 입력에 출력 하나를 정확히 대응시키는 규칙입니다.', target:'foundations/notation.html#함수와-화살표', prerequisites:['set'], why:'입력과 출력의 관계를 모호하지 않게 표현하고 구조를 보존하는 사상을 정의합니다.', example:'f(x)=x²은 각 수 x에 하나의 수 x²을 대응시킵니다.', formal:'함수 f:A→B는 모든 a∈A에 대해 유일한 b∈B를 대응시키는 관계입니다.', usedIn:['미분','준동형','morphism','isogeny'] };

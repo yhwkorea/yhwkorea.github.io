@@ -1,0 +1,1 @@
+export default { id:'affine-plane', title:'아핀평면', terms:['아핀평면'], summary:'체 F의 두 원소를 좌표로 갖는 모든 순서쌍 (x,y)의 공간 F²입니다.', target:'isogeny/02-elliptic-curves.html#아핀평면과-대수곡선', prerequisites:['set','field'], why:'두 변수 방정식의 해를 점으로 그려 곡선을 다루기 위한 좌표 공간입니다.', example:'F₅ 위 아핀평면에는 (0,0)부터 (4,4)까지 25개 점이 있습니다.', formal:'A²(F)=F×F이며 원소는 순서쌍 (x,y)입니다.', usedIn:['대수곡선','타원곡선의 유한 좌표'] };

@@ -1,0 +1,1 @@
+export default { id:'kernel', title:'커널', terms:['커널','kernel'], summary:'군 준동형이 공역의 항등원으로 보내는 원소들을 모은 부분군입니다.', target:'isogeny/03-isogenies.html#커널이-isogeny를-결정한다', prerequisites:['group'], why:'사상이 어떤 정보를 하나로 뭉개는지 측정하며 Isogeny에서는 화살표를 결정합니다.', example:'배점 사상 [2]의 커널은 2P=O가 되는 2-torsion 점들입니다.', formal:'ker φ={P∈E₁:φ(P)=O_E₂}입니다.', usedIn:['몫군','isogeny 구성','Vélu 공식','차수'] };
