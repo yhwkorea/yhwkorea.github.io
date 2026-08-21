@@ -39,8 +39,6 @@ Promise.all([
     const needle = normalize(query);
     results.replaceChildren();
     results.hidden = !needle;
-    areaList.closest('.finder-block').hidden = Boolean(needle);
-    questionList.closest('.finder-block').hidden = Boolean(needle);
     if (!needle) return;
     const tokens = needle.split(' ').filter(Boolean);
     const matches = concepts.filter((concept) => tokens.every((token) => conceptText(concept).includes(token)));
