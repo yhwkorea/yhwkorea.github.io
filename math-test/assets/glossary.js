@@ -3,6 +3,14 @@
   const assetBase = new URL('.', script.src);
   const page = (path) => new URL(`../${path}`, assetBase).href;
   const entries = {
+    '집합': ['서로 구별되는 대상들을 하나의 범위로 모아 취급한 것입니다.', 'foundations/notation.html#집합과-원소'],
+    '원소': ['집합을 구성하는 각각의 대상입니다. a∈A는 a가 A의 원소라는 뜻입니다.', 'foundations/notation.html#집합과-원소'],
+    '부분집합': ['A의 모든 원소가 B에도 들어 있을 때 A는 B의 부분집합입니다.', 'foundations/notation.html#부분집합과-집합-연산'],
+    '함수': ['정의역의 각 원소에 공역의 원소를 정확히 하나씩 대응시키는 규칙입니다.', 'foundations/notation.html#함수와-화살표'],
+    '단사': ['서로 다른 두 입력을 같은 출력으로 보내지 않는 함수입니다.', 'foundations/notation.html#함수와-화살표'],
+    '전사': ['공역의 모든 원소가 적어도 한 입력의 출력으로 나타나는 함수입니다.', 'foundations/notation.html#함수와-화살표'],
+    '동치관계': ['반사성·대칭성·추이성을 만족하여 원소들을 겹치지 않는 묶음으로 나누는 관계입니다.', 'foundations/notation.html#관계와-동치류-a'],
+    '동치류': ['주어진 원소와 동치인 원소를 전부 모은 묶음이며 [a]로 씁니다.', 'foundations/notation.html#관계와-동치류-a'],
     '이항연산': ['두 원소를 입력받아 같은 집합의 원소 하나를 출력하는 함수입니다.', 'foundations/algebra.html#연산이란-무엇인가'],
     '군': ['결합법칙, 항등원, 역원을 갖는 하나의 이항연산 구조입니다.', 'foundations/algebra.html#군-연산-하나가-있는-구조'],
     '아벨군': ['연산의 순서를 바꿔도 결과가 같은 군입니다. 가환군이라고도 합니다.', 'foundations/algebra.html#군-연산-하나가-있는-구조'],

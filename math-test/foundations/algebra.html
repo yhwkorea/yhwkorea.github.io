@@ -1,23 +1,6 @@
-<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>대수학 기초 — PQC 학습 가이드</title><link rel="stylesheet" href="../assets/katex/katex.min.css"><link rel="stylesheet" href="../assets/style.css"></head><body data-chapter-view="true"><div class="layout"><aside class="sidebar"><div class="brand">PQC 학습 가이드</div><div class="brand-sub">분야별 기초부터 SQIsign까지</div><nav>
-      <h5>학습 가이드</h5>
-      <ul>
-        <li><a href="../index.html">학습 홈</a></li>
-        <li><a href="../foundations/algebra.html" class="active">대수학</a></li>
-        <li><a href="../isogeny/01-finite-fields.html">유한체</a></li>
-        <li><a href="../isogeny/02-elliptic-curves.html">타원곡선</a></li>
-        <li><a href="../isogeny/03-isogenies.html">Isogeny</a></li>
-        <li><a href="../isogeny/isogeny-textbook.html">SQIsign</a></li>
-      </ul>
-      <h5>참고 자료</h5>
-      <ul>
-        <li><a href="../lattice/lattice-answers.html">Lattice 답안 (1–9)</a></li>
-        <li><a href="../algebra/algebra-answers.html">Algebra 답안 (1–16)</a></li>
-        <li><a href="../probability/probability-answers.html">Probability 답안 (1–10)</a></li>
-        <li><a href="../linear-algebra/linear-algebra-answers.html">Linear Algebra 답안 (1–17)</a></li>
-        <li><a href="../background/real-analysis.html">실해석학 보충</a></li>
-      </ul>
-    </nav></aside><main class="content"><div class="content-inner"><div class="eyebrow">Mathematical Foundations · Algebra</div><h1 id="대수학-기초-연산에서-체까지">대수학 기초 — 연산에서 체까지</h1>
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>대수학 기초 — PQC 학습 가이드</title><link rel="stylesheet" href="../assets/katex/katex.min.css"><link rel="stylesheet" href="../assets/style.css"></head><body data-chapter-view="true"><div class="layout"><aside class="sidebar"><div class="brand">PQC 학습 가이드</div><div class="brand-sub">기호부터 SQIsign까지</div><nav><h5>학습 가이드</h5><ul><li><a href="../index.html">학습 홈</a></li><li><a href="../foundations/notation.html">집합과 기호</a></li><li><a href="../foundations/algebra.html" class="active">대수학</a></li><li><a href="../isogeny/01-finite-fields.html">유한체</a></li><li><a href="../isogeny/02-elliptic-curves.html">타원곡선</a></li><li><a href="../isogeny/03-isogenies.html">Isogeny</a></li><li><a href="../isogeny/isogeny-textbook.html">SQIsign</a></li></ul><h5>참고 자료</h5><ul><li><a href="../lattice/lattice-answers.html">Lattice 답안 (1–9)</a></li><li><a href="../algebra/algebra-answers.html">Algebra 답안 (1–16)</a></li><li><a href="../probability/probability-answers.html">Probability 답안 (1–10)</a></li><li><a href="../linear-algebra/linear-algebra-answers.html">Linear Algebra 답안 (1–17)</a></li><li><a href="../background/real-analysis.html">실해석학 보충</a></li></ul></nav></aside><main class="content"><div class="content-inner"><div class="eyebrow">Mathematical Foundations · Algebra</div><h1 id="대수학-기초-연산에서-체까지">대수학 기초 — 연산에서 체까지</h1>
 <p>SQIsign에서 <span class="math inline">\(\mathbb F_{p^2}\)</span>, <span class="math inline">\(\mathbb Z[i]\)</span>, <span class="math inline">\(\operatorname{End}(E)\)</span> 같은 대상을 읽으려면 먼저 군·환·아이디얼·체가 무엇인지 알아야 합니다. 이 장은 그 구조들이 어떤 공리를 추가할 때 차례로 나타나는지 설명합니다.</p>
+<p><strong>먼저 읽기:</strong> <span class="math inline">\(\in\)</span>, <span class="math inline">\(\subseteq\)</span>, <span class="math inline">\(\times\)</span>, <span class="math inline">\(\to\)</span>, <span class="math inline">\(:=\)</span>, <span class="math inline">\([a]\)</span> 같은 기호가 낯설다면 <a href="notation.html">집합과 수학 기호</a>를 먼저 읽으세요. 이 장에서는 그 기호들의 정의를 이미 알고 있다고 가정합니다.</p>
 <h2 id="연산이란-무엇인가">1. 연산이란 무엇인가</h2>
 <aside class="concept-purpose">
 <strong>왜 등장했나?</strong>
@@ -105,7 +88,7 @@
 몫환 <span class="math inline">\(F[x]/(f)\)</span>로 유한체를 만들고, 사원수 좌아이디얼로 SQIsign의 isogeny를 표현합니다.
 </p>
 </aside>
-<p>먼저 만들고 싶은 결과부터 보겠습니다. 정수에서 “6의 배수만큼 차이 나는 수는 같다”고 약속하면 <span class="math inline">\(1,7,13\)</span>은 모두 같은 원소가 되고 <span class="math inline">\(\mathbb Z/6\mathbb Z\)</span>가 됩니다. 이때 <span class="math inline">\([a]+[b]:=[a+b]\)</span>, <span class="math inline">\([a][b]:=[ab]\)</span>라고 계산하고 싶습니다. 어떤 부분집합을 0으로 취급해도 이 계산이 가능할까요? 그 조건을 정확히 모은 것이 아이디얼입니다.</p>
+<p>먼저 만들고 싶은 결과부터 보겠습니다. 정수에서 “6의 배수만큼 차이 나는 수는 같다”고 약속하면 <span class="math inline">\(1,7,13\)</span>은 모두 같은 묶음에 들어갑니다. 이 묶음을 정의한 뒤에야 대괄호 연산을 쓸 수 있습니다.</p>
 <p>가환환 <span class="math inline">\(R\)</span>의 부분집합 <span class="math inline">\(I\)</span>가 다음을 만족하면 <strong>아이디얼(ideal)</strong>이라 합니다.</p>
 <ol type="1">
 <li><span class="math inline">\((I,+)\)</span>는 <span class="math inline">\((R,+)\)</span>의 부분군이다.</li>
@@ -116,6 +99,16 @@
 <p>원소 <span class="math inline">\(a\)</span> 하나의 모든 배수</p>
 <p><span class="math display">\[(a):=Ra=\{ra:r\in R\}\]</span></p>
 <p>를 <span class="math inline">\(a\)</span>가 생성하는 <strong>주아이디얼</strong>이라 합니다. <span class="math inline">\(F[x]\)</span>에서 <span class="math inline">\((f)\)</span>는 <span class="math inline">\(f\)</span>의 배수인 다항식 전체입니다.</p>
+<h3 id="동치관계에서-대괄호-a까지">동치관계에서 대괄호 <span class="math inline">\([a]\)</span>까지</h3>
+<p>아이디얼 <span class="math inline">\(I\subseteq R\)</span>를 하나 고정하고</p>
+<p><span class="math display">\[a\sim b\quad:\Longleftrightarrow\quad a-b\in I\]</span></p>
+<p>로 정의합니다. <span class="math inline">\(I\)</span>가 덧셈 부분군이므로 이 관계는 반사적·대칭적·추이적이며 동치관계입니다. <span class="math inline">\(a\)</span>와 동치인 원소들의 묶음을</p>
+<p><span class="math display">\[[a]:=a+I:=\{a+i:i\in I\}\]</span></p>
+<p>로 정의합니다. 이제 <span class="math inline">\([a]\)</span>는 숫자 <span class="math inline">\(a\)</span>가 아니라 <strong><span class="math inline">\(a\)</span>가 대표하는 동치류 전체</strong>입니다. 모든 동치류의 집합이 몫집합</p>
+<p><span class="math display">\[R/I:=\{[a]:a\in R\}\]</span></p>
+<p>입니다. 이 집합 위에서 비로소</p>
+<p><span class="math display">\[[a]+[b]:=[a+b],\qquad [a][b]:=[ab]\]</span></p>
+<p>라고 연산을 정의합니다. 기호 <span class="math inline">\(:=\)</span>는 오른쪽 식을 왼쪽 기호의 뜻으로 정한다는 표시입니다.</p>
 <h3 id="왜-부분환이-아니라-아이디얼이어야-하는가">왜 부분환이 아니라 아이디얼이어야 하는가</h3>
 <p><span class="math inline">\(R/I\)</span>에서 <span class="math inline">\(a\)</span>와 <span class="math inline">\(a+i\)</span>를 같은 원소로 취급하고</p>
 <p><span class="math display">\[(a+I)(b+I):=ab+I\]</span></p>
@@ -166,6 +159,4 @@
 <li>사원수 order의 좌아이디얼: isogeny를 대수적으로 나타내는 <strong>아이디얼</strong></li>
 </ul>
 <p>이제 이 추상 구조를 실제 원소와 연산으로 만드는 <a href="../isogeny/01-finite-fields.html">유한체 장</a>으로 이동하면 됩니다.</p>
-</div></main></div><script src="../assets/katex/katex.min.js"></script><script src="../assets/katex/auto-render.min.js"></script><script>renderMathInElement(document.body,{delimiters:[{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false},{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false}]});</script><script src="../assets/glossary.js"></script>
-<script src="../assets/chapters.js"></script>
-</body></html>
+</div></main></div><script src="../assets/katex/katex.min.js"></script><script src="../assets/katex/auto-render.min.js"></script><script>renderMathInElement(document.body,{delimiters:[{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false},{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false}]});</script><script src="../assets/glossary.js"></script><script src="../assets/chapters.js"></script></body></html>
