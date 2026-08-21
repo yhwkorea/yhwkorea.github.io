@@ -411,6 +411,27 @@ details.chapter.glossary-revealed {
 
 /* Learning-guide landing page */
 .guide-hero, .answer-library { max-width: 760px; }
+.concept-finder { max-width: 760px; margin: 28px 0 42px; padding: clamp(22px, 4vw, 34px); border: 1px solid var(--border); border-radius: 16px; background: var(--surface); }
+.concept-finder h2 { margin: 5px 0 18px; }
+.concept-search span { display: block; margin-bottom: 6px; color: var(--ink-soft); font: 650 .82rem/1.4 -apple-system, sans-serif; }
+.concept-search input { width: 100%; padding: 13px 15px; border: 2px solid var(--accent); border-radius: 10px; background: var(--bg); color: var(--ink); font: 1rem/1.4 -apple-system, sans-serif; }
+.concept-search input:focus { outline: 3px solid color-mix(in srgb, var(--accent) 20%, transparent); }
+.finder-block { margin-top: 25px; }
+.finder-block h3, .search-results h3 { margin: 0 0 10px; font-size: 1rem; }
+.question-list { display: flex; flex-wrap: wrap; gap: 7px; }
+.question-list a { padding: 7px 10px; border: 1px solid var(--border); border-radius: 999px; background: var(--surface-alt); text-decoration: none; font: 600 .8rem/1.4 -apple-system, sans-serif; }
+.area-list { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 9px; }
+.area-card, .search-result { display: block; padding: 12px 14px; border: 1px solid var(--border); border-radius: 9px; text-decoration: none; background: var(--bg); }
+.area-card:hover, .search-result:hover { border-color: var(--accent); }
+.area-card strong, .area-card span, .search-result strong, .search-result span, .search-result small { display: block; }
+.area-card span, .search-result span { color: var(--ink-soft); font-size: .82rem; line-height: 1.5; }
+.search-results { margin-top: 20px; }
+.search-result { margin-top: 8px; }
+.search-result small { margin-top: 4px; color: var(--accent); font: 650 .72rem/1.4 -apple-system, sans-serif; }
+.search-empty { color: var(--ink-soft); }
+.recommended-path { max-width: 760px; margin: 0 0 38px; padding: 12px 16px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); }
+.recommended-path summary { cursor: pointer; color: var(--accent-ink); font-weight: 700; }
+.recommended-path ol { margin-bottom: 0; }
 .guide-hero {
   margin: 30px 0 42px;
   padding: clamp(24px, 5vw, 42px);
@@ -474,6 +495,7 @@ details.chapter.glossary-revealed {
 .answer-buttons a { flex-direction: column; padding: 13px 15px; border: 1px solid var(--border); border-radius: 9px; background: var(--surface); color: var(--ink); }
 .answer-buttons small { color: var(--ink-soft); margin-top: 2px; }
 @media (max-width: 620px) {
+  .area-list { grid-template-columns: 1fr; }
   .signature-flow { grid-template-columns: 1fr; }
   .signature-flow > b { transform: none; }
   .signature-story { grid-template-columns: 1fr; }
