@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>유한체 — PQC 학습 가이드</title><link rel="stylesheet" href="../assets/katex/katex.min.css"><link rel="stylesheet" href="../assets/style.css"></head>
+<body><div class="layout"><aside class="sidebar"><div class="brand">PQC 학습 가이드</div><div class="brand-sub">Isogeny에서 SQIsign까지</div><nav>
+<h5>학습 순서</h5><ul><li><a href="../index.html">← 학습 홈</a></li><li><a href="01-finite-fields.html" class="active">1 · 유한체</a></li>
+<li><a href="02-elliptic-curves.html">2 · 타원곡선</a></li>
+<li><a href="03-isogenies.html">3 · Isogeny</a></li>
+<li><a href="isogeny-textbook.html">4 · SQIsign</a></li></ul>
+<h5>참고 자료</h5><ul><li><a href="../index.html#qualifying-answers">수학 자격시험 답안</a></li></ul>
+</nav></aside><main class="content"><div class="content-inner"><div class="eyebrow">Isogeny Foundations · 유한체</div><h1 id="유한체-sqisign의-좌표가-사는-세계">유한체 — SQIsign의 좌표가 사는 세계</h1>
+<p>이 장의 목표는 <span class="math inline">\(\mathbb F_p\)</span>와 <span class="math inline">\(\mathbb F_{p^2}\)</span>를 기호로만 넘기지 않고, 원소가 무엇이고 연산이 왜 잘 정의되는지부터 이해하는 것입니다.</p>
+<h2 id="체란-무엇인가">1. 체란 무엇인가</h2>
+<p><strong>정의.</strong> 집합 <span class="math inline">\(F\)</span>와 두 연산 <span class="math inline">\(+\)</span>, <span class="math inline">\(\cdot\)</span>이 다음을 만족하면 <span class="math inline">\(F\)</span>를 <strong>체(field)</strong>라 합니다.</p>
+<ol type="1">
+<li><span class="math inline">\((F,+)\)</span>는 항등원 <span class="math inline">\(0\)</span>을 가진 아벨군이다.</li>
+<li><span class="math inline">\(F^\times:=F\setminus\{0\}\)</span>는 곱셈에 대해 항등원 <span class="math inline">\(1\)</span>을 가진 아벨군이다.</li>
+<li><span class="math inline">\(a(b+c)=ab+ac\)</span>가 모든 <span class="math inline">\(a,b,c\in F\)</span>에 대해 성립한다.</li>
+</ol>
+<p>두 번째 조건 때문에 <span class="math inline">\(0\)</span>이 아닌 모든 원소 <span class="math inline">\(a\)</span>에는 역원 <span class="math inline">\(a^{-1}\)</span>이 있습니다. 따라서 체에서는 <span class="math inline">\(a\ne0\)</span>일 때 나눗셈 <span class="math inline">\(b/a:=ba^{-1}\)</span>을 할 수 있습니다. 타원곡선의 덧셈 공식에 분모가 나타날 수 있는 이유가 바로 이것입니다.</p>
+<h2 id="소수체-mathbb-f_p">2. 소수체 <span class="math inline">\(\mathbb F_p\)</span></h2>
+<p><span class="math inline">\(p\)</span>가 소수일 때</p>
+<p><span class="math display">\[\mathbb F_p:=\mathbb Z/p\mathbb Z=\{\bar0,\bar1,\ldots,\overline{p-1}\}\]</span></p>
+<p>로 정의합니다. <span class="math inline">\(\bar a=\bar b\)</span>는 <span class="math inline">\(p\mid(a-b)\)</span>라는 뜻이고, 덧셈과 곱셈은 정수에서 계산한 뒤 <span class="math inline">\(p\)</span>로 나눈 나머지를 취합니다.</p>
+<p><strong>왜 소수여야 하는가.</strong> <span class="math inline">\(p\)</span>가 소수이고 <span class="math inline">\(\bar a\ne\bar0\)</span>이면 <span class="math inline">\(\gcd(a,p)=1\)</span>입니다. Bézout 항등식으로 <span class="math inline">\(au+pv=1\)</span>인 정수 <span class="math inline">\(u,v\)</span>가 존재하므로 <span class="math inline">\(\bar a\bar u=\bar1\)</span>입니다. 따라서 모든 0 아닌 원소가 역원을 가집니다. 반대로 <span class="math inline">\(n=ab\)</span>가 합성수이면 <span class="math inline">\(\bar a,\bar b\ne0\)</span>인데 <span class="math inline">\(\bar a\bar b=0\)</span>이므로 둘 다 역원을 가질 수 없습니다. 그래서 <span class="math inline">\(\mathbb Z/n\mathbb Z\)</span>는 <span class="math inline">\(n\)</span>이 소수일 때에만 체입니다.</p>
+<p><strong>예제: <span class="math inline">\(\mathbb F_7\)</span>.</strong> <span class="math inline">\(3^{-1}=5\)</span>입니다. 실제로 <span class="math inline">\(3\cdot5=15\equiv1\pmod7\)</span>입니다. <span class="math inline">\(x^2=-1\)</span>은 해가 없습니다. 제곱들을 계산하면 <span class="math inline">\(0,1,2,4\)</span>만 나오기 때문입니다.</p>
+<h2 id="다항식으로-확장체-만들기">3. 다항식으로 확장체 만들기</h2>
+<p><span class="math inline">\(F[x]\)</span>에서 기약다항식 <span class="math inline">\(f(x)\)</span>를 잡으면 몫환 <span class="math inline">\(F[x]/(f)\)</span>는 체입니다. 원소는 다항식의 동치류이고, <span class="math inline">\(f\)</span>로 나눈 나머지로 대표할 수 있습니다.</p>
+<p><strong>정리.</strong> <span class="math inline">\(F[x]/(f)\)</span>가 체인 것과 <span class="math inline">\(f\)</span>가 <span class="math inline">\(F[x]\)</span>에서 기약인 것은 동치입니다.</p>
+<p><strong>증명.</strong> <span class="math inline">\(f\)</span>가 기약이고 <span class="math inline">\(g\not\equiv0\pmod f\)</span>이면 <span class="math inline">\(\gcd(f,g)=1\)</span>입니다. 따라서 다항식 Bézout 항등식 <span class="math inline">\(a(x)f(x)+b(x)g(x)=1\)</span>이 성립하고, 몫에서 <span class="math inline">\([b][g]=[1]\)</span>이므로 <span class="math inline">\([g]\)</span>가 역원을 가집니다. 반대로 <span class="math inline">\(f=gh\)</span>가 비자명하게 인수분해되면 <span class="math inline">\([g],[h]\ne0\)</span>이지만 <span class="math inline">\([g][h]=[f]=0\)</span>입니다. 영인자가 있는 환은 체가 아닙니다. <span class="math inline">\(\square\)</span></p>
+<h2 id="mathbb-f_p2를-손으로-만들기">4. <span class="math inline">\(\mathbb F_{p^2}\)</span>를 손으로 만들기</h2>
+<p><span class="math inline">\(p\equiv3\pmod4\)</span>이면 <span class="math inline">\(-1\)</span>은 <span class="math inline">\(\mathbb F_p\)</span>에서 제곱이 아닙니다. 따라서 <span class="math inline">\(X^2+1\)</span>은 <span class="math inline">\(\mathbb F_p\)</span>에서 기약이고</p>
+<p><span class="math display">\[\mathbb F_{p^2}=\mathbb F_p[X]/(X^2+1)\]</span></p>
+<p>로 둘 수 있습니다. <span class="math inline">\(i:=[X]\)</span>라 쓰면 <span class="math inline">\(i^2=-1\)</span>이고 모든 원소는 유일하게 <span class="math inline">\(a+bi\)</span> (<span class="math inline">\(a,b\in\mathbb F_p\)</span>)로 표현됩니다.</p>
+<p><span class="math display">\[ (a+bi)(c+di)=(ac-bd)+(ad+bc)i. \]</span></p>
+<p>0이 아닌 <span class="math inline">\(a+bi\)</span>의 역원은</p>
+<p><span class="math display">\[ (a+bi)^{-1}=\frac{a-bi}{a^2+b^2}. \]</span></p>
+<p>분모가 0이면 <span class="math inline">\(a^2=-b^2\)</span>입니다. <span class="math inline">\(b\ne0\)</span>이면 <span class="math inline">\((a/b)^2=-1\)</span>이 되어 기약성과 모순이고, <span class="math inline">\(b=0\)</span>이면 <span class="math inline">\(a=0\)</span>입니다. 따라서 0 아닌 원소에서는 분모가 항상 0이 아닙니다.</p>
+<h2 id="frobenius와-켤레">5. Frobenius와 켤레</h2>
+<p>특성 <span class="math inline">\(p\)</span>에서는 이항계수 <span class="math inline">\(\binom pk\)</span>가 <span class="math inline">\(0&lt;k&lt;p\)</span>일 때 <span class="math inline">\(p\)</span>의 배수이므로</p>
+<p><span class="math display">\[ (x+y)^p=x^p+y^p. \]</span></p>
+<p>따라서 <span class="math inline">\(\pi:x\mapsto x^p\)</span>는 체 준동형이고 <strong>Frobenius 사상</strong>이라 부릅니다. <span class="math inline">\(\mathbb F_{p^2}\)</span>의 모든 원소는 <span class="math inline">\(x^{p^2}=x\)</span>를 만족하며, <span class="math inline">\(\pi^2=\mathrm{id}\)</span>입니다. <span class="math inline">\(p\equiv3\pmod4\)</span>일 때 <span class="math inline">\(i^p=i^{p\bmod4}=i^3=-i\)</span>이므로</p>
+<p><span class="math display">\[ (a+bi)^p=a-bi. \]</span></p>
+<p>즉 Frobenius는 복소수 켤레와 똑같이 작동합니다. 노름은 <span class="math inline">\(N(a+bi)=(a+bi)^{p+1}=a^2+b^2\in\mathbb F_p\)</span>입니다.</p>
+<h2 id="sqisign에서-왜-mathbb-f_p2인가">6. SQIsign에서 왜 <span class="math inline">\(\mathbb F_{p^2}\)</span>인가</h2>
+<p>SQIsign의 초특이 타원곡선과 필요한 isogeny는 자연스럽게 <span class="math inline">\(\mathbb F_{p^2}\)</span> 위에서 다뤄집니다. 좌표 <span class="math inline">\(x,y\)</span>, 곡선 계수, 커널점은 모두 이 체의 원소입니다. 따라서 “곡선 위 점을 계산한다”는 말은 결국 <span class="math inline">\(a+bi\)</span> 꼴 원소들의 덧셈·곱셈·역원을 계산한다는 뜻입니다.</p>
+<p><strong>다음:</strong> <a href="02-elliptic-curves.html">대수곡선과 타원곡선</a></p>
+</div></main></div>
+<script src="../assets/katex/katex.min.js"></script><script src="../assets/katex/auto-render.min.js"></script>
+<script>renderMathInElement(document.body,{delimiters:[{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false},{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false}]});</script></body></html>

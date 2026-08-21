@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Isogeny — PQC 학습 가이드</title><link rel="stylesheet" href="../assets/katex/katex.min.css"><link rel="stylesheet" href="../assets/style.css"></head>
+<body><div class="layout"><aside class="sidebar"><div class="brand">PQC 학습 가이드</div><div class="brand-sub">Isogeny에서 SQIsign까지</div><nav>
+<h5>학습 순서</h5><ul><li><a href="../index.html">← 학습 홈</a></li><li><a href="01-finite-fields.html">1 · 유한체</a></li>
+<li><a href="02-elliptic-curves.html">2 · 타원곡선</a></li>
+<li><a href="03-isogenies.html" class="active">3 · Isogeny</a></li>
+<li><a href="isogeny-textbook.html">4 · SQIsign</a></li></ul>
+<h5>참고 자료</h5><ul><li><a href="../index.html#qualifying-answers">수학 자격시험 답안</a></li></ul>
+</nav></aside><main class="content"><div class="content-inner"><div class="eyebrow">Isogeny Foundations · Isogeny</div><h1 id="isogeny-곡선-사이의-구조-보존-사상">Isogeny — 곡선 사이의 구조 보존 사상</h1>
+<p>이 장의 목표는 isogeny를 단순히 “곡선 사이 화살표”라고 부르지 않고, 어떤 종류의 사상이며 커널·차수·쌍대가 어떻게 연결되는지 밝히는 것입니다.</p>
+<h2 id="곡선-사이의-사상">1. 곡선 사이의 사상</h2>
+<p>타원곡선 <span class="math inline">\(E_1,E_2\)</span> 사이의 <strong>morphism</strong>은 사영좌표에서 동차다항식들로 주어지고 곡선의 모든 점에서 정의되는 사상입니다. 아핀좌표에서는 보통 유리함수</p>
+<p><span class="math display">\[\varphi(x,y)=(r_1(x,y),r_2(x,y))\]</span></p>
+<p>로 보이지만, 분모가 0이 되는 곳까지 사영좌표로 일관되게 연장되어야 합니다. 단순한 집합 함수나 임의의 군 준동형은 대수적 사상이 아니므로 isogeny가 아닙니다.</p>
+<h2 id="isogeny의-정의">2. Isogeny의 정의</h2>
+<p><strong>정의.</strong> <span class="math inline">\(F\)</span> 위 타원곡선 사이의 <strong>isogeny</strong>는 <span class="math inline">\(F\)</span> 위에 정의된 비상수 morphism <span class="math inline">\(\varphi:E_1\to E_2\)</span>로서 <span class="math inline">\(\varphi(\mathcal O_{E_1})=\mathcal O_{E_2}\)</span>를 만족하는 사상입니다.</p>
+<p><strong>정리.</strong> 위 조건을 만족하는 morphism은 자동으로 군 준동형이고 전사이며 커널이 유한합니다. 따라서 “전사인 유한 커널의 대수적 군 준동형”이라고 정의해도 동치입니다. 중요한 점은 이 성질들이 서로 무관한 체크리스트가 아니라, 비상수 곡선 morphism과 항등원 보존에서 따라온다는 것입니다.</p>
+<p><span class="math inline">\(E_1=E_2\)</span>인 isogeny를 <strong>endomorphism</strong>이라 하고, 0 사상까지 모은 환을 <span class="math inline">\(\operatorname{End}(E)\)</span>라 합니다. 덧셈은 <span class="math inline">\((\varphi+\psi)(P)=\varphi(P)+\psi(P)\)</span>, 곱셈은 합성입니다.</p>
+<h2 id="커널이-isogeny를-결정한다">3. 커널이 isogeny를 결정한다</h2>
+<p><span class="math inline">\(E\)</span>의 유한 부분군 <span class="math inline">\(K\)</span>가 Galois 작용에 안정적이면 몫곡선 <span class="math inline">\(E/K\)</span>와 isogeny</p>
+<p><span class="math display">\[\varphi_K:E\longrightarrow E/K\]</span></p>
+<p>가 존재하고 <span class="math inline">\(\ker\varphi_K=K\)</span>입니다. 이는 공역의 동형을 제외하고 유일합니다. Vélu 공식은 <span class="math inline">\(K\)</span>의 점들을 입력받아 <span class="math inline">\(E/K\)</span>의 계수와 <span class="math inline">\(\varphi_K\)</span>의 유리함수를 실제로 계산합니다.</p>
+<p>그래서 SQIsign은 긴 유리함수 전체 대신 torsion 점 <span class="math inline">\(P\)</span>가 생성하는 커널 <span class="math inline">\(K=\langle P\rangle\)</span>을 저장하거나 해시로 선택합니다. 커널을 알면 화살표를 재구성할 수 있기 때문입니다.</p>
+<h2 id="차수와-분리가능성">4. 차수와 분리가능성</h2>
+<p>비상수 morphism은 함수체의 포함 <span class="math inline">\(\varphi^*:F(E_2)\hookrightarrow F(E_1)\)</span>을 유도합니다. <strong>차수</strong>를</p>
+<p><span class="math display">\[\deg\varphi=[F(E_1):\varphi^*F(E_2)]\]</span></p>
+<p>로 정의합니다. <span class="math inline">\(\varphi\)</span>가 분리가능하면 <span class="math inline">\(\deg\varphi=|\ker\varphi|\)</span>이지만, 특성 <span class="math inline">\(p\)</span>에서 비분리 사상에는 이 등식이 깨질 수 있습니다. 예를 들어 Frobenius isogeny는 차수가 <span class="math inline">\(p\)</span>이지만 기하적 커널점은 하나뿐입니다. 따라서 “차수=커널 크기”는 분리가능성 조건을 붙여야 정확합니다.</p>
+<p>합성에 대해서는</p>
+<p><span class="math display">\[\deg(\psi\circ\varphi)=\deg\psi\,\deg\varphi\]</span></p>
+<p>가 성립합니다. 작은 소수 차수 isogeny들을 합성해 큰 차수 경로를 표현하는 근거입니다.</p>
+<h2 id="쌍대-isogeny">5. 쌍대 isogeny</h2>
+<p>차수 <span class="math inline">\(n\)</span>인 isogeny <span class="math inline">\(\varphi:E_1\to E_2\)</span>에는 유일한 쌍대 isogeny <span class="math inline">\(\hat\varphi:E_2\to E_1\)</span>가 존재하여</p>
+<p><span class="math display">\[\hat\varphi\circ\varphi=[n]_{E_1},\qquad
+\varphi\circ\hat\varphi=[n]_{E_2}\]</span></p>
+<p>를 만족합니다. 특히 <span class="math inline">\(\deg\hat\varphi=n\)</span>입니다. 그래프에서 간선을 반대로 따라갈 수 있다는 말은 단순히 함수를 역으로 푼다는 뜻이 아니라 이 쌍대 사상을 계산한다는 뜻입니다. <span class="math inline">\(n&gt;1\)</span>이면 <span class="math inline">\(\varphi\)</span>는 여러 점을 한 점으로 보내므로 집합함수로서 역함수가 없습니다.</p>
+<h2 id="isogeny-그래프">6. Isogeny 그래프</h2>
+<p>소수 <span class="math inline">\(\ell\ne\operatorname{char}F\)</span>를 고정합니다. 꼭짓점은 타원곡선의 동형류이고, <span class="math inline">\(\ell\)</span>-isogeny가 있으면 간선을 잇습니다. <span class="math inline">\(E[\ell]\cong(\mathbb Z/\ell\mathbb Z)^2\)</span>에는 크기 <span class="math inline">\(\ell\)</span>인 순환부분군이 정확히 <span class="math inline">\(\ell+1\)</span>개 있으므로, 중복 동형과 자기루프를 중복도까지 세면 각 꼭짓점에서 <span class="math inline">\(\ell+1\)</span>개의 간선이 나옵니다.</p>
+<p>SQIsign은 이 그래프의 초특이 연결성분을 사용합니다. 공개키는 꼭짓점 <span class="math inline">\(E_A\)</span>, 비밀 witness는 그 꼭짓점의 endomorphism ring을 계산할 수 있는 정보이고, 서명 응답은 challenge가 정한 꼭짓점으로 가는 isogeny입니다.</p>
+<p><strong>이전:</strong> <a href="02-elliptic-curves.html">대수곡선과 타원곡선</a> · <strong>다음:</strong> <a href="isogeny-textbook.html">SQIsign 전체 구조</a></p>
+</div></main></div>
+<script src="../assets/katex/katex.min.js"></script><script src="../assets/katex/auto-render.min.js"></script>
+<script>renderMathInElement(document.body,{delimiters:[{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false},{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false}]});</script></body></html>
