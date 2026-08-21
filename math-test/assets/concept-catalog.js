@@ -10,11 +10,5 @@ export const areas = [
 
 export const commonQuestions = [
   { question: '전자서명은 암호화와 뭐가 다른가?', href: 'foundations/cryptography.html#서명이-해결하는-문제', terms: ['전자서명', '암호화', '서명'] },
-  { question: 'SQIsign은 결국 무엇을 하는가?', href: 'foundations/cryptography.html#sqisign의-기여', terms: ['SQIsign', 'PQC', '후양자'] },
-  { question: '곡선 사이 화살표 Isogeny가 뭔가?', href: 'isogeny/03-isogenies.html#isogeny의-정의', terms: ['isogeny', '곡선', '화살표'] },
-  { question: '𝒪는 숫자 0인가, 대문자 O인가?', href: 'isogeny/02-elliptic-curves.html#사영평면과-무한원점', terms: ['O', '0', '무한원점', '항등원'] },
-  { question: '편미분이 왜 곡선에 등장하나?', href: 'isogeny/02-elliptic-curves.html#특이점과-매끄러움', terms: ['편미분', '특이점', '모두 0'] },
-  { question: 'char F와 체의 표수는 무슨 뜻인가?', href: 'isogeny/02-elliptic-curves.html#특이점과-매끄러움', terms: ['char F', '표수', '특성'] },
-  { question: '아이디얼은 왜 필요한가?', href: 'foundations/algebra.html#아이디얼-몫환을-만들-수-있는-부분집합', terms: ['아이디얼', '몫환', '왜'] },
-  { question: '[a]는 숫자인가, 집합인가?', href: 'foundations/notation.html#관계와-동치류-a', terms: ['[a]', '동치류', '대괄호'] }
+  { question: 'SQIsign은 결국 무엇을 하는가?', href: 'foundations/cryptography.html#sqisign의-기여', terms: ['SQIsign', 'PQC', '후양자'] }
 ];
