@@ -371,6 +371,15 @@ details.chapter[open] > summary h2::before { content: '▾'; }
 .chapter-body > :first-child { margin-top: 0; }
 .chapter-body > :last-child { margin-bottom: 0; }
 details.chapter:target, details.chapter:has(:target) { border-color: var(--accent); }
+details.chapter.glossary-revealed {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
+  animation: glossary-reveal 1.2s ease-out;
+}
+@keyframes glossary-reveal {
+  0% { transform: translateY(4px); }
+  35% { transform: translateY(0); }
+}
 
 /* Learning-guide landing page */
 .guide-hero, .answer-library { max-width: 760px; }

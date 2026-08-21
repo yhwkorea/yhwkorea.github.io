@@ -56,15 +56,31 @@
   index.append(kicker, title, help, list, close);
   content.insertBefore(index, chapters[0].details);
 
+  const findTarget = (hash) => {
+    if (!hash) return null;
+    const raw = hash.replace(/^#/, '');
+    const candidates = [raw];
+    try { candidates.unshift(decodeURIComponent(raw)); } catch (_) { /* already decoded */ }
+    for (const id of candidates) {
+      const target = document.getElementById(id);
+      if (target) return target;
+    }
+    return null;
+  };
   const revealHash = () => {
-    if (!location.hash) return;
-    const target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+    const pending = sessionStorage.getItem('glossary-target');
+    const target = findTarget(location.hash) || findTarget(pending);
     const chapter = target && target.closest('details.chapter');
     if (chapter) {
       chapter.open = true;
-      requestAnimationFrame(() => target.scrollIntoView({ block: 'start' }));
+      chapter.classList.add('glossary-revealed');
+      sessionStorage.removeItem('glossary-target');
+      sessionStorage.removeItem('glossary-term');
+      requestAnimationFrame(() => requestAnimationFrame(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' })));
+      setTimeout(() => chapter.classList.remove('glossary-revealed'), 2600);
     }
   };
   revealHash();
+  window.addEventListener('pageshow', revealHash);
   window.addEventListener('hashchange', revealHash);
 })();

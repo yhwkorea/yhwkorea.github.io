@@ -67,6 +67,11 @@
     const title = document.createElement('strong'); title.textContent = term;
     const text = document.createElement('p'); text.textContent = definition;
     const link = document.createElement('a'); link.href = page(target); link.textContent = '설명에서 자세히 보기 →';
+    link.addEventListener('click', () => {
+      const destination = new URL(link.href);
+      sessionStorage.setItem('glossary-target', destination.hash);
+      sessionStorage.setItem('glossary-term', term);
+    });
     pop.append(title, text, link);
     pop.hidden = false;
     const rect = selection.getRangeAt(0).getBoundingClientRect();
