@@ -66,7 +66,7 @@
 <li>곱셈은 결합적이다: <span class="math inline">\((ab)c=a(bc)\)</span>.</li>
 <li>분배법칙이 성립한다: <span class="math inline">\(a(b+c)=ab+ac\)</span>, <span class="math inline">\((a+b)c=ac+bc\)</span>.</li>
 </ol>
-<p>이 가이드에서는 추가로 곱셈 항등원 <span class="math inline">\(1\)</span>이 있는 환을 기본으로 사용합니다. <span class="math inline">\(ab=ba\)</span>까지 성립하면 <strong>가환환</strong>입니다. 문헌에 따라 환의 정의에 <span class="math inline">\(1\)</span>을 요구하지 않기도 하므로, 다른 책을 읽을 때는 저자의 관례를 확인해야 합니다.</p>
+<p>이 가이드에서는 추가로 곱셈 항등원 <span class="math inline">\(1\)</span>이 있는 환을 기본으로 사용합니다. <span class="math inline">\(ab=ba\)</span>까지 성립하면 <strong data-concept="commutative-ring">가환환</strong>입니다. 문헌에 따라 환의 정의에 <span class="math inline">\(1\)</span>을 요구하지 않기도 하므로, 다른 책을 읽을 때는 저자의 관례를 확인해야 합니다.</p>
 <p><strong>예제.</strong> <span class="math inline">\(\mathbb Z\)</span>, <span class="math inline">\(\mathbb Z/n\mathbb Z\)</span>, <span class="math inline">\(F[x]\)</span>는 가환환입니다. <span class="math inline">\(n\ge2\)</span>일 때 행렬환 <span class="math inline">\(M_n(F)\)</span>는 보통 <span class="math inline">\(AB\ne BA\)</span>이므로 비가환환입니다. <span class="math inline">\(\operatorname{End}(E)\)</span>도 합성을 곱셈으로 하는 환이며, 초특이 타원곡선에서는 비가환입니다.</p>
 <h3 id="곱셈-역원은-일부에만-있다">곱셈 역원은 일부에만 있다</h3>
 <p>환에서는 모든 0 아닌 원소가 나눗셈을 허용할 필요가 없습니다. <span class="math inline">\(u\in R\)</span>에 <span class="math inline">\(uv=vu=1\)</span>인 <span class="math inline">\(v\)</span>가 존재할 때만 <span class="math inline">\(u\)</span>를 <strong>단원(unit)</strong>이라 합니다. 예를 들어 <span class="math inline">\(\mathbb Z\)</span>의 단원은 <span class="math inline">\(1,-1\)</span>뿐입니다.</p>
@@ -88,8 +88,9 @@
 몫환 <span class="math inline">\(F[x]/(f)\)</span>로 유한체를 만들고, 사원수 좌아이디얼로 SQIsign의 isogeny를 표현합니다.
 </p>
 </aside>
+<section data-concept-module="ideal" aria-label="아이디얼 이해 깊이 선택"></section>
 <p>먼저 만들고 싶은 결과부터 보겠습니다. 정수에서 “6의 배수만큼 차이 나는 수는 같다”고 약속하면 <span class="math inline">\(1,7,13\)</span>은 모두 같은 묶음에 들어갑니다. 이 묶음을 정의한 뒤에야 대괄호 연산을 쓸 수 있습니다.</p>
-<p>가환환 <span class="math inline">\(R\)</span>의 부분집합 <span class="math inline">\(I\)</span>가 다음을 만족하면 <strong>아이디얼(ideal)</strong>이라 합니다.</p>
+<p>가환환 <span class="math inline">\(R\)</span>의 부분집합 <span class="math inline">\(I\)</span>가 다음을 만족하면 <strong data-concept="ideal">아이디얼(ideal)</strong>이라 합니다.</p>
 <ol type="1">
 <li><span class="math inline">\((I,+)\)</span>는 <span class="math inline">\((R,+)\)</span>의 부분군이다.</li>
 <li>모든 <span class="math inline">\(r\in R\)</span>, <span class="math inline">\(a\in I\)</span>에 대해 <span class="math inline">\(ra\in I\)</span>이다.</li>

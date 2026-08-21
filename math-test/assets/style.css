@@ -344,12 +344,40 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 .glossary-popover strong { color: var(--accent-ink); font-size: .95rem; }
 .glossary-popover p { margin: 5px 0 9px; color: var(--ink-soft); font-size: .86rem; line-height: 1.55; }
 .glossary-popover a { font-size: .82rem; font-weight: 700; text-decoration: none; }
+.glossary-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.glossary-actions button {
+  padding: 4px 8px; border: 1px solid var(--border); border-radius: 999px;
+  background: var(--surface-alt); color: var(--accent-ink); cursor: pointer; font-size: .76rem;
+}
+.concept-term {
+  cursor: help; text-decoration: underline dotted var(--accent); text-underline-offset: 3px;
+}
+.concept-term:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
 .selection-hint {
   position: fixed; right: 16px; bottom: 14px; z-index: 40; padding: 6px 10px;
   border: 1px solid var(--border); border-radius: 999px; background: color-mix(in srgb, var(--surface) 92%, transparent);
   color: var(--ink-faint); font: 600 .72rem/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 @media (max-width: 620px) { .selection-hint { position: static; width: fit-content; margin: 18px auto; } }
+
+.concept-module {
+  max-width: 600px; margin: 0 0 18px; padding: 15px 18px;
+  border: 1px solid var(--accent); border-radius: 10px; background: var(--accent-soft);
+}
+.concept-module-summary { margin: 0 0 11px; color: var(--ink); font-weight: 650; }
+.concept-module-tabs { display: flex; flex-wrap: wrap; gap: 7px; }
+.concept-module-tabs button {
+  padding: 6px 10px; border: 1px solid var(--accent); border-radius: 8px;
+  background: var(--surface); color: var(--accent-ink); cursor: pointer; font: 650 .8rem/1.4 -apple-system, sans-serif;
+}
+.concept-module-tabs button[aria-expanded="true"] { background: var(--accent-ink); color: var(--surface); }
+.concept-module-panel {
+  margin-top: 10px; padding: 11px 13px; border-left: 3px solid var(--accent);
+  background: var(--surface); color: var(--ink-soft); font-size: .9rem; line-height: 1.65;
+}
+.concept-module-panel[hidden] { display: none; }
+.concept-prerequisites { margin: 10px 0 0; color: var(--ink-soft); font-size: .8rem; }
+.concept-prerequisites a { color: var(--accent-ink); font-weight: 650; }
 
 .chapter-index { max-width: 600px; margin: 30px 0 26px; padding: 20px 22px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); }
 .chapter-index > span { color: var(--accent); font: 700 .72rem/1.4 -apple-system, sans-serif; letter-spacing: .1em; text-transform: uppercase; }

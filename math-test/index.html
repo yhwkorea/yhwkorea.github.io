@@ -19,30 +19,41 @@
       <div class="eyebrow">PQC Learning Guide</div>
       <h1 class="page-title">PQC 학습 가이드</h1>
       <p class="page-sub">
-        추상대수의 기본 구조에서 출발해 유한체, 타원곡선, Isogeny를 거쳐
-        SQIsign의 서명 구조까지 순서대로 읽습니다. 아래 번호대로 진행하세요.
+        SQIsign이 무엇을 가능하게 하는지 먼저 봅니다. 이해되지 않는 용어만 눌러
+        Isogeny, 타원곡선, 유한체, 대수학으로 한 단계씩 내려가면 됩니다.
       </p>
+
+      <section class="guide-hero outcome-hero" aria-labelledby="sqisign-start">
+        <span class="guide-kicker">Start with the outcome</span>
+        <h2 id="sqisign-start">SQIsign은 무엇을 하는가?</h2>
+        <p><strong>짧은 공개키와 서명</strong>을 목표로 하는 후양자 전자서명입니다. 서명자는 자신만 아는 타원곡선 쪽 비밀 구조를 이용해 challenge가 정한 도착점까지 응답 경로를 만들고, 검증자는 그 경로가 맞는지만 확인합니다.</p>
+        <div class="protocol-map" aria-label="SQIsign 서명 결과">
+          <span>메시지</span><b>+</b><span>비밀 witness</span><b>→</b><span>서명</span>
+          <i>검증자는 공개키로 응답 경로가 올바른지 확인</i>
+        </div>
+        <a class="primary-button" href="isogeny/isogeny-textbook.html#먼저-sqisign-그림부터-읽자">SQIsign 그림부터 보기 →</a>
+      </section>
 
       <section class="learning-section" aria-labelledby="learning-order">
         <div class="section-heading">
-          <span>Start here</span>
-          <h2 id="learning-order">학습 순서</h2>
-          <p>앞 장의 개념을 다음 장에서 그대로 사용합니다.</p>
+          <span>Drill down only when needed</span>
+          <h2 id="learning-order">어디가 막혔나요?</h2>
+          <p>아는 내용은 건너뛰고, 이해되지 않는 질문만 선택하세요.</p>
         </div>
-        <div class="learning-path">
-        <a class="guide-card" href="foundations/notation.html"><span>00</span><h3>집합과 수학 기호</h3><p>원소·부분집합·함수·논리·동치관계와 [a] 표기를 먼저 읽습니다.</p><em>기호부터 시작 →</em></a>
-        <a class="guide-card" href="foundations/algebra.html"><span>01</span><h3>대수학의 언어</h3><p>연산, 군, 환, 아이디얼, 정역, 체가 어떤 관계인지 공리부터 시작합니다.</p><em>대수 구조 배우기 →</em></a>
-        <a class="guide-card" href="isogeny/01-finite-fields.html"><span>02</span><h3>유한체</h3><p>체의 공리부터 ℱₚ와 ℱₚ²의 원소·연산·Frobenius를 직접 구성합니다.</p><em>유한체 만들기 →</em></a>
-        <a class="guide-card" href="isogeny/02-elliptic-curves.html"><span>03</span><h3>곡선과 타원곡선</h3><p>아핀·사영평면, 특이점, 무한원점, 군법칙과 torsion을 정의합니다.</p><em>곡선 이해하기 →</em></a>
-        <a class="guide-card" href="isogeny/03-isogenies.html"><span>04</span><h3>Isogeny</h3><p>대수적 사상, 커널, 차수, 분리가능성, 쌍대와 그래프를 연결합니다.</p><em>화살표 이해하기 →</em></a>
-        <a class="guide-card" href="isogeny/isogeny-textbook.html"><span>05</span><h3>SQIsign</h3><p>곡선과 사원수의 두 계산 세계가 서명 프로토콜에서 만나는 과정을 봅니다.</p><em>프로토콜로 이동 →</em></a>
+        <div class="learning-path reverse-path">
+        <a class="guide-card" href="isogeny/isogeny-textbook.html#sqisign-개요-지식증명에서-서명까지"><span>01</span><h3>서명 절차가 낯설다</h3><p>commitment, challenge, response가 어떻게 하나의 서명이 되는지 봅니다.</p><em>SQIsign 절차 →</em></a>
+        <a class="guide-card" href="isogeny/03-isogenies.html#isogeny의-정의"><span>02</span><h3>곡선 사이 화살표가 뭔가?</h3><p>Isogeny가 무엇이며 커널 하나로 화살표를 어떻게 정하는지 내려갑니다.</p><em>Isogeny →</em></a>
+        <a class="guide-card" href="isogeny/02-elliptic-curves.html#특이점과-매끄러움"><span>03</span><h3>타원곡선이 뭔가?</h3><p>방정식의 해집합이 어떻게 점 덧셈을 가진 암호학적 구조가 되는지 봅니다.</p><em>타원곡선 →</em></a>
+        <a class="guide-card" href="isogeny/01-finite-fields.html#체란-무엇인가"><span>04</span><h3>곡선 좌표는 어디서 계산하나?</h3><p>유한체에서 덧셈·곱셈·나눗셈을 실제로 계산하는 방법을 봅니다.</p><em>유한체 →</em></a>
+        <a class="guide-card" href="foundations/algebra.html#환-덧셈과-곱셈이-함께-있는-구조"><span>05</span><h3>체·환·아이디얼부터 막힌다</h3><p>필요한 대수 개념만 예시·등장 이유·엄밀한 정의 중 골라 확인합니다.</p><em>대수학 →</em></a>
+        <a class="guide-card" href="foundations/notation.html#집합과-원소"><span>06</span><h3>집합과 기호부터 낯설다</h3><p>원소, 함수, 관계, 동치류와 [a] 표기까지 가장 아래 기초로 내려갑니다.</p><em>기호 기초 →</em></a>
         </div>
       </section>
 
       <section class="guide-hero">
-        <span class="guide-kicker">Destination preview</span>
-        <h2>SQIsign에서 만나게 될 구조</h2>
-        <p>위 다섯 장을 마치면 네 곡선과 세 종류의 isogeny가 만드는 이 도식을 읽을 수 있습니다.</p>
+        <span class="guide-kicker">The protocol picture</span>
+        <h2>모든 세부 개념은 이 그림을 설명하기 위해 존재합니다</h2>
+        <p>처음에는 화살표의 의미를 몰라도 됩니다. 모르는 지점만 눌러 아래 개념으로 내려가면 됩니다.</p>
         <div class="protocol-map" aria-label="SQIsign 프로토콜 경로">
           <a href="isogeny/02-elliptic-curves.html">E₀</a><b>φcom</b><a href="isogeny/03-isogenies.html">E₁</a><b>φchall</b><a href="isogeny/03-isogenies.html">E₂</a>
           <i>비밀 φsecret ↓</i><span>Eₐ</span><b>φresp</b><span>E₂</span>
