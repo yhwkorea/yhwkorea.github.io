@@ -311,6 +311,22 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 
 .katex-display { overflow-x: auto; overflow-y: hidden; padding: 4px 0; }
 
+.glossary-popover {
+  position: fixed; z-index: 1000; padding: 14px 16px; border: 1px solid var(--accent);
+  border-radius: 10px; background: var(--surface); color: var(--ink);
+  box-shadow: 0 10px 32px rgba(0,0,0,.18); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+.glossary-popover[hidden] { display: none; }
+.glossary-popover strong { color: var(--accent-ink); font-size: .95rem; }
+.glossary-popover p { margin: 5px 0 9px; color: var(--ink-soft); font-size: .86rem; line-height: 1.55; }
+.glossary-popover a { font-size: .82rem; font-weight: 700; text-decoration: none; }
+.selection-hint {
+  position: fixed; right: 16px; bottom: 14px; z-index: 40; padding: 6px 10px;
+  border: 1px solid var(--border); border-radius: 999px; background: color-mix(in srgb, var(--surface) 92%, transparent);
+  color: var(--ink-faint); font: 600 .72rem/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+@media (max-width: 620px) { .selection-hint { position: static; width: fit-content; margin: 18px auto; } }
+
 /* Learning-guide landing page */
 .guide-hero, .answer-library { max-width: 760px; }
 .guide-hero {
