@@ -346,12 +346,14 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 .katex-display { overflow-x: auto; overflow-y: hidden; padding: 4px 0; }
 
 .glossary-popover {
+  --concept-color: var(--accent); --concept-soft: var(--accent-soft); --concept-ink: var(--accent-ink);
   position: fixed; z-index: 1000; padding: 14px 16px; border: 1px solid var(--accent);
   border-radius: 10px; background: var(--surface); color: var(--ink);
   box-shadow: 0 10px 32px rgba(0,0,0,.18); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 .glossary-popover[hidden] { display: none; }
-.glossary-popover strong { color: var(--accent-ink); font-size: .95rem; }
+.glossary-popover { border-color: var(--concept-color); }
+.glossary-popover strong { color: var(--concept-ink); font-size: .95rem; }
 .glossary-popover p { margin: 5px 0 9px; color: var(--ink-soft); font-size: .86rem; line-height: 1.55; }
 .glossary-popover a { font-size: .82rem; font-weight: 700; text-decoration: none; }
 .glossary-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
@@ -360,9 +362,10 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
   background: var(--surface-alt); color: var(--accent-ink); cursor: pointer; font-size: .76rem;
 }
 .concept-term {
-  cursor: help; text-decoration: underline dotted var(--accent); text-underline-offset: 3px;
+  --concept-color: var(--accent); --concept-soft: var(--accent-soft); --concept-ink: var(--accent-ink);
+  cursor: help; text-decoration: underline dotted var(--concept-color); text-decoration-thickness: 2px; text-underline-offset: 3px;
 }
-.concept-term:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+.concept-term:focus-visible { outline: 2px solid var(--concept-color); outline-offset: 3px; border-radius: 2px; }
 .selection-hint {
   position: fixed; right: 16px; bottom: 14px; z-index: 40; padding: 6px 10px;
   border: 1px solid var(--border); border-radius: 999px; background: color-mix(in srgb, var(--surface) 92%, transparent);
@@ -371,23 +374,34 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 @media (max-width: 620px) { .selection-hint { position: static; width: fit-content; margin: 18px auto; } }
 
 .concept-module {
+  --concept-color: var(--accent); --concept-soft: var(--accent-soft); --concept-ink: var(--accent-ink);
   max-width: 600px; margin: 0 0 18px; padding: 15px 18px;
-  border: 1px solid var(--accent); border-radius: 10px; background: var(--accent-soft);
+  border: 1px solid var(--concept-color); border-radius: 10px; background: var(--concept-soft);
 }
+.concept-area-badge { display: block; width: fit-content; margin: 0 0 7px; padding: 2px 7px; border: 1px solid var(--concept-color); border-radius: 999px; color: var(--concept-ink); background: var(--concept-soft); font: 750 .67rem/1.35 -apple-system, sans-serif; letter-spacing: .03em; }
+.glossary-popover .concept-area-badge { margin-bottom: 5px; }
+.concept-term[data-area="cryptography"], .concept-module[data-area="cryptography"], .glossary-popover[data-area="cryptography"] { --concept-color: #a64b72; --concept-soft: color-mix(in srgb, #a64b72 11%, var(--surface)); --concept-ink: #793451; }
+.concept-term[data-area="sqisign"], .concept-module[data-area="sqisign"], .glossary-popover[data-area="sqisign"] { --concept-color: #7256b5; --concept-soft: color-mix(in srgb, #7256b5 11%, var(--surface)); --concept-ink: #523b8d; }
+.concept-term[data-area="isogeny"], .concept-module[data-area="isogeny"], .glossary-popover[data-area="isogeny"] { --concept-color: #287e91; --concept-soft: color-mix(in srgb, #287e91 11%, var(--surface)); --concept-ink: #185c6b; }
+.concept-term[data-area="elliptic-curves"], .concept-module[data-area="elliptic-curves"], .glossary-popover[data-area="elliptic-curves"] { --concept-color: #24754d; --concept-soft: color-mix(in srgb, #24754d 11%, var(--surface)); --concept-ink: #185638; }
+.concept-term[data-area="finite-fields"], .concept-module[data-area="finite-fields"], .glossary-popover[data-area="finite-fields"] { --concept-color: #3973ad; --concept-soft: color-mix(in srgb, #3973ad 11%, var(--surface)); --concept-ink: #285785; }
+.concept-term[data-area="calculus"], .concept-module[data-area="calculus"], .glossary-popover[data-area="calculus"] { --concept-color: #b3671e; --concept-soft: color-mix(in srgb, #b3671e 12%, var(--surface)); --concept-ink: #824710; }
+.concept-term[data-area="algebra"], .concept-module[data-area="algebra"], .glossary-popover[data-area="algebra"] { --concept-color: #8b5b2b; --concept-soft: color-mix(in srgb, #8b5b2b 11%, var(--surface)); --concept-ink: #653e19; }
+.concept-term[data-area="notation"], .concept-module[data-area="notation"], .glossary-popover[data-area="notation"] { --concept-color: #666d78; --concept-soft: color-mix(in srgb, #666d78 10%, var(--surface)); --concept-ink: #464d57; }
 .concept-module-summary { margin: 0 0 11px; color: var(--ink); font-weight: 650; }
 .concept-module-tabs { display: flex; flex-wrap: wrap; gap: 7px; }
 .concept-module-tabs button {
-  padding: 6px 10px; border: 1px solid var(--accent); border-radius: 8px;
-  background: var(--surface); color: var(--accent-ink); cursor: pointer; font: 650 .8rem/1.4 -apple-system, sans-serif;
+  padding: 6px 10px; border: 1px solid var(--concept-color); border-radius: 8px;
+  background: var(--surface); color: var(--concept-ink); cursor: pointer; font: 650 .8rem/1.4 -apple-system, sans-serif;
 }
-.concept-module-tabs button[aria-expanded="true"] { background: var(--accent-ink); color: var(--surface); }
+.concept-module-tabs button[aria-expanded="true"] { background: var(--concept-ink); color: var(--surface); }
 .concept-module-panel {
-  margin-top: 10px; padding: 11px 13px; border-left: 3px solid var(--accent);
+  margin-top: 10px; padding: 11px 13px; border-left: 3px solid var(--concept-color);
   background: var(--surface); color: var(--ink-soft); font-size: .9rem; line-height: 1.65;
 }
 .concept-module-panel[hidden] { display: none; }
 .concept-prerequisites { margin: 10px 0 0; color: var(--ink-soft); font-size: .8rem; }
-.concept-prerequisites a { color: var(--accent-ink); font-weight: 650; }
+.concept-prerequisites a { color: var(--concept-ink); font-weight: 650; }
 
 .chapter-index { max-width: 600px; margin: 30px 0 26px; padding: 20px 22px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); }
 .chapter-index > span { color: var(--accent); font: 700 .72rem/1.4 -apple-system, sans-serif; letter-spacing: .1em; text-transform: uppercase; }

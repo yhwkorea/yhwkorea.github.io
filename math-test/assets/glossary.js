@@ -1,7 +1,17 @@
 const glossaryScript = document.currentScript;
-import('./concepts/index.js').then(({ conceptsById, conceptsByTerm }) => {
+Promise.all([import('./concepts/index.js'), import('./concept-catalog.js')]).then(([{ conceptsById, conceptsByTerm }, { areas }]) => {
 const assetBase = new URL('.', glossaryScript.src);
 const page = (path) => new URL(`../${path}`, assetBase).href;
+const areaByConcept = new Map();
+areas.forEach((area) => area.concepts.forEach((id) => {
+  if (!areaByConcept.has(id)) areaByConcept.set(id, area);
+}));
+const decorateArea = (element, concept) => {
+  const area = areaByConcept.get(concept.id);
+  if (!area) return null;
+  element.dataset.area = area.id;
+  return area;
+};
 
 const guideHome = document.querySelector('.sidebar nav ul li');
 if (guideHome && !document.querySelector('.sidebar a[href*="cryptography.html"]')) {
@@ -84,6 +94,17 @@ function rememberDestination(link, term) {
 
 function renderPopover(found) {
   pop.replaceChildren();
+  if (found.concept) {
+    const area = decorateArea(pop, found.concept);
+    if (area) {
+      const badge = document.createElement('span');
+      badge.className = 'concept-area-badge';
+      badge.textContent = area.title;
+      pop.append(badge);
+    }
+  } else {
+    delete pop.dataset.area;
+  }
   const title = document.createElement('strong');
   title.textContent = found.term;
   const text = document.createElement('p');
@@ -136,9 +157,10 @@ document.querySelectorAll('[data-concept]').forEach((trigger) => {
   const concept = conceptsById.get(trigger.dataset.concept);
   if (!concept) return;
   trigger.classList.add('concept-term');
+  const area = decorateArea(trigger, concept);
   trigger.tabIndex = 0;
   trigger.setAttribute('role', 'button');
-  trigger.setAttribute('aria-label', `${concept.title} 정의 보기`);
+  trigger.setAttribute('aria-label', `${concept.title}${area ? `, ${area.title} 분야` : ''} 정의 보기`);
   const show = () => {
     renderPopover({ term: concept.title, concept });
     placePopover(trigger.getBoundingClientRect());
@@ -153,6 +175,13 @@ document.querySelectorAll('[data-concept-module]').forEach((host) => {
   const concept = conceptsById.get(host.dataset.conceptModule);
   if (!concept) return;
   host.classList.add('concept-module');
+  const area = decorateArea(host, concept);
+  if (area) {
+    const badge = document.createElement('span');
+    badge.className = 'concept-area-badge';
+    badge.textContent = `${area.title} 개념`;
+    host.append(badge);
+  }
   const summary = document.createElement('p');
   summary.className = 'concept-module-summary';
   summary.textContent = concept.summary;
