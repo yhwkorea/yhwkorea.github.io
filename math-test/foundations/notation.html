@@ -36,7 +36,7 @@
 <h2 id="부분집합과-집합-연산">3. 부분집합과 집합 연산</h2>
 <p><span class="math inline">\(A\)</span>의 모든 원소가 <span class="math inline">\(B\)</span>에도 들어 있으면</p>
 <p><span class="math display">\[A\subseteq B\]</span></p>
-<p>라고 쓰고 “<span class="math inline">\(A\)</span>는 <span class="math inline">\(B\)</span>의 부분집합”이라 읽습니다. <span class="math inline">\(A\subset B\)</span>를 진부분집합의 뜻으로 쓰는 책도 있고 <span class="math inline">\(\subseteq\)</span>와 같은 뜻으로 쓰는 책도 있으므로 이 가이드에서는 포함에 <span class="math inline">\(\subseteq\)</span>를 사용합니다.</p>
+<p>라고 쓰고 “<span data-concept="subset"><span class="math inline">\(A\)</span>는 <span class="math inline">\(B\)</span>의 부분집합</span>”이라 읽습니다. <span class="math inline">\(A\subset B\)</span>를 진부분집합의 뜻으로 쓰는 책도 있고 <span class="math inline">\(\subseteq\)</span>와 같은 뜻으로 쓰는 책도 있으므로 이 가이드에서는 포함에 <span class="math inline">\(\subseteq\)</span>를 사용합니다.</p>
 <ul>
 <li>합집합 <span class="math inline">\(A\cup B\)</span>: <span class="math inline">\(A\)</span> 또는 <span class="math inline">\(B\)</span>에 속하는 원소 전체</li>
 <li>교집합 <span class="math inline">\(A\cap B\)</span>: <span class="math inline">\(A\)</span>와 <span class="math inline">\(B\)</span> 양쪽에 속하는 원소 전체</li>
@@ -66,11 +66,11 @@
 <p><span class="math display">\[f:A\longrightarrow B\]</span></p>
 <p>는 <strong data-concept="function">함수</strong> <span class="math inline">\(f\)</span>가 <span class="math inline">\(A\)</span>의 각 원소에 <span class="math inline">\(B\)</span>의 원소를 정확히 하나씩 대응시킨다는 뜻입니다. <span class="math inline">\(A\)</span>는 정의역, <span class="math inline">\(B\)</span>는 공역입니다. <span class="math inline">\(f(a)=b\)</span>는 <span class="math inline">\(a\)</span>가 <span class="math inline">\(b\)</span>로 보내진다는 뜻입니다.</p>
 <ul>
-<li>단사: <span class="math inline">\(f(a_1)=f(a_2)\Rightarrow a_1=a_2\)</span>. 서로 다른 입력을 같은 출력으로 합치지 않습니다.</li>
-<li>전사: 모든 <span class="math inline">\(b\in B\)</span>가 어떤 입력의 출력입니다.</li>
+<li><span data-concept="injective-function">단사</span>: <span class="math inline">\(f(a_1)=f(a_2)\Rightarrow a_1=a_2\)</span>. 서로 다른 입력을 같은 출력으로 합치지 않습니다.</li>
+<li><span data-concept="surjective-function">전사</span>: 모든 <span class="math inline">\(b\in B\)</span>가 어떤 입력의 출력입니다.</li>
 <li>전단사: 단사이면서 전사입니다. 이때 역함수 <span class="math inline">\(f^{-1}:B\to A\)</span>가 존재합니다.</li>
 </ul>
-<p><span class="math inline">\(S\times S\to S\)</span> 꼴 함수는 두 원소를 받아 다시 <span class="math inline">\(S\)</span>의 원소를 내므로 <strong>이항연산</strong>이 됩니다. 따라서 연산도 함수의 한 종류입니다.</p>
+<p><span class="math inline">\(S\times S\to S\)</span> 꼴 함수는 두 원소를 받아 다시 <span class="math inline">\(S\)</span>의 원소를 내므로 <strong data-concept="binary-operation">이항연산</strong>이 됩니다. 따라서 연산도 함수의 한 종류입니다.</p>
 <h2 id="관계와-동치류-a">6. 관계와 동치류 <span class="math inline">\([a]\)</span></h2>
 <p>집합 <span class="math inline">\(S\)</span> 위의 <strong>관계</strong>는 어떤 두 원소가 서로 관련 있는지를 정하는 규칙입니다. <span class="math inline">\(a\sim b\)</span>라고 쓰면 “<span class="math inline">\(a\)</span>와 <span class="math inline">\(b\)</span>가 이 관계에 있다”는 뜻입니다.</p>
 <p>관계 <span class="math inline">\(\sim\)</span>가 다음을 만족하면 <strong data-concept="equivalence-relation">동치관계</strong>라 합니다.</p>

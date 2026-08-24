@@ -27,12 +27,6 @@ if (guideHome && !document.querySelector('.sidebar a[href*="cryptography.html"]'
 // 아직 모듈로 옮기지 않은 전문 용어는 이 목록에서 계속 지원한다.
 // 기초 개념부터 concepts/의 독립 파일로 순차 이관한다.
 const legacyEntries = new Map(Object.entries({
-  '부분집합': ['A의 모든 원소가 B에도 들어 있을 때 A는 B의 부분집합입니다.', 'foundations/notation.html#부분집합과-집합-연산'],
-  '단사': ['서로 다른 두 입력을 같은 출력으로 보내지 않는 함수입니다.', 'foundations/notation.html#함수와-화살표'],
-  '전사': ['공역의 모든 원소가 적어도 한 입력의 출력으로 나타나는 함수입니다.', 'foundations/notation.html#함수와-화살표'],
-  '준동형': ['연산을 보존하는 함수입니다. 군에서는 f(ab)=f(a)f(b)를 만족합니다.', 'foundations/algebra.html#군-연산-하나가-있는-구조'],
-  '주아이디얼': ['원소 하나의 모든 환 배수로 이루어진 아이디얼입니다.', 'foundations/algebra.html#아이디얼-몫환을-만들-수-있는-부분집합'],
-  'Frobenius': ['특성 p의 체에서 x를 x^p로 보내는 체 준동형입니다.', 'isogeny/01-finite-fields.html#frobenius와-켤레']
 }));
 
 const pop = document.createElement('aside');
