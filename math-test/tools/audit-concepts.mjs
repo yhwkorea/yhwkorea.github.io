@@ -111,7 +111,9 @@ for (const path of pages) {
       else if (!byId.has(id)) errors.push(`${rel}: unknown ${attribute} ${id}`);
     }
   }
-  for (const match of html.matchAll(/<strong(?![^>]*data-concept)[^>]*>([^<]{2,45})<\/strong>/g)) {
+  const learningGuide = rel === 'index.html' || rel.startsWith('foundations/') || rel.startsWith('isogeny/');
+  if (!learningGuide) continue;
+  for (const match of html.matchAll(/<(?:strong|em)(?![^>]*data-concept)[^>]*>([^<]{2,45})<\/(?:strong|em)>/g)) {
     const text = match[1].replace(/\s+/g, ' ').trim();
     if (/^(정의|정리|증명|예제|이전|다음|왜|계산|먼저|직접|결론|공식|검증|키 생성)/.test(text)) continue;
     if (!visibleCandidates.has(text)) visibleCandidates.set(text, new Set());

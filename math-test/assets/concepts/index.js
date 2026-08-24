@@ -56,7 +56,7 @@ import func from './function.js';
 
 export const concepts = [digitalSignature, hashFunction, pqc, sqisign, witness, commitment, challenge, response, identificationProtocol, fiatShamir, derivative, partialDerivative, characteristic, modularArithmetic, polynomial, irreduciblePolynomial, finiteField, extensionField, affinePlane, projectivePlane, algebraicCurve, singularPoint, pointAtInfinity, ellipticCurve, groupLaw, scalarMultiplication, algebraicClosure, jInvariant, torsion, rationalFunction, morphism, groupHomomorphism, functionField, separableMorphism, isogeny, kernel, degree, veluFormulas, dualIsogeny, galoisAction, isogenyGraph, endomorphism, supersingular, quaternionAlgebra, order, set, func, relation, equivalenceClass, group, ring, commutativeRing, ideal, quotientRing, field];
 export const conceptsById = new Map(concepts.map((concept) => [concept.id, concept]));
-export const conceptsByTerm = new Map(concepts.flatMap((concept) => concept.terms.map((term) => [term, concept])));
+export const conceptsByTerm = new Map(concepts.flatMap((concept) => concept.terms.map((term) => [term.normalize('NFKC').toLocaleLowerCase('ko'), concept])));
 
 export function getConcept(id) {
   return conceptsById.get(id) || null;

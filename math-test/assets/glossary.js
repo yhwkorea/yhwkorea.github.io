@@ -29,7 +29,6 @@ if (guideHome && !document.querySelector('.sidebar a[href*="cryptography.html"]'
 const legacyEntries = new Map(Object.entries({
   '원소': ['집합을 구성하는 각각의 대상입니다. a∈A는 a가 A의 원소라는 뜻입니다.', 'foundations/notation.html#집합과-원소'],
   '부분집합': ['A의 모든 원소가 B에도 들어 있을 때 A는 B의 부분집합입니다.', 'foundations/notation.html#부분집합과-집합-연산'],
-  '함수': ['정의역의 각 원소에 공역의 원소를 정확히 하나씩 대응시키는 규칙입니다.', 'foundations/notation.html#함수와-화살표'],
   '단사': ['서로 다른 두 입력을 같은 출력으로 보내지 않는 함수입니다.', 'foundations/notation.html#함수와-화살표'],
   '전사': ['공역의 모든 원소가 적어도 한 입력의 출력으로 나타나는 함수입니다.', 'foundations/notation.html#함수와-화살표'],
   '이항연산': ['두 원소를 입력받아 같은 집합의 원소 하나를 출력하는 함수입니다.', 'foundations/algebra.html#연산이란-무엇인가'],
@@ -37,23 +36,11 @@ const legacyEntries = new Map(Object.entries({
   '가환군': ['연산의 순서를 바꿔도 결과가 같은 군입니다. 아벨군이라고도 합니다.', 'foundations/algebra.html#군-연산-하나가-있는-구조'],
   '부분군': ['큰 군의 부분집합이 같은 연산으로 다시 군을 이루는 경우입니다.', 'foundations/algebra.html#군-연산-하나가-있는-구조'],
   '준동형': ['연산을 보존하는 함수입니다. 군에서는 f(ab)=f(a)f(b)를 만족합니다.', 'foundations/algebra.html#군-연산-하나가-있는-구조'],
-  '커널': ['준동형이 항등원으로 보내는 원소들의 집합입니다.', 'foundations/algebra.html#군-연산-하나가-있는-구조'],
   '단원': ['환에서 곱셈 역원을 갖는 원소입니다.', 'foundations/algebra.html#환-덧셈과-곱셈이-함께-있는-구조'],
   '영인자': ['0이 아닌데 다른 0 아닌 원소와 곱해서 0이 되는 원소입니다.', 'foundations/algebra.html#환-덧셈과-곱셈이-함께-있는-구조'],
   '주아이디얼': ['원소 하나의 모든 환 배수로 이루어진 아이디얼입니다.', 'foundations/algebra.html#아이디얼-몫환을-만들-수-있는-부분집합'],
   '정역': ['1≠0이고 영인자가 없는 가환환입니다.', 'foundations/algebra.html#정역과-체'],
-  '유한체': ['원소 개수가 유한한 체입니다. SQIsign에서는 주로 Fp와 Fp²를 사용합니다.', 'isogeny/01-finite-fields.html#체란-무엇인가'],
-  'Frobenius': ['특성 p의 체에서 x를 x^p로 보내는 체 준동형입니다.', 'isogeny/01-finite-fields.html#frobenius와-켤레'],
-  '아핀평면': ['체 F에 대해 순서쌍 (x,y) 전체로 이루어진 F²입니다.', 'isogeny/02-elliptic-curves.html#아핀평면과-대수곡선'],
-  '사영평면': ['0이 아닌 세 좌표를 공통 스칼라배까지 같게 보는 공간입니다.', 'isogeny/02-elliptic-curves.html#사영평면과-무한원점'],
-  '대수곡선': ['두 변수 다항식 방정식의 해집합으로 주어지는 1차원 대수적 대상입니다.', 'isogeny/02-elliptic-curves.html#아핀평면과-대수곡선'],
-  '특이점': ['곡선식과 모든 편미분이 동시에 0이 되는 점입니다.', 'isogeny/02-elliptic-curves.html#특이점과-매끄러움'],
-  '타원곡선': ['지정된 유리점을 가진 매끄러운 사영 genus 1 곡선입니다.', 'isogeny/02-elliptic-curves.html#특이점과-매끄러움'],
-  'torsion': ['어떤 양의 정수 n에 대해 [n]P=O가 되는 유한 차수의 점입니다.', 'isogeny/02-elliptic-curves.html#torsion-점'],
-  'isogeny': ['항등원을 보존하는 타원곡선 사이의 비상수 대수적 사상입니다.', 'isogeny/03-isogenies.html#isogeny의-정의'],
-  'Isogeny': ['항등원을 보존하는 타원곡선 사이의 비상수 대수적 사상입니다.', 'isogeny/03-isogenies.html#isogeny의-정의'],
-  'endomorphism': ['곡선에서 자기 자신으로 가는 isogeny입니다.', 'isogeny/03-isogenies.html#isogeny의-정의'],
-  '쌍대 isogeny': ['합성하면 차수배 사상이 되는 반대 방향의 isogeny입니다.', 'isogeny/03-isogenies.html#쌍대-isogeny']
+  'Frobenius': ['특성 p의 체에서 x를 x^p로 보내는 체 준동형입니다.', 'isogeny/01-finite-fields.html#frobenius와-켤레']
 }));
 
 const pop = document.createElement('aside');
@@ -76,7 +63,7 @@ const lookup = (raw) => {
     if (word.endsWith(suffix)) candidates.push(word.slice(0, -suffix.length));
   }
   for (const term of candidates) {
-    const concept = conceptsByTerm.get(term);
+    const concept = conceptsByTerm.get(term.normalize('NFKC').toLocaleLowerCase('ko'));
     if (concept) return { term, concept };
     const legacy = legacyEntries.get(term);
     if (legacy) return { term, legacy };
