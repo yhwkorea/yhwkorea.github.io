@@ -30,9 +30,14 @@ import supersingular from './supersingular.js';
 import quaternionAlgebra from './quaternion-algebra.js';
 import order from './order.js';
 import fiatShamir from './fiat-shamir.js';
+import commitment from './commitment.js';
+import challenge from './challenge.js';
+import witness from './witness.js';
+import response from './response.js';
+import identificationProtocol from './identification-protocol.js';
 import func from './function.js';
 
-export const concepts = [digitalSignature, hashFunction, pqc, sqisign, fiatShamir, derivative, partialDerivative, characteristic, affinePlane, projectivePlane, algebraicCurve, singularPoint, pointAtInfinity, ellipticCurve, torsion, morphism, isogeny, kernel, degree, endomorphism, supersingular, quaternionAlgebra, order, set, func, relation, equivalenceClass, group, ring, commutativeRing, ideal, quotientRing, field];
+export const concepts = [digitalSignature, hashFunction, pqc, sqisign, witness, commitment, challenge, response, identificationProtocol, fiatShamir, derivative, partialDerivative, characteristic, affinePlane, projectivePlane, algebraicCurve, singularPoint, pointAtInfinity, ellipticCurve, torsion, morphism, isogeny, kernel, degree, endomorphism, supersingular, quaternionAlgebra, order, set, func, relation, equivalenceClass, group, ring, commutativeRing, ideal, quotientRing, field];
 export const conceptsById = new Map(concepts.map((concept) => [concept.id, concept]));
 export const conceptsByTerm = new Map(concepts.flatMap((concept) => concept.terms.map((term) => [term, concept])));
 
