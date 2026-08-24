@@ -79,9 +79,15 @@ import quaternionIdeal from './quaternion-ideal.js';
 import reducedNorm from './reduced-norm.js';
 import deuringCorrespondence from './deuring-correspondence.js';
 import klpt from './klpt.js';
+import limit from './limit.js';
+import slope from './slope.js';
+import tangentLine from './tangent-line.js';
+import gradient from './gradient.js';
+import closureProperty from './closure-property.js';
+import binaryRelation from './binary-relation.js';
 import func from './function.js';
 
-export const concepts = [publicKey, privateKey, authentication, integrity, encryption, digitalSignature, hashFunction, pqc, securityAssumption, sqisign, witness, commitment, challenge, response, identificationProtocol, fiatShamir, klpt, derivative, partialDerivative, characteristic, modularArithmetic, polynomial, irreduciblePolynomial, finiteField, extensionField, frobeniusMap, affinePlane, projectivePlane, algebraicCurve, singularPoint, pointAtInfinity, ellipticCurve, groupLaw, scalarMultiplication, algebraicClosure, jInvariant, torsion, rationalFunction, morphism, groupHomomorphism, functionField, separableMorphism, isogeny, kernel, degree, veluFormulas, dualIsogeny, galoisAction, isogenyGraph, expanderGraph, ramanujanGraph, endomorphism, supersingular, quaternionAlgebra, order, quaternionIdeal, reducedNorm, deuringCorrespondence, set, element, subset, proposition, func, injectiveFunction, surjectiveFunction, relation, equivalenceClass, binaryOperation, identityElement, inverseElement, group, abelianGroup, subgroup, ring, commutativeRing, unit, zeroDivisor, integralDomain, ideal, principalIdeal, quotientRing, field];
+export const concepts = [publicKey, privateKey, authentication, integrity, encryption, digitalSignature, hashFunction, pqc, securityAssumption, sqisign, witness, commitment, challenge, response, identificationProtocol, fiatShamir, klpt, limit, slope, derivative, tangentLine, partialDerivative, gradient, characteristic, modularArithmetic, polynomial, irreduciblePolynomial, finiteField, extensionField, frobeniusMap, affinePlane, projectivePlane, algebraicCurve, singularPoint, pointAtInfinity, ellipticCurve, groupLaw, scalarMultiplication, algebraicClosure, jInvariant, torsion, rationalFunction, morphism, groupHomomorphism, functionField, separableMorphism, isogeny, kernel, degree, veluFormulas, dualIsogeny, galoisAction, isogenyGraph, expanderGraph, ramanujanGraph, endomorphism, supersingular, quaternionAlgebra, order, quaternionIdeal, reducedNorm, deuringCorrespondence, set, element, subset, proposition, func, injectiveFunction, surjectiveFunction, binaryRelation, relation, equivalenceClass, binaryOperation, closureProperty, identityElement, inverseElement, group, abelianGroup, subgroup, ring, commutativeRing, unit, zeroDivisor, integralDomain, ideal, principalIdeal, quotientRing, field];
 export const conceptsById = new Map(concepts.map((concept) => [concept.id, concept]));
 export const conceptsByTerm = new Map(concepts.flatMap((concept) => concept.terms.map((term) => [term.normalize('NFKC').toLocaleLowerCase('ko'), concept])));
 
