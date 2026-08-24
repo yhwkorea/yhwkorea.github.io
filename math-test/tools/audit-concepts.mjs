@@ -10,6 +10,21 @@ const byId = new Map();
 const errors = [];
 const warnings = [];
 const targetChecks = [];
+// These emphasized strings were manually reviewed as UI labels, example titles,
+// people, subject cards, or complete explanatory claims rather than reusable terms.
+// Exact matching makes changed or newly introduced wording return to the review queue.
+const reviewedNonConceptPhrases = new Set([
+  'Algebra', 'Lattice', 'Linear Algebra', 'Probability',
+  'SQIsign의 사용자 관점', '같은 점에서 모두 0', '개발자 지수', '결합법칙:',
+  '곡선식도 0이고', '기호를 문장으로 읽기', '네 곡선과 세 종류의 화살표가 왜 필요한지',
+  '다른 수학적 기반을 가진 암호가 하나쯤 더 있으면', '사용자 민수', '선행 지식:',
+  '순수 대수 문제', '아이소제니(isogeny) 그래프 위에서 길찾기', '어디에 쓰이나?',
+  '어떤 종류의 대상을 입력받고 무엇을 말하는지', '완전히 다른 수학 계열',
+  '정말 모두 0인지 확인하기', '직관.', '집합 연산 계산',
+  '초특이 타원곡선 사이에서 숨겨진 Isogeny 구조를 찾기 어렵다',
+  '프로토콜이 아니라 깨지는 초안', '한 글자만 바뀌어도',
+  '핵심 사실 (인용, Pizer 등).', '환 전체의 아무 원소를 곱해도'
+]);
 const scalarFields = ['id', 'title', 'summary', 'target', 'why', 'example', 'formal'];
 const arrayFields = ['terms', 'prerequisites', 'usedIn'];
 
@@ -116,6 +131,7 @@ for (const path of pages) {
   for (const match of html.matchAll(/<(?:strong|em)(?![^>]*data-concept)[^>]*>([^<]{2,45})<\/(?:strong|em)>/g)) {
     const text = match[1].replace(/\s+/g, ' ').trim();
     if (/^(정의|정리|증명|예제|이전|다음|왜|계산|먼저|직접|결론|공식|검증|키 생성)/.test(text)) continue;
+    if (reviewedNonConceptPhrases.has(text)) continue;
     if (!visibleCandidates.has(text)) visibleCandidates.set(text, new Set());
     visibleCandidates.get(text).add(rel);
   }
@@ -132,7 +148,7 @@ for (const target of targetChecks) {
 
 console.log(`concepts: ${concepts.length}`);
 console.log(`html pages: ${pages.length}`);
-console.log(`unclassified strong-text candidates: ${visibleCandidates.size}`);
+console.log(`unreviewed emphasized-text candidates: ${visibleCandidates.size}`);
 for (const [term, locations] of [...visibleCandidates].sort().slice(0, 80)) console.log(`  ? ${term} :: ${[...locations].join(', ')}`);
 for (const warning of warnings) console.warn(`warning: ${warning}`);
 if (errors.length) {

@@ -25,7 +25,7 @@
 
 <h2 id="서명과-검증">3. 서명과 검증은 실제로 무엇을 하나?</h2>
 <p>전자서명 방식은 세 알고리즘으로 정의됩니다.</p>
-<ol><li><strong>키 생성:</strong> <code>(공개키, 비밀키)</code> 한 쌍을 만듭니다.</li><li><strong>서명:</strong> <code>Sign(비밀키, 메시지) → 서명값</code>.</li><li><strong>검증:</strong> <code>Verify(공개키, 메시지, 서명값) → 참 또는 거짓</code>.</li></ol>
+<ol><li><strong>키 생성:</strong> <code>(공개키, 비밀키)</code> 한 쌍을 만듭니다.</li><li><strong data-concept="digital-signature">서명:</strong> <code>Sign(비밀키, 메시지) → 서명값</code>.</li><li><strong>검증:</strong> <code>Verify(공개키, 메시지, 서명값) → 참 또는 거짓</code>.</li></ol>
 <div class="worked-example"><strong>한 글자만 바뀌어도</strong><p>지수가 “금액 10만원”에 서명했는데 공격자가 메시지를 “금액 90만원”으로 바꾸면, 기존 서명은 새 메시지에 맞지 않으므로 검증 결과가 거짓이 됩니다.</p></div>
 
 <h2 id="해시가-하는-일">4. 해시는 왜 등장하나?</h2>
