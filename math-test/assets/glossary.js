@@ -31,10 +31,14 @@ const legacyEntries = new Map(Object.entries({
 
 const pop = document.createElement('aside');
 pop.className = 'glossary-popover';
+pop.id = 'glossary-popover';
 pop.setAttribute('role', 'dialog');
+pop.setAttribute('aria-modal', 'false');
 pop.setAttribute('aria-live', 'polite');
 pop.hidden = true;
 document.body.append(pop);
+let activeTrigger = null;
+let moduleInstance = 0;
 
 const hint = document.createElement('div');
 hint.className = 'selection-hint';
@@ -67,6 +71,11 @@ function rememberDestination(link, term) {
 
 function renderPopover(found) {
   pop.replaceChildren();
+  const close = document.createElement('button');
+  close.type = 'button';
+  close.className = 'glossary-close';
+  close.setAttribute('aria-label', '개념 설명 닫기');
+  close.textContent = '×';
   if (found.concept) {
     const area = decorateArea(pop, found.concept);
     if (area) {
@@ -79,7 +88,9 @@ function renderPopover(found) {
     delete pop.dataset.area;
   }
   const title = document.createElement('strong');
+  title.id = 'glossary-popover-title';
   title.textContent = found.term;
+  pop.setAttribute('aria-labelledby', title.id);
   const text = document.createElement('p');
   const target = found.concept ? found.concept.target : found.legacy[1];
   text.textContent = found.concept ? found.concept.summary : found.legacy[0];
@@ -87,7 +98,7 @@ function renderPopover(found) {
   link.href = page(target);
   link.textContent = '설명에서 자세히 보기 →';
   rememberDestination(link, found.term);
-  pop.append(title, text);
+  pop.append(close, title, text);
   if (found.concept) {
     const actions = document.createElement('div');
     actions.className = 'glossary-actions';
@@ -103,9 +114,11 @@ function renderPopover(found) {
   } else {
     pop.append(link);
   }
+  close.addEventListener('click', () => hide({ restoreFocus: true }));
+  return close;
 }
 
-function placePopover(rect) {
+function placePopover(rect, focusTarget) {
   pop.hidden = false;
   const width = Math.min(340, window.innerWidth - 24);
   const left = Math.max(12, Math.min(rect.left + rect.width / 2 - width / 2, window.innerWidth - width - 12));
@@ -113,6 +126,7 @@ function placePopover(rect) {
   pop.style.width = `${width}px`;
   pop.style.left = `${left}px`;
   pop.style.top = `${Math.max(12, top)}px`;
+  focusTarget?.focus({ preventScroll: true });
 }
 
 function showSelection() {
@@ -122,8 +136,9 @@ function showSelection() {
   if (!raw || raw.length > 32) return;
   const found = lookup(raw);
   if (!found) return;
-  renderPopover(found);
-  placePopover(selection.getRangeAt(0).getBoundingClientRect());
+  activeTrigger = null;
+  const close = renderPopover(found);
+  placePopover(selection.getRangeAt(0).getBoundingClientRect(), close);
 }
 
 document.querySelectorAll('[data-concept]').forEach((trigger) => {
@@ -133,10 +148,15 @@ document.querySelectorAll('[data-concept]').forEach((trigger) => {
   const area = decorateArea(trigger, concept);
   trigger.tabIndex = 0;
   trigger.setAttribute('role', 'button');
+  trigger.setAttribute('aria-controls', pop.id);
+  trigger.setAttribute('aria-expanded', 'false');
   trigger.setAttribute('aria-label', `${concept.title}${area ? `, ${area.title} 분야` : ''} 정의 보기`);
   const show = () => {
-    renderPopover({ term: concept.title, concept });
-    placePopover(trigger.getBoundingClientRect());
+    if (activeTrigger && activeTrigger !== trigger) activeTrigger.setAttribute('aria-expanded', 'false');
+    activeTrigger = trigger;
+    trigger.setAttribute('aria-expanded', 'true');
+    const close = renderPopover({ term: concept.title, concept });
+    placePopover(trigger.getBoundingClientRect(), close);
   };
   trigger.addEventListener('click', show);
   trigger.addEventListener('keydown', (event) => {
@@ -162,7 +182,7 @@ document.querySelectorAll('[data-concept-module]').forEach((host) => {
   tabs.className = 'concept-module-tabs';
   const panel = document.createElement('div');
   panel.className = 'concept-module-panel';
-  panel.id = `concept-${concept.id}-detail`;
+  panel.id = `concept-${concept.id}-detail-${++moduleInstance}`;
   const modes = [['example', '계산 예시'], ['why', '왜 필요한가?'], ['formal', '엄밀한 정의']];
   const buttons = modes.map(([field, label]) => {
     const button = document.createElement('button');
@@ -197,9 +217,17 @@ document.querySelectorAll('[data-concept-module]').forEach((host) => {
   host.append(summary, tabs, panel, prerequisites);
 });
 
-const hide = () => { pop.hidden = true; };
+function hide({ restoreFocus = false } = {}) {
+  if (pop.hidden) return;
+  pop.hidden = true;
+  if (activeTrigger) {
+    activeTrigger.setAttribute('aria-expanded', 'false');
+    if (restoreFocus) activeTrigger.focus({ preventScroll: true });
+  }
+  activeTrigger = null;
+}
 document.addEventListener('mouseup', () => setTimeout(showSelection, 0));
 document.addEventListener('touchend', () => setTimeout(showSelection, 120));
 document.addEventListener('mousedown', (event) => { if (!pop.contains(event.target) && !event.target.closest('[data-concept]')) hide(); });
-document.addEventListener('keydown', (event) => { if (event.key === 'Escape') hide(); });
+document.addEventListener('keydown', (event) => { if (event.key === 'Escape') hide({ restoreFocus: true }); });
 }).catch((error) => console.error('Concept modules failed to load', error));

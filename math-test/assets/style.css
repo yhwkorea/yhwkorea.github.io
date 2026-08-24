@@ -353,6 +353,8 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 }
 .glossary-popover[hidden] { display: none; }
 .glossary-popover { border-color: var(--concept-color); }
+.glossary-close { position: absolute; top: 7px; right: 9px; width: 28px; height: 28px; padding: 0; border: 1px solid var(--border); border-radius: 50%; background: var(--surface-alt); color: var(--ink-soft); cursor: pointer; font: 700 1.1rem/1 sans-serif; }
+.glossary-close:focus-visible { outline: 2px solid var(--concept-color); outline-offset: 2px; }
 .glossary-popover strong { color: var(--concept-ink); font-size: .95rem; }
 .glossary-popover p { margin: 5px 0 9px; color: var(--ink-soft); font-size: .86rem; line-height: 1.55; }
 .glossary-popover a { font-size: .82rem; font-weight: 700; text-decoration: none; }

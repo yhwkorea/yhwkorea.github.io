@@ -23,8 +23,8 @@
       <section class="concept-finder" data-concept-browser aria-labelledby="finder-title">
         <span class="guide-kicker">Find what you need</span>
         <h2 id="finder-title">무엇을 알고 싶나요?</h2>
-        <label class="concept-search"><span>질문 또는 용어 검색</span><div class="concept-search-box"><span aria-hidden="true">⌕</span><input type="search" placeholder="무엇이 궁금한가요?  예: char F, 무한원점, 아이디얼" autocomplete="off"></div><small>문장으로 물어보거나, 본문에서 본 기호·용어를 그대로 입력하세요.</small></label>
-        <div class="search-results" data-search-results hidden aria-live="polite"></div>
+        <label class="concept-search"><span>질문 또는 용어 검색</span><div class="concept-search-box"><span aria-hidden="true">⌕</span><input type="search" role="combobox" aria-autocomplete="list" aria-controls="concept-search-results" aria-expanded="false" placeholder="무엇이 궁금한가요?  예: char F, 무한원점, 아이디얼" autocomplete="off"></div><small>문장으로 물어보거나, 본문에서 본 기호·용어를 그대로 입력하세요.</small></label>
+        <div id="concept-search-results" class="search-results" data-search-results role="listbox" hidden aria-live="polite"></div>
         <div class="finder-block">
           <h3>질문으로 찾기</h3>
           <div class="question-list" data-question-list></div>

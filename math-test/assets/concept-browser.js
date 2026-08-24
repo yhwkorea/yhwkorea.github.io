@@ -11,7 +11,7 @@ Promise.all([
   const questionList = host.querySelector('[data-question-list]');
   const results = host.querySelector('[data-search-results]');
 
-  const areaFor = (id) => areas.find((area) => area.concepts.includes(id));
+  const areasFor = (id) => areas.filter((area) => area.concepts.includes(id));
   const normalize = (value) => value.toLocaleLowerCase('ko').replace(/\s+/g, ' ').trim();
   const conceptText = (concept) => normalize([
     concept.title, ...concept.terms, concept.summary, concept.why,
@@ -39,6 +39,7 @@ Promise.all([
     const needle = normalize(query);
     results.replaceChildren();
     results.hidden = !needle;
+    input.setAttribute('aria-expanded', String(Boolean(needle)));
     if (!needle) return;
     const tokens = needle.split(' ').filter(Boolean);
     const matches = concepts.filter((concept) => tokens.every((token) => conceptText(concept).includes(token)));
@@ -47,17 +48,17 @@ Promise.all([
     heading.textContent = `“${query}” 검색 결과 ${matches.length + questionMatches.length}개`;
     results.append(heading);
     questionMatches.forEach((item) => {
-      const link = document.createElement('a'); link.className = 'search-result'; link.href = page(item.href);
+      const link = document.createElement('a'); link.className = 'search-result'; link.href = page(item.href); link.setAttribute('role', 'option');
       const title = document.createElement('strong'); title.textContent = item.question;
       const text = document.createElement('span'); text.textContent = '질문에 해당하는 설명으로 이동';
       link.append(title, text); results.append(link);
     });
     matches.forEach((concept) => {
-      const area = areaFor(concept.id);
-      const link = document.createElement('a'); link.className = 'search-result'; link.href = page(concept.target);
+      const conceptAreas = areasFor(concept.id);
+      const link = document.createElement('a'); link.className = 'search-result'; link.href = page(concept.target); link.setAttribute('role', 'option');
       const title = document.createElement('strong'); title.textContent = concept.title;
       const text = document.createElement('span'); text.textContent = concept.summary;
-      const meta = document.createElement('small'); meta.textContent = area ? `${area.title} · 자세한 설명으로 이동` : '자세한 설명으로 이동';
+      const meta = document.createElement('small'); meta.textContent = conceptAreas.length ? `${conceptAreas.map((area) => area.title).join(' · ')} · 자세한 설명으로 이동` : '자세한 설명으로 이동';
       link.append(title, text, meta); results.append(link);
     });
     if (!matches.length && !questionMatches.length) {
@@ -69,6 +70,24 @@ Promise.all([
   }
 
   input.addEventListener('input', () => renderResults(input.value));
+  input.addEventListener('keydown', (event) => {
+    if (event.key === 'ArrowDown') {
+      const first = results.querySelector('a[role="option"]');
+      if (first) { event.preventDefault(); first.focus(); }
+    } else if (event.key === 'Escape') {
+      results.hidden = true; input.setAttribute('aria-expanded', 'false');
+    }
+  });
+  results.addEventListener('keydown', (event) => {
+    const options = [...results.querySelectorAll('a[role="option"]')];
+    const index = options.indexOf(document.activeElement);
+    if (event.key === 'ArrowDown' && index >= 0) { event.preventDefault(); options[(index + 1) % options.length].focus(); }
+    else if (event.key === 'ArrowUp' && index >= 0) { event.preventDefault(); (index === 0 ? input : options[index - 1]).focus(); }
+    else if (event.key === 'Escape') { event.preventDefault(); results.hidden = true; input.setAttribute('aria-expanded', 'false'); input.focus(); }
+  });
+  document.addEventListener('pointerdown', (event) => {
+    if (!host.contains(event.target)) { results.hidden = true; input.setAttribute('aria-expanded', 'false'); }
+  });
   const initial = new URLSearchParams(location.search).get('q');
   if (initial) { input.value = initial; renderResults(initial); }
 }).catch((error) => console.error('Concept browser failed to load', error));
