@@ -4,26 +4,26 @@
 <body data-chapter-view="true"><div class="layout"><aside class="sidebar"><div class="brand">PQC 학습 가이드</div><div class="brand-sub">Isogeny에서 SQIsign까지</div><nav><h5>학습 가이드</h5><ul><li><a href="../index.html">학습 홈</a></li><li><a href="../foundations/notation.html">집합과 기호</a></li><li><a href="../foundations/algebra.html">대수학</a></li><li><a href="../isogeny/01-finite-fields.html">유한체</a></li><li><a href="../isogeny/02-elliptic-curves.html">타원곡선</a></li><li><a href="../isogeny/03-isogenies.html" class="active">Isogeny</a></li><li><a href="../isogeny/isogeny-textbook.html">SQIsign</a></li></ul><h5>참고 자료</h5><ul><li><a href="../lattice/lattice-answers.html">Lattice 답안 (1–9)</a></li><li><a href="../algebra/algebra-answers.html">Algebra 답안 (1–16)</a></li><li><a href="../probability/probability-answers.html">Probability 답안 (1–10)</a></li><li><a href="../linear-algebra/linear-algebra-answers.html">Linear Algebra 답안 (1–17)</a></li><li><a href="../background/real-analysis.html">실해석학 보충</a></li></ul></nav></aside><main class="content"><div class="content-inner"><div class="eyebrow">Isogeny Foundations · Isogeny</div><h1 id="isogeny-곡선-사이의-구조-보존-사상">Isogeny — 곡선 사이의 구조 보존 사상</h1>
 <p>이 장의 목표는 isogeny를 단순히 “곡선 사이 화살표”라고 부르지 않고, 어떤 종류의 사상이며 커널·차수·쌍대가 어떻게 연결되는지 밝히는 것입니다.</p>
 <h2 id="곡선-사이의-사상">1. 곡선 사이의 사상</h2>
-<p>타원곡선 <span class="math inline">\(E_1,E_2\)</span> 사이의 <strong data-concept="morphism">morphism</strong>은 <strong data-concept="projective-plane">사영좌표</strong>에서 동차다항식들로 주어지고 곡선의 모든 점에서 정의되는 사상입니다. 아핀좌표에서는 보통 유리함수</p>
+<p>타원곡선 <span class="math inline">\(E_1,E_2\)</span> 사이의 <strong data-concept="morphism">morphism</strong>은 <strong data-concept="projective-plane">사영좌표</strong>에서 동차다항식들로 주어지고 곡선의 모든 점에서 정의되는 사상입니다. 아핀좌표에서는 보통 <span data-concept="rational-function">유리함수</span></p>
 <p><span class="math display">\[\varphi(x,y)=(r_1(x,y),r_2(x,y))\]</span></p>
 <p>로 보이지만, 분모가 0이 되는 곳까지 사영좌표로 일관되게 연장되어야 합니다. 단순한 집합 함수나 임의의 군 준동형은 대수적 사상이 아니므로 isogeny가 아닙니다.</p>
 <h2 id="isogeny의-정의">2. Isogeny의 정의</h2>
 <p><strong>정의.</strong> <span class="math inline">\(F\)</span> 위 타원곡선 사이의 <strong data-concept="isogeny">isogeny</strong>는 <span class="math inline">\(F\)</span> 위에 정의된 비상수 morphism <span class="math inline">\(\varphi:E_1\to E_2\)</span>로서 <span class="math inline">\(\varphi(\mathcal O_{E_1})=\mathcal O_{E_2}\)</span>를 만족하는 사상입니다.</p>
-<p><strong>정리.</strong> 위 조건을 만족하는 morphism은 자동으로 군 준동형이고 전사이며 커널이 유한합니다. 따라서 “전사인 유한 커널의 대수적 군 준동형”이라고 정의해도 동치입니다. 중요한 점은 이 성질들이 서로 무관한 체크리스트가 아니라, 비상수 곡선 morphism과 항등원 보존에서 따라온다는 것입니다.</p>
+<p><strong>정리.</strong> 위 조건을 만족하는 morphism은 자동으로 <span data-concept="group-homomorphism">군 준동형</span>이고 전사이며 커널이 유한합니다. 따라서 “전사인 유한 커널의 대수적 군 준동형”이라고 정의해도 동치입니다. 중요한 점은 이 성질들이 서로 무관한 체크리스트가 아니라, 비상수 곡선 morphism과 항등원 보존에서 따라온다는 것입니다.</p>
 <p><span class="math inline">\(E_1=E_2\)</span>인 isogeny를 <strong data-concept="endomorphism">endomorphism</strong>이라 하고, 0 사상까지 모은 환을 <span class="math inline">\(\operatorname{End}(E)\)</span>라 합니다. 덧셈은 <span class="math inline">\((\varphi+\psi)(P)=\varphi(P)+\psi(P)\)</span>, 곱셈은 합성입니다.</p>
 <h2 id="커널이-isogeny를-결정한다">3. 커널이 isogeny를 결정한다</h2>
-<p><span class="math inline">\(E\)</span>의 유한 부분군 <span class="math inline">\(K\)</span>가 Galois 작용에 안정적이면 몫곡선 <span class="math inline">\(E/K\)</span>와 isogeny</p>
+<p><span class="math inline">\(E\)</span>의 유한 부분군 <span class="math inline">\(K\)</span>가 <span data-concept="galois-action">Galois 작용</span>에 안정적이면 몫곡선 <span class="math inline">\(E/K\)</span>와 isogeny</p>
 <p><span class="math display">\[\varphi_K:E\longrightarrow E/K\]</span></p>
-<p>가 존재하고 <span class="math inline">\(\ker\varphi_K=K\)</span>입니다. 이는 공역의 동형을 제외하고 유일합니다. Vélu 공식은 <span class="math inline">\(K\)</span>의 점들을 입력받아 <span class="math inline">\(E/K\)</span>의 계수와 <span class="math inline">\(\varphi_K\)</span>의 유리함수를 실제로 계산합니다.</p>
+<p>가 존재하고 <span class="math inline">\(\ker\varphi_K=K\)</span>입니다. 이는 공역의 동형을 제외하고 유일합니다. <span data-concept="velu-formulas">Vélu 공식</span>은 <span class="math inline">\(K\)</span>의 점들을 입력받아 <span class="math inline">\(E/K\)</span>의 계수와 <span class="math inline">\(\varphi_K\)</span>의 유리함수를 실제로 계산합니다.</p>
 <p>그래서 SQIsign은 긴 유리함수 전체 대신 <strong data-concept="torsion">torsion 점</strong> <span class="math inline">\(P\)</span>가 생성하는 <strong data-concept="kernel">커널</strong> <span class="math inline">\(K=\langle P\rangle\)</span>을 저장하거나 해시로 선택합니다. 커널을 알면 화살표를 재구성할 수 있기 때문입니다.</p>
 <h2 id="차수와-분리가능성">4. 차수와 분리가능성</h2>
-<p>비상수 morphism은 함수체의 포함 <span class="math inline">\(\varphi^*:F(E_2)\hookrightarrow F(E_1)\)</span>을 유도합니다. <strong data-concept="degree">차수</strong>를</p>
+<p>비상수 morphism은 <span data-concept="function-field">함수체</span>의 포함 <span class="math inline">\(\varphi^*:F(E_2)\hookrightarrow F(E_1)\)</span>을 유도합니다. <strong data-concept="degree">차수</strong>를</p>
 <p><span class="math display">\[\deg\varphi=[F(E_1):\varphi^*F(E_2)]\]</span></p>
-<p>로 정의합니다. <span class="math inline">\(\varphi\)</span>가 분리가능하면 <span class="math inline">\(\deg\varphi=|\ker\varphi|\)</span>이지만, 특성 <span class="math inline">\(p\)</span>에서 비분리 사상에는 이 등식이 깨질 수 있습니다. 예를 들어 Frobenius isogeny는 차수가 <span class="math inline">\(p\)</span>이지만 기하적 커널점은 하나뿐입니다. 따라서 “차수=커널 크기”는 분리가능성 조건을 붙여야 정확합니다.</p>
+<p>로 정의합니다. <span data-concept="separable-morphism"><span class="math inline">\(\varphi\)</span>가 분리가능하면</span> <span class="math inline">\(\deg\varphi=|\ker\varphi|\)</span>이지만, 특성 <span class="math inline">\(p\)</span>에서 비분리 사상에는 이 등식이 깨질 수 있습니다. 예를 들어 Frobenius isogeny는 차수가 <span class="math inline">\(p\)</span>이지만 기하적 커널점은 하나뿐입니다. 따라서 “차수=커널 크기”는 분리가능성 조건을 붙여야 정확합니다.</p>
 <p>합성에 대해서는</p>
 <p><span class="math display">\[\deg(\psi\circ\varphi)=\deg\psi\,\deg\varphi\]</span></p>
 <p>가 성립합니다. 작은 소수 차수 isogeny들을 합성해 큰 차수 경로를 표현하는 근거입니다.</p>
-<h2 id="쌍대-isogeny">5. 쌍대 isogeny</h2>
+<h2 id="쌍대-isogeny">5. <span data-concept="dual-isogeny">쌍대 아이소제니</span></h2>
 <p>차수 <span class="math inline">\(n\)</span>인 isogeny <span class="math inline">\(\varphi:E_1\to E_2\)</span>에는 유일한 쌍대 isogeny <span class="math inline">\(\hat\varphi:E_2\to E_1\)</span>가 존재하여</p>
 <p><span class="math display">\[\hat\varphi\circ\varphi=[n]_{E_1},\qquad
 \varphi\circ\hat\varphi=[n]_{E_2}\]</span></p>
