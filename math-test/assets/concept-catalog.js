@@ -5,8 +5,8 @@ export const areas = [
   { id: 'elliptic-curves', title: '타원곡선', description: '곡선·특이점·무한원점·점 덧셈', href: 'isogeny/02-elliptic-curves.html', concepts: ['affine-plane','projective-plane','algebraic-curve','elliptic-curve','group-law','scalar-multiplication','algebraic-closure','j-invariant','torsion','singular-point','point-at-infinity'] },
   { id: 'finite-fields', title: '유한체', description: 'Fₚ와 Fₚ²에서 계산하는 방법과 표수', href: 'isogeny/01-finite-fields.html', concepts: ['modular-arithmetic','polynomial','irreducible-polynomial','finite-field','extension-field','field','characteristic'] },
   { id: 'calculus', title: '미적분', description: '미분·편미분과 곡선의 변화율', href: 'foundations/calculus.html', concepts: ['derivative', 'partial-derivative'] },
-  { id: 'algebra', title: '대수학', description: '군·환·아이디얼·몫환·체', href: 'foundations/algebra.html', concepts: ['group', 'ring', 'commutative-ring', 'ideal', 'quotient-ring', 'field'] },
-  { id: 'notation', title: '집합과 기호', description: '집합·함수·관계·동치류와 낯선 수학 기호', href: 'foundations/notation.html', concepts: ['set', 'function', 'equivalence-relation', 'equivalence-class'] }
+  { id: 'algebra', title: '대수학', description: '군·환·아이디얼·몫환·체', href: 'foundations/algebra.html', concepts: ['binary-operation','identity-element','inverse-element','group','abelian-group','subgroup','ring','commutative-ring','unit','zero-divisor','integral-domain','ideal','quotient-ring','field'] },
+  { id: 'notation', title: '집합과 기호', description: '집합·함수·관계·동치류와 낯선 수학 기호', href: 'foundations/notation.html', concepts: ['set','element','function','equivalence-relation','equivalence-class'] }
 ];
 
 export const commonQuestions = [

@@ -1,0 +1,1 @@
+export default { id:'element', title:'원소', terms:['원소','element'], summary:'집합 안에 들어 있는 각각의 대상을 원소라고 합니다.', target:'foundations/notation.html#집합과-원소', prerequisites:['set'], why:'a∈A, 부분집합, 함수의 입력처럼 거의 모든 수학 문장의 가장 작은 단위입니다.', example:'A={2,4,6}이면 4는 A의 원소라서 4∈A이고, 3∉A입니다.', formal:'집합론에서 ∈은 원시적인 소속 관계입니다. a∈A는 대상 a가 집합 A에 속한다는 명제입니다.', usedIn:['부분집합','함수','군','곡선 위 점'] };

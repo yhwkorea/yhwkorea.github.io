@@ -52,9 +52,18 @@ import separableMorphism from './separable-morphism.js';
 import dualIsogeny from './dual-isogeny.js';
 import veluFormulas from './velu-formulas.js';
 import galoisAction from './galois-action.js';
+import element from './element.js';
+import binaryOperation from './binary-operation.js';
+import identityElement from './identity-element.js';
+import inverseElement from './inverse-element.js';
+import abelianGroup from './abelian-group.js';
+import subgroup from './subgroup.js';
+import unit from './unit.js';
+import zeroDivisor from './zero-divisor.js';
+import integralDomain from './integral-domain.js';
 import func from './function.js';
 
-export const concepts = [digitalSignature, hashFunction, pqc, sqisign, witness, commitment, challenge, response, identificationProtocol, fiatShamir, derivative, partialDerivative, characteristic, modularArithmetic, polynomial, irreduciblePolynomial, finiteField, extensionField, affinePlane, projectivePlane, algebraicCurve, singularPoint, pointAtInfinity, ellipticCurve, groupLaw, scalarMultiplication, algebraicClosure, jInvariant, torsion, rationalFunction, morphism, groupHomomorphism, functionField, separableMorphism, isogeny, kernel, degree, veluFormulas, dualIsogeny, galoisAction, isogenyGraph, endomorphism, supersingular, quaternionAlgebra, order, set, func, relation, equivalenceClass, group, ring, commutativeRing, ideal, quotientRing, field];
+export const concepts = [digitalSignature, hashFunction, pqc, sqisign, witness, commitment, challenge, response, identificationProtocol, fiatShamir, derivative, partialDerivative, characteristic, modularArithmetic, polynomial, irreduciblePolynomial, finiteField, extensionField, affinePlane, projectivePlane, algebraicCurve, singularPoint, pointAtInfinity, ellipticCurve, groupLaw, scalarMultiplication, algebraicClosure, jInvariant, torsion, rationalFunction, morphism, groupHomomorphism, functionField, separableMorphism, isogeny, kernel, degree, veluFormulas, dualIsogeny, galoisAction, isogenyGraph, endomorphism, supersingular, quaternionAlgebra, order, set, element, func, relation, equivalenceClass, binaryOperation, identityElement, inverseElement, group, abelianGroup, subgroup, ring, commutativeRing, unit, zeroDivisor, integralDomain, ideal, quotientRing, field];
 export const conceptsById = new Map(concepts.map((concept) => [concept.id, concept]));
 export const conceptsByTerm = new Map(concepts.flatMap((concept) => concept.terms.map((term) => [term.normalize('NFKC').toLocaleLowerCase('ko'), concept])));
 
