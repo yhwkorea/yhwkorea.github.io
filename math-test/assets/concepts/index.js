@@ -90,9 +90,16 @@ import smoothCurve from './smooth-curve.js';
 import genus from './genus.js';
 import discriminant from './discriminant.js';
 import homogeneousPolynomial from './homogeneous-polynomial.js';
+import graph from './graph.js';
+import randomWalk from './random-walk.js';
+import spectralGap from './spectral-gap.js';
+import fieldAutomorphism from './field-automorphism.js';
+import fieldNorm from './field-norm.js';
+import normalSubgroup from './normal-subgroup.js';
+import quotientGroup from './quotient-group.js';
 import func from './function.js';
 
-export const concepts = [publicKey, privateKey, authentication, integrity, encryption, digitalSignature, hashFunction, pqc, securityAssumption, sqisign, witness, commitment, challenge, response, identificationProtocol, fiatShamir, klpt, limit, slope, derivative, tangentLine, partialDerivative, gradient, characteristic, modularArithmetic, polynomial, irreduciblePolynomial, finiteField, extensionField, frobeniusMap, affinePlane, projectivePlane, homogeneousPolynomial, algebraicCurve, singularPoint, smoothCurve, genus, discriminant, pointAtInfinity, rationalPoint, ellipticCurve, groupLaw, scalarMultiplication, algebraicClosure, jInvariant, torsion, rationalFunction, morphism, groupHomomorphism, functionField, separableMorphism, isogeny, kernel, degree, veluFormulas, dualIsogeny, galoisAction, isogenyGraph, expanderGraph, ramanujanGraph, endomorphism, supersingular, quaternionAlgebra, order, quaternionIdeal, reducedNorm, deuringCorrespondence, set, element, subset, proposition, func, injectiveFunction, surjectiveFunction, binaryRelation, relation, equivalenceClass, binaryOperation, closureProperty, identityElement, inverseElement, group, abelianGroup, subgroup, ring, commutativeRing, unit, zeroDivisor, integralDomain, ideal, principalIdeal, quotientRing, field];
+export const concepts = [publicKey, privateKey, authentication, integrity, encryption, digitalSignature, hashFunction, pqc, securityAssumption, sqisign, witness, commitment, challenge, response, identificationProtocol, fiatShamir, klpt, limit, slope, derivative, tangentLine, partialDerivative, gradient, characteristic, modularArithmetic, polynomial, irreduciblePolynomial, finiteField, extensionField, fieldAutomorphism, frobeniusMap, fieldNorm, affinePlane, projectivePlane, homogeneousPolynomial, algebraicCurve, singularPoint, smoothCurve, genus, discriminant, pointAtInfinity, rationalPoint, ellipticCurve, groupLaw, scalarMultiplication, algebraicClosure, jInvariant, torsion, rationalFunction, morphism, groupHomomorphism, functionField, separableMorphism, isogeny, kernel, degree, veluFormulas, dualIsogeny, galoisAction, graph, isogenyGraph, randomWalk, spectralGap, expanderGraph, ramanujanGraph, endomorphism, supersingular, quaternionAlgebra, order, quaternionIdeal, reducedNorm, deuringCorrespondence, set, element, subset, proposition, func, injectiveFunction, surjectiveFunction, binaryRelation, relation, equivalenceClass, binaryOperation, closureProperty, identityElement, inverseElement, group, abelianGroup, subgroup, normalSubgroup, quotientGroup, ring, commutativeRing, unit, zeroDivisor, integralDomain, ideal, principalIdeal, quotientRing, field];
 export const conceptsById = new Map(concepts.map((concept) => [concept.id, concept]));
 export const conceptsByTerm = new Map(concepts.flatMap((concept) => concept.terms.map((term) => [term.normalize('NFKC').toLocaleLowerCase('ko'), concept])));
 
