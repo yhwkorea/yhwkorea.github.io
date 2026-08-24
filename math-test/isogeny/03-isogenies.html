@@ -28,7 +28,7 @@
 <p><span class="math display">\[\hat\varphi\circ\varphi=[n]_{E_1},\qquad
 \varphi\circ\hat\varphi=[n]_{E_2}\]</span></p>
 <p>를 만족합니다. 특히 <span class="math inline">\(\deg\hat\varphi=n\)</span>입니다. 그래프에서 간선을 반대로 따라갈 수 있다는 말은 단순히 함수를 역으로 푼다는 뜻이 아니라 이 쌍대 사상을 계산한다는 뜻입니다. <span class="math inline">\(n&gt;1\)</span>이면 <span class="math inline">\(\varphi\)</span>는 여러 점을 한 점으로 보내므로 집합함수로서 역함수가 없습니다.</p>
-<h2 id="isogeny-그래프">6. Isogeny 그래프</h2>
+<h2 id="isogeny-그래프">6. <span data-concept="isogeny-graph">아이소제니 그래프</span></h2>
 <p>소수 <span class="math inline">\(\ell\ne\operatorname{char}F\)</span>를 고정합니다. 꼭짓점은 타원곡선의 동형류이고, <span class="math inline">\(\ell\)</span>-isogeny가 있으면 간선을 잇습니다. <span class="math inline">\(E[\ell]\cong(\mathbb Z/\ell\mathbb Z)^2\)</span>에는 크기 <span class="math inline">\(\ell\)</span>인 순환부분군이 정확히 <span class="math inline">\(\ell+1\)</span>개 있으므로, 중복 동형과 자기루프를 중복도까지 세면 각 꼭짓점에서 <span class="math inline">\(\ell+1\)</span>개의 간선이 나옵니다.</p>
 <p>SQIsign은 이 그래프의 <strong data-concept="supersingular">초특이</strong> 연결성분을 사용합니다. 공개키는 꼭짓점 <span class="math inline">\(E_A\)</span>, 비밀 witness는 그 꼭짓점의 endomorphism ring을 계산할 수 있는 정보이고, 서명 응답은 challenge가 정한 꼭짓점으로 가는 isogeny입니다.</p>
 <p><strong>이전:</strong> <a href="02-elliptic-curves.html">대수곡선과 타원곡선</a> · <strong>다음:</strong> <a href="isogeny-textbook.html">SQIsign 전체 구조</a></p>
