@@ -7,7 +7,8 @@ areas.forEach((area) => area.concepts.forEach((id) => {
   if (!areaByConcept.has(id)) areaByConcept.set(id, area);
 }));
 const decorateArea = (element, concept) => {
-  const area = areaByConcept.get(concept.id);
+  const targetPage = concept.target.split('#')[0];
+  const area = areas.find((candidate) => candidate.href === targetPage) || areaByConcept.get(concept.id);
   if (!area) return null;
   element.dataset.area = area.id;
   return area;

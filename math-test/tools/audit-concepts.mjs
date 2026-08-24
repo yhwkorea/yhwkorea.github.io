@@ -95,15 +95,20 @@ function visit(id) {
 for (const id of byId.keys()) visit(id);
 
 const areaIds = new Set();
+const catalogMembership = new Map([...byId.keys()].map((id) => [id, []]));
 for (const area of areas) {
   if (!area || typeof area !== 'object') { errors.push('catalog area must be an object'); continue; }
   for (const field of ['id', 'title', 'description', 'href']) if (!nonempty(area[field])) errors.push(`catalog area ${area.id || '(unknown)'}: invalid ${field}`);
   if (areaIds.has(area.id)) errors.push(`duplicate catalog area id: ${area.id}`);
   areaIds.add(area.id);
   if (!Array.isArray(area.concepts) || !area.concepts.length) errors.push(`catalog area ${area.id}: invalid concepts`);
-  else for (const id of area.concepts) if (!byId.has(id)) errors.push(`catalog area ${area.id}: unknown concept ${id}`);
+  else for (const id of area.concepts) {
+    if (!byId.has(id)) errors.push(`catalog area ${area.id}: unknown concept ${id}`);
+    else catalogMembership.get(id).push(area.id);
+  }
   localTarget(`catalog area ${area.id}`, area.href);
 }
+for (const [id, memberships] of catalogMembership) if (!memberships.length) errors.push(`concept ${id}: missing catalog area`);
 for (const [index, question] of commonQuestions.entries()) {
   if (!question || typeof question !== 'object' || !nonempty(question.question) || !Array.isArray(question.terms) || !question.terms.length) errors.push(`common question ${index}: invalid schema`);
   localTarget(`common question ${index}`, question?.href);
