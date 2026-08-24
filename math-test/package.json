@@ -1,5 +1,8 @@
 {
   "private": true,
   "type": "module",
-  "scripts": { "audit:concepts": "node tools/audit-concepts.mjs" }
+  "scripts": {
+    "audit:concepts": "node tools/audit-concepts.mjs",
+    "sync:nav": "node tools/sync-guide-nav.mjs"
+  }
 }
