@@ -40,9 +40,14 @@ import extensionField from './extension-field.js';
 import groupLaw from './group-law.js';
 import jInvariant from './j-invariant.js';
 import isogenyGraph from './isogeny-graph.js';
+import modularArithmetic from './modular-arithmetic.js';
+import polynomial from './polynomial.js';
+import irreduciblePolynomial from './irreducible-polynomial.js';
+import algebraicClosure from './algebraic-closure.js';
+import scalarMultiplication from './scalar-multiplication.js';
 import func from './function.js';
 
-export const concepts = [digitalSignature, hashFunction, pqc, sqisign, witness, commitment, challenge, response, identificationProtocol, fiatShamir, derivative, partialDerivative, characteristic, finiteField, extensionField, affinePlane, projectivePlane, algebraicCurve, singularPoint, pointAtInfinity, ellipticCurve, groupLaw, jInvariant, torsion, morphism, isogeny, kernel, degree, isogenyGraph, endomorphism, supersingular, quaternionAlgebra, order, set, func, relation, equivalenceClass, group, ring, commutativeRing, ideal, quotientRing, field];
+export const concepts = [digitalSignature, hashFunction, pqc, sqisign, witness, commitment, challenge, response, identificationProtocol, fiatShamir, derivative, partialDerivative, characteristic, modularArithmetic, polynomial, irreduciblePolynomial, finiteField, extensionField, affinePlane, projectivePlane, algebraicCurve, singularPoint, pointAtInfinity, ellipticCurve, groupLaw, scalarMultiplication, algebraicClosure, jInvariant, torsion, morphism, isogeny, kernel, degree, isogenyGraph, endomorphism, supersingular, quaternionAlgebra, order, set, func, relation, equivalenceClass, group, ring, commutativeRing, ideal, quotientRing, field];
 export const conceptsById = new Map(concepts.map((concept) => [concept.id, concept]));
 export const conceptsByTerm = new Map(concepts.flatMap((concept) => concept.terms.map((term) => [term, concept])));
 
