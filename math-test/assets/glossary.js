@@ -47,6 +47,9 @@ hint.textContent = '용어를 누르거나 드래그하면 설명을 볼 수 있
 document.body.append(hint);
 
 const clean = (value) => value.replace(/\s+/g, ' ').trim().replace(/^[“”"'‘’()[\]{}]+|[“”"'‘’()[\]{}.,:;!?]+$/g, '');
+const searchableTerms = [...conceptsById.values()].flatMap((concept) => concept.terms.map((term) => ({
+  concept, term, normalized: term.normalize('NFKC').toLocaleLowerCase('ko')
+}))).sort((a, b) => b.term.length - a.term.length);
 const lookup = (raw) => {
   const word = clean(raw);
   const candidates = [word];
@@ -61,6 +64,38 @@ const lookup = (raw) => {
   }
   return null;
 };
+
+function appendConceptText(host, value, ownerId = '') {
+  host.replaceChildren();
+  const normalized = value.normalize('NFKC').toLocaleLowerCase('ko');
+  let cursor = 0;
+  while (cursor < value.length) {
+    let best = null;
+    for (const candidate of searchableTerms) {
+      if (candidate.concept.id === ownerId) continue;
+      const index = normalized.indexOf(candidate.normalized, cursor);
+      if (index < 0) continue;
+      const latin = /^[a-z0-9]/i.test(candidate.term);
+      if (latin && ((index > 0 && /[a-z0-9]/i.test(normalized[index - 1])) || /[a-z0-9]/i.test(normalized[index + candidate.normalized.length] || ''))) continue;
+      if (candidate.normalized.length === 1 && index > 0 && /[가-힣]/.test(normalized[index - 1])) continue;
+      if (!best || index < best.index || (index === best.index && candidate.term.length > best.candidate.term.length)) best = { index, candidate };
+    }
+    if (!best) { host.append(value.slice(cursor)); break; }
+    if (best.index > cursor) host.append(value.slice(cursor, best.index));
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'inline-concept-link';
+    button.textContent = value.slice(best.index, best.index + best.candidate.term.length);
+    button.setAttribute('aria-label', `${best.candidate.concept.title} 정의 보기`);
+    button.addEventListener('click', (event) => {
+      event.stopPropagation();
+      const close = renderPopover({ term: best.candidate.concept.title, concept: best.candidate.concept });
+      placePopover(button.getBoundingClientRect(), close);
+    });
+    host.append(button);
+    cursor = best.index + best.candidate.term.length;
+  }
+}
 
 function rememberDestination(link, term) {
   link.addEventListener('click', () => {
@@ -94,7 +129,8 @@ function renderPopover(found) {
   pop.setAttribute('aria-labelledby', title.id);
   const text = document.createElement('p');
   const target = found.concept ? found.concept.target : found.legacy[1];
-  text.textContent = found.concept ? found.concept.summary : found.legacy[0];
+  if (found.concept) appendConceptText(text, found.concept.summary, found.concept.id);
+  else text.textContent = found.legacy[0];
   const link = document.createElement('a');
   link.href = page(target);
   link.textContent = '설명에서 자세히 보기 →';
@@ -107,7 +143,7 @@ function renderPopover(found) {
       const button = document.createElement('button');
       button.type = 'button';
       button.textContent = label;
-      button.addEventListener('click', () => { text.textContent = found.concept[field]; });
+      button.addEventListener('click', () => { appendConceptText(text, found.concept[field], found.concept.id); });
       actions.append(button);
     }
     actions.append(link);
@@ -178,7 +214,7 @@ document.querySelectorAll('[data-concept-module]').forEach((host) => {
   }
   const summary = document.createElement('p');
   summary.className = 'concept-module-summary';
-  summary.textContent = concept.summary;
+  appendConceptText(summary, concept.summary, concept.id);
   const tabs = document.createElement('div');
   tabs.className = 'concept-module-tabs';
   const panel = document.createElement('div');
@@ -196,7 +232,8 @@ document.querySelectorAll('[data-concept-module]').forEach((host) => {
       buttons.forEach((item) => item.setAttribute('aria-expanded', 'false'));
       button.setAttribute('aria-expanded', String(!closing));
       panel.hidden = closing;
-      panel.textContent = closing ? '' : concept[field];
+      if (closing) panel.replaceChildren();
+      else appendConceptText(panel, concept[field], concept.id);
     });
     tabs.append(button);
     return button;

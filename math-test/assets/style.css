@@ -363,6 +363,9 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
   padding: 4px 8px; border: 1px solid var(--border); border-radius: 999px;
   background: var(--surface-alt); color: var(--accent-ink); cursor: pointer; font-size: .76rem;
 }
+.inline-concept-link { display: inline; margin: 0; padding: 0 2px; border: 0; border-bottom: 1px dotted var(--concept-color, var(--accent)); background: transparent; color: var(--concept-ink, var(--accent-ink)); cursor: help; font: inherit; font-weight: 700; }
+.inline-concept-link:hover { background: var(--concept-soft, var(--accent-soft)); }
+.inline-concept-link:focus-visible { outline: 2px solid var(--concept-color, var(--accent)); outline-offset: 2px; border-radius: 2px; }
 .concept-term {
   --concept-color: var(--accent); --concept-soft: var(--accent-soft); --concept-ink: var(--accent-ink);
   cursor: help; text-decoration: underline dotted var(--concept-color); text-decoration-thickness: 2px; text-underline-offset: 3px;
