@@ -1,0 +1,1 @@
+export default {id:'complex-number',title:'복소수',terms:['복소수','complex number'],summary:'실수에 i²=-1인 수 i를 추가해 a+bi로 나타내는 수입니다.',target:'school/04-senior-secondary.html#complex',prerequisites:['real-number'],why:'실수 해가 없는 다항방정식을 풀고 회전과 진동을 간결하게 표현합니다.',example:'x²+1=0의 해는 i와 -i입니다.',formal:'C는 R[x]/(x²+1)과 동형인 대수적으로 닫힌 체입니다.',usedIn:['다항식','Fourier 분석','타원곡선','사원수']};

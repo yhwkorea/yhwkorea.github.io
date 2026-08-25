@@ -1,0 +1,1 @@
+export default {id:'quadratic-equation',title:'이차방정식',terms:['이차방정식','quadratic equation'],summary:'미지수의 최고차항이 2차인 방정식입니다.',target:'school/03-secondary.html#quadratic',prerequisites:['polynomial','real-number'],why:'포물선의 교점과 넓이·운동에서 생기는 비선형 관계를 풉니다.',example:'x²-5x+6=(x-2)(x-3)이므로 해는 2와 3입니다.',formal:'ax²+bx+c=0(a≠0)의 근은 (-b±√(b²-4ac))/(2a)입니다.',usedIn:['복소수','포물선','다항식']};

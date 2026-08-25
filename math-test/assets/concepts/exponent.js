@@ -1,0 +1,1 @@
+export default {id:'exponent',title:'지수와 거듭제곱',terms:['지수','거듭제곱','exponent'],summary:'같은 수의 반복 곱셈을 밑과 지수로 압축한 표현입니다.',target:'school/02-middle.html#powers',prerequisites:['integer'],why:'큰·작은 수와 반복 성장, 다항식의 차수를 간결하게 표현합니다.',example:'2⁵=2×2×2×2×2=32이고 2⁻³=1/8입니다.',formal:'정수 지수는 군의 반복 연산으로 확장하며 a⁰=1, a^{-n}=(a^{-1})^n입니다.',usedIn:['과학적 표기','다항식','지수함수','유한체']};

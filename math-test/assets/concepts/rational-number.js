@@ -1,0 +1,1 @@
+export default {id:'rational-number',title:'유리수',terms:['유리수','rational number'],summary:'두 정수의 비 a/b로 표현할 수 있는 수입니다.',target:'school/02-middle.html#rational',prerequisites:['integer','fraction'],why:'정수만으로 끝나지 않는 나눗셈을 항상 표현합니다.',example:'0.125=1/8이고 0.333…=1/3입니다.',formal:'Q는 Z×(Z\{0})에서 (a,b)~(c,d) iff ad=bc로 만든 동치류의 체입니다.',usedIn:['실수','확률','비율','좌표']};

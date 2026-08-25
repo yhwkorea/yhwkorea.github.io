@@ -30,7 +30,9 @@ const utilityNavPages = new Set([
   'foundations/algebra.html', 'isogeny/01-finite-fields.html', 'isogeny/02-elliptic-curves.html',
   'isogeny/03-isogenies.html', 'isogeny/isogeny-textbook.html',
   'crypto/01-symmetric-hash.html', 'crypto/02-key-establishment.html',
-  'crypto/03-signatures.html', 'crypto/04-pqc-candidates.html', 'crypto/05-tls-pki.html'
+  'crypto/03-signatures.html', 'crypto/04-pqc-candidates.html', 'crypto/05-tls-pki.html',
+  'school/01-primary.html', 'school/02-middle.html',
+  'school/03-secondary.html', 'school/04-senior-secondary.html'
 ]);
 const scalarFields = ['id', 'title', 'summary', 'target', 'why', 'example', 'formal'];
 const arrayFields = ['terms', 'prerequisites', 'usedIn'];

@@ -124,8 +124,22 @@ import fieldNorm from './field-norm.js';
 import normalSubgroup from './normal-subgroup.js';
 import quotientGroup from './quotient-group.js';
 import func from './function.js';
+import fraction from './fraction.js';
+import ratio from './ratio.js';
+import integer from './integer.js';
+import rationalNumber from './rational-number.js';
+import exponent from './exponent.js';
+import linearEquation from './linear-equation.js';
+import realNumber from './real-number.js';
+import quadraticEquation from './quadratic-equation.js';
+import trigonometry from './trigonometry.js';
+import complexNumber from './complex-number.js';
+import combinatorics from './combinatorics.js';
+import integral from './integral.js';
+import matrix from './matrix.js';
+import vector from './vector.js';
 
-export const concepts = [publicKey, privateKey, authentication, integrity, encryption, entropy, drbg, nonce, blockCipher, aes, aead, hashFunction, mac, kdf, diffieHellman, kem, mlKem, digitalSignature, certificate, tls13, mlDsa, slhDsa, hqc, fnDsa, faest, hawk, mayo, mqom, qrUov, sdith, snova, uov, ascon, pqc, securityAssumption, sqisign, witness, commitment, challenge, response, identificationProtocol, fiatShamir, klpt, limit, slope, derivative, tangentLine, partialDerivative, gradient, characteristic, modularArithmetic, polynomial, irreduciblePolynomial, finiteField, extensionField, fieldAutomorphism, frobeniusMap, fieldNorm, affinePlane, projectivePlane, homogeneousPolynomial, algebraicCurve, singularPoint, smoothCurve, genus, discriminant, pointAtInfinity, rationalPoint, ellipticCurve, groupLaw, scalarMultiplication, algebraicClosure, jInvariant, torsion, rationalFunction, morphism, groupHomomorphism, functionField, separableMorphism, isogeny, kernel, degree, veluFormulas, dualIsogeny, galoisAction, graph, isogenyGraph, randomWalk, spectralGap, expanderGraph, ramanujanGraph, endomorphism, supersingular, quaternionAlgebra, order, quaternionIdeal, reducedNorm, deuringCorrespondence, set, element, subset, proposition, func, injectiveFunction, surjectiveFunction, binaryRelation, relation, equivalenceClass, binaryOperation, closureProperty, identityElement, inverseElement, group, abelianGroup, subgroup, normalSubgroup, quotientGroup, ring, commutativeRing, unit, zeroDivisor, integralDomain, ideal, principalIdeal, quotientRing, field];
+export const concepts = [publicKey, privateKey, authentication, integrity, encryption, entropy, drbg, nonce, blockCipher, aes, aead, hashFunction, mac, kdf, diffieHellman, kem, mlKem, digitalSignature, certificate, tls13, mlDsa, slhDsa, hqc, fnDsa, faest, hawk, mayo, mqom, qrUov, sdith, snova, uov, ascon, pqc, securityAssumption, sqisign, witness, commitment, challenge, response, identificationProtocol, fiatShamir, klpt, fraction, ratio, integer, rationalNumber, exponent, linearEquation, realNumber, quadraticEquation, trigonometry, complexNumber, combinatorics, integral, matrix, vector, limit, slope, derivative, tangentLine, partialDerivative, gradient, characteristic, modularArithmetic, polynomial, irreduciblePolynomial, finiteField, extensionField, fieldAutomorphism, frobeniusMap, fieldNorm, affinePlane, projectivePlane, homogeneousPolynomial, algebraicCurve, singularPoint, smoothCurve, genus, discriminant, pointAtInfinity, rationalPoint, ellipticCurve, groupLaw, scalarMultiplication, algebraicClosure, jInvariant, torsion, rationalFunction, morphism, groupHomomorphism, functionField, separableMorphism, isogeny, kernel, degree, veluFormulas, dualIsogeny, galoisAction, graph, isogenyGraph, randomWalk, spectralGap, expanderGraph, ramanujanGraph, endomorphism, supersingular, quaternionAlgebra, order, quaternionIdeal, reducedNorm, deuringCorrespondence, set, element, subset, proposition, func, injectiveFunction, surjectiveFunction, binaryRelation, relation, equivalenceClass, binaryOperation, closureProperty, identityElement, inverseElement, group, abelianGroup, subgroup, normalSubgroup, quotientGroup, ring, commutativeRing, unit, zeroDivisor, integralDomain, ideal, principalIdeal, quotientRing, field];
 export const conceptsById = new Map(concepts.map((concept) => [concept.id, concept]));
 export const conceptsByTerm = new Map(concepts.flatMap((concept) => concept.terms.map((term) => [term.normalize('NFKC').toLocaleLowerCase('ko'), concept])));
 

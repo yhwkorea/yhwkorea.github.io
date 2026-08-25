@@ -1,5 +1,9 @@
 export const globalAreas = [
   { id: 'cryptography', label: '현대 암호학', href: 'foundations/cryptography.html', children: ['보안 목표', '대칭 암호·AEAD', '해시·MAC·KDF', '키 합의·KEM', '전자서명·PKI', 'TLS', 'PQC'] },
+  { id: 'primary-math', label: '초등 수학', href: 'school/01-primary.html', children: ['수와 연산', '분수·소수', '비율', '측정', '도형', '자료'] },
+  { id: 'middle-math', label: '중등 수학', href: 'school/02-middle.html', children: ['정수·유리수', '대수식', '방정식', '좌표', '기하', '확률'] },
+  { id: 'secondary-math', label: '고등 기본', href: 'school/03-secondary.html', children: ['실수', '다항식', '방정식', '함수', '삼각비', '통계'] },
+  { id: 'senior-math', label: '고등 심화', href: 'school/04-senior-secondary.html', children: ['집합·함수', '복소수', '조합', '기하', '미적분', '행렬·벡터'] },
   { id: 'calculus', label: '미적분', href: 'foundations/calculus.html', children: ['미분', '편미분', '그래디언트', '특이점'] },
   { id: 'notation', label: '집합과 기호', href: 'foundations/notation.html', children: ['집합', '함수', '관계', '동치류'] },
   { id: 'algebra', label: '대수학', href: 'foundations/algebra.html', children: ['군', '환', '아이디얼', '몫', '체'] },
@@ -31,6 +35,10 @@ export const journeys = {
   snova: { label: 'SNOVA 이해', root: 'crypto/04-pqc-candidates.html#snova' },
   uov: { label: 'UOV 이해', root: 'crypto/04-pqc-candidates.html#uov' },
   tls: { label: 'TLS 1.3 이해', root: 'crypto/05-tls-pki.html#client-hello' },
+  'primary-math': { label: '초등 수학 전체 연결', root: 'school/01-primary.html#counting' },
+  'middle-math': { label: '중등 수학 전체 연결', root: 'school/02-middle.html#integers' },
+  'secondary-math': { label: '고등 기본 수학 연결', root: 'school/03-secondary.html#real-numbers' },
+  'senior-math': { label: '고등 심화 수학 연결', root: 'school/04-senior-secondary.html#sets' },
   notation: { label: '집합과 수학 기호 이해', root: 'foundations/notation.html#집합과-원소' },
   algebra: { label: '대수학 구조 이해', root: 'foundations/algebra.html#연산이란-무엇인가' },
   calculus: { label: '미분과 편미분 이해', root: 'foundations/calculus.html#미분은-무엇을-재나' },
@@ -127,6 +135,41 @@ export const mathBranches = [
     { label: '차수·분리가능성', href: 'isogeny/03-isogenies.html#차수와-분리가능성' },
     { label: '쌍대 아이소제니', href: 'isogeny/03-isogenies.html#쌍대-isogeny' },
     { label: '아이소제니 그래프', href: 'isogeny/03-isogenies.html#isogeny-그래프' }
+  ] }
+];
+
+export const schoolBranches = [
+  { label: '초등 수학', journey: 'primary-math', nodes: [
+    { label: '수 세기·자릿값', href: 'school/01-primary.html#counting' },
+    { label: '사칙연산·약수', href: 'school/01-primary.html#operations' },
+    { label: '분수·소수·비율', href: 'school/01-primary.html#fractions' },
+    { label: '규칙·측정', href: 'school/01-primary.html#patterns' },
+    { label: '도형·대칭', href: 'school/01-primary.html#geometry' },
+    { label: '자료·가능성', href: 'school/01-primary.html#data' }
+  ] },
+  { label: '중등 수학', journey: 'middle-math', nodes: [
+    { label: '정수·유리수·거듭제곱', href: 'school/02-middle.html#integers' },
+    { label: '대수식·일차방정식', href: 'school/02-middle.html#expressions' },
+    { label: '비례·좌표·그래프', href: 'school/02-middle.html#ratio-proportion' },
+    { label: '삼각형·사각형·측정', href: 'school/02-middle.html#triangles' },
+    { label: '통계·확률', href: 'school/02-middle.html#statistics' },
+    { label: '추측·반례·증명', href: 'school/02-middle.html#proof' }
+  ] },
+  { label: '고등 기본', journey: 'secondary-math', nodes: [
+    { label: '실수·다항식', href: 'school/03-secondary.html#real-numbers' },
+    { label: '연립·이차방정식', href: 'school/03-secondary.html#linear-systems' },
+    { label: '수열·함수', href: 'school/03-secondary.html#sequences' },
+    { label: '좌표·유클리드 기하', href: 'school/03-secondary.html#coordinate-geometry' },
+    { label: '삼각비·원', href: 'school/03-secondary.html#trigonometry' },
+    { label: '통계·확률', href: 'school/03-secondary.html#statistics' }
+  ] },
+  { label: '고등 심화', journey: 'senior-math', nodes: [
+    { label: '집합·관계·함수', href: 'school/04-senior-secondary.html#sets' },
+    { label: '삼각함수·복소수', href: 'school/04-senior-secondary.html#trigonometric-functions' },
+    { label: '조합·이항정리·수열', href: 'school/04-senior-secondary.html#counting' },
+    { label: '원뿔곡선·3차원 기하', href: 'school/04-senior-secondary.html#analytic-geometry' },
+    { label: '극한·미분·적분', href: 'school/04-senior-secondary.html#limits' },
+    { label: '행렬·벡터·확률', href: 'school/04-senior-secondary.html#matrices' }
   ] }
 ];
 

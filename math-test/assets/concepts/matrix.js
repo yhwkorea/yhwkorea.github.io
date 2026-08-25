@@ -1,0 +1,1 @@
+export default {id:'matrix',title:'행렬',terms:['행렬','matrix'],summary:'수나 식을 직사각형으로 배열해 선형변환과 연립방정식을 표현합니다.',target:'school/04-senior-secondary.html#matrices',prerequisites:['function'],why:'많은 선형 관계를 한 객체로 계산합니다.',example:'2×2 행렬은 평면의 회전·확대·찌그러뜨리기를 나타낼 수 있습니다.',formal:'m×n 행렬은 체 F의 원소를 갖는 함수 {1,…,m}×{1,…,n}→F입니다.',usedIn:['선형대수','그래프','암호 구현']};

@@ -1,0 +1,1 @@
+export default {id:'linear-equation',title:'일차방정식',terms:['일차방정식','linear equation'],summary:'미지수의 최고차항이 1차인 등식에서 등식을 참으로 만드는 값을 찾는 문제입니다.',target:'school/02-middle.html#linear-equation',prerequisites:['function'],why:'말로 주어진 일정한 변화 관계를 식으로 풀기 위해 사용합니다.',example:'3x+2=11의 양변에서 2를 빼고 3으로 나누면 x=3입니다.',formal:'체 위에서 ax+b=0(a≠0)은 유일한 해 x=-b/a를 갖습니다.',usedIn:['연립방정식','직선','선형대수']};

@@ -1,0 +1,1 @@
+export default {id:'fraction',title:'분수',terms:['분수','fraction'],summary:'전체를 같은 크기로 나눈 조각 수, 두 수의 비 또는 나눗셈 결과를 나타내는 수입니다.',target:'school/01-primary.html#fractions',prerequisites:[],why:'자연수로 끝나지 않는 나눗셈과 부분의 크기를 표현합니다.',example:'1/2과 1/3을 더할 때 조각 크기를 1/6로 맞추면 3/6+2/6=5/6입니다.',formal:'b≠0인 정수 a,b의 순서쌍 (a,b)를 동치관계로 묶어 a/b를 정의합니다.',usedIn:['유리수','비율','확률','평균']};

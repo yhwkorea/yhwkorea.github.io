@@ -1,4 +1,4 @@
-import { cryptoBranches, mathBranches, journeys, areaForPath } from './site-map.js';
+import { cryptoBranches, schoolBranches, mathBranches, journeys, areaForPath } from './site-map.js';
 import { getJourney, startJourney, descend, reconcile, returnTo, endJourney, subscribe } from './journey-store.js';
 
 if (!window.PQCJourney) {
@@ -82,8 +82,9 @@ if (!window.PQCJourney) {
         return map;
       };
       const cryptoTitle = document.createElement('h3'); cryptoTitle.textContent = '현대 암호학 가지';
-      const mathTitle = document.createElement('h3'); mathTitle.textContent = '수학 기초 가지';
-      body.append(heading, cryptoTitle, makeBranchMap(cryptoBranches, '암호학'), mathTitle, makeBranchMap(mathBranches, '수학'));
+      const schoolTitle = document.createElement('h3'); schoolTitle.textContent = '초·중·고 수학 가지';
+      const mathTitle = document.createElement('h3'); mathTitle.textContent = '대학 수학·암호 선수개념';
+      body.append(heading, cryptoTitle, makeBranchMap(cryptoBranches, '암호학'), schoolTitle, makeBranchMap(schoolBranches, '학교 수학'), mathTitle, makeBranchMap(mathBranches, '수학'));
     } else if (!journey) {
       body.innerHTML = '<strong>시작한 학습 경로가 없습니다.</strong><p>전체 지도에서 관심 있는 암호나 수학 개념 옆의 ‘경로 시작’을 누르세요.</p>';
     } else {

@@ -1,0 +1,1 @@
+export default {id:'real-number',title:'실수',terms:['실수','real number'],summary:'유리수와 무리수를 함께 포함하며 수직선을 빈틈없이 채우는 수 체계입니다.',target:'school/03-secondary.html#real-numbers',prerequisites:['rational-number'],why:'√2와 극한값처럼 유리수로 표현되지 않는 양을 다룹니다.',example:'√2는 분수로 쓸 수 없지만 수직선의 한 점입니다.',formal:'R은 완비 순서체이며 모든 비어 있지 않고 위로 유계인 부분집합이 상한을 갖습니다.',usedIn:['극한','미적분','좌표기하','확률']};

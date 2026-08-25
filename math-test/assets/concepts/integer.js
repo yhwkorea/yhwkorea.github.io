@@ -1,0 +1,1 @@
+export default {id:'integer',title:'정수',terms:['정수','integer'],summary:'자연수와 0, 음수를 모두 포함하는 수 체계입니다.',target:'school/02-middle.html#integers',prerequisites:[],why:'작은 수에서 큰 수를 빼는 계산과 방향·손익을 일관되게 표현합니다.',example:'온도가 3도에서 5도 내려가면 3-5=-2도입니다.',formal:'정수환 Z는 자연수의 차를 동치류로 구성한 가환환입니다.',usedIn:['유리수','나머지 연산','다항식','지수']};

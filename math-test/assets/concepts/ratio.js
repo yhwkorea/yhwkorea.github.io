@@ -1,0 +1,1 @@
+export default {id:'ratio',title:'비와 비율',terms:['비율','비','ratio'],summary:'두 양을 덧셈의 차이가 아니라 곱셈적으로 비교하는 방법입니다.',target:'school/01-primary.html#ratio',prerequisites:['fraction'],why:'크기가 다른 집단·길이·가격을 같은 기준으로 비교합니다.',example:'성공 3회와 전체 5회의 비율은 3/5=60%입니다.',formal:'기준량 b≠0에 대한 비교량 a의 비율을 몫 a/b로 나타냅니다.',usedIn:['백분율','확률','기울기','닮음']};

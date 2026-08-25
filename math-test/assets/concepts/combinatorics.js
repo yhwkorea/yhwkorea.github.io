@@ -1,0 +1,1 @@
+export default {id:'combinatorics',title:'순열과 조합',terms:['순열','조합','combinatorics'],summary:'가능한 배열과 선택을 중복 없이 세는 방법입니다.',target:'school/04-senior-secondary.html#counting',prerequisites:['set'],why:'확률의 표본공간과 알고리즘 경우의 수를 계산합니다.',example:'n개 중 순서 없이 r개를 고르는 수는 n!/(r!(n-r)!)입니다.',formal:'유한집합의 단사 배열과 r-부분집합의 cardinality를 계산합니다.',usedIn:['확률','이항정리','그래프','암호 키 공간']};

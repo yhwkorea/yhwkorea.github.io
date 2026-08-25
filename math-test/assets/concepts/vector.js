@@ -1,0 +1,1 @@
+export default {id:'vector',title:'벡터',terms:['벡터','vector'],summary:'크기와 방향 또는 선형공간의 한 원소를 나타냅니다.',target:'school/04-senior-secondary.html#vectors',prerequisites:['function'],why:'위치·힘·데이터와 선형 결합을 같은 언어로 다룹니다.',example:'(1,2)+(3,-1)=(4,1)입니다.',formal:'벡터는 체 위 벡터공간의 원소이며 덧셈과 스칼라곱 공리를 만족합니다.',usedIn:['행렬','격자','기하','미분']};

@@ -1,0 +1,1 @@
+export default {id:'integral',title:'적분',terms:['적분','integral'],summary:'작은 구간의 기여를 합한 극한이며 미분의 역연산과 연결됩니다.',target:'school/04-senior-secondary.html#integrals',prerequisites:['limit','derivative'],why:'넓이·누적량·평균과 확률을 계산합니다.',example:'0부터 1까지 x를 적분한 값은 삼각형 넓이 1/2입니다.',formal:'Riemann 적분은 분할의 mesh가 0으로 갈 때 Riemann 합의 극한입니다.',usedIn:['미분방정식','확률밀도','해석학']};
