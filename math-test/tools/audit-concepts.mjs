@@ -32,7 +32,11 @@ const utilityNavPages = new Set([
   'crypto/01-symmetric-hash.html', 'crypto/02-key-establishment.html',
   'crypto/03-signatures.html', 'crypto/04-pqc-candidates.html', 'crypto/05-tls-pki.html',
   'school/01-primary.html', 'school/02-middle.html',
-  'school/03-secondary.html', 'school/04-senior-secondary.html'
+  'school/03-secondary.html', 'school/04-senior-secondary.html',
+  'university/01-linear-algebra.html', 'university/02-probability.html',
+  'university/03-real-analysis.html', 'university/04-number-theory.html',
+  'university/05-discrete-math.html', 'university/06-differential-equations.html',
+  'university/07-topology.html', 'university/08-complex-analysis.html'
 ]);
 const scalarFields = ['id', 'title', 'summary', 'target', 'why', 'example', 'formal'];
 const arrayFields = ['terms', 'prerequisites', 'usedIn'];

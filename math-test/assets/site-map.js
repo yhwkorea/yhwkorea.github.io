@@ -4,7 +4,14 @@ export const globalAreas = [
   { id: 'middle-math', label: '중등 수학', href: 'school/02-middle.html', children: ['정수·유리수', '대수식', '방정식', '좌표', '기하', '확률'] },
   { id: 'secondary-math', label: '고등 기본', href: 'school/03-secondary.html', children: ['실수', '다항식', '방정식', '함수', '삼각비', '통계'] },
   { id: 'senior-math', label: '고등 심화', href: 'school/04-senior-secondary.html', children: ['집합·함수', '복소수', '조합', '기하', '미적분', '행렬·벡터'] },
-  { id: 'linear-algebra', label: '선형대수학', href: 'linear-algebra/linear-algebra-answers.html', children: ['벡터', '행렬', '선형변환', '고유값'] },
+  { id: 'linear-algebra', label: '선형대수학', href: 'university/01-linear-algebra.html', children: ['벡터공간', '행렬', '선형변환', '고유값'] },
+  { id: 'probability', label: '확률론', href: 'university/02-probability.html', children: ['사건', '조건부확률', '확률변수', '극한정리'] },
+  { id: 'real-analysis', label: '실해석학', href: 'university/03-real-analysis.html', children: ['수열', '극한', '연속', '적분'] },
+  { id: 'number-theory', label: '정수론', href: 'university/04-number-theory.html', children: ['나눗셈', '소수', '합동식', '유한체'] },
+  { id: 'discrete-math', label: '이산수학', href: 'university/05-discrete-math.html', children: ['논리', '조합', '그래프', '알고리즘'] },
+  { id: 'differential-equations', label: '미분방정식', href: 'university/06-differential-equations.html', children: ['1계', '2계', 'Laplace', '동역학계'] },
+  { id: 'topology', label: '위상수학', href: 'university/07-topology.html', children: ['열린집합', '연속', '콤팩트성', '기본군'] },
+  { id: 'complex-analysis', label: '복소해석학', href: 'university/08-complex-analysis.html', children: ['정칙함수', '복소적분', '급수', '유수'] },
   { id: 'calculus', label: '미적분', href: 'foundations/calculus.html', children: ['미분', '편미분', '그래디언트', '특이점'] },
   { id: 'notation', label: '집합과 기호', href: 'foundations/notation.html', children: ['집합', '함수', '관계', '동치류'] },
   { id: 'algebra', label: '추상대수학', href: 'foundations/algebra.html', children: ['군', '환', '아이디얼', '몫', '체'] },
@@ -95,8 +102,22 @@ export const cryptoBranches = [
 
 export const mathBranches = [
   { label: '선형대수학', nodes: [
-    { label: '벡터·행렬·선형변환', href: 'linear-algebra/linear-algebra-answers.html' },
-    { label: '고유값·스펙트럼', href: 'linear-algebra/linear-algebra-answers.html' }
+    { label: '벡터공간·선형변환', href: 'university/01-linear-algebra.html#vector-spaces' },
+    { label: '고유값·SVD', href: 'university/01-linear-algebra.html#eigenvalues' }
+  ] },
+  { label: '확률론', nodes: [
+    { label: '조건부확률·Bayes', href: 'university/02-probability.html#conditional' },
+    { label: '확률변수·극한정리', href: 'university/02-probability.html#random-variables' }
+  ] },
+  { label: '해석학', nodes: [
+    { label: '실해석학', href: 'university/03-real-analysis.html#sequences' },
+    { label: '복소해석학', href: 'university/08-complex-analysis.html#holomorphic' },
+    { label: '미분방정식', href: 'university/06-differential-equations.html#models' }
+  ] },
+  { label: '이산·구조 수학', nodes: [
+    { label: '정수론', href: 'university/04-number-theory.html#divisibility' },
+    { label: '이산수학', href: 'university/05-discrete-math.html#logic' },
+    { label: '위상수학', href: 'university/07-topology.html#open-sets' }
   ] },
   { label: '집합과 기호', journey: 'notation', nodes: [
     { label: '집합·원소', href: 'foundations/notation.html#집합과-원소' },

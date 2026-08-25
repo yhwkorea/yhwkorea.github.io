@@ -1,0 +1,1 @@
+export default {id:'divisibility',title:'나눗셈 관계',terms:['나눗셈 관계','나눔','divisibility'],summary:'a가 b를 나눈다는 것은 b가 a의 정수배라는 뜻입니다.',target:'university/04-number-theory.html#divisibility',prerequisites:['integer','relation'],why:'약수·소수·최대공약수·합동식의 출발점입니다.',example:'3|12이지만 5∤12입니다.',formal:'정수 a,b에 대해 어떤 k∈Z가 존재하여 b=ak이면 a|b라 씁니다.',usedIn:['소수','gcd','합동식','아이디얼']};
