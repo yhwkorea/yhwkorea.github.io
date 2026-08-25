@@ -34,61 +34,110 @@
     try { return JSON.parse(sessionStorage.getItem(pathKey) || 'null'); } catch (_) { return null; }
   };
   const writePath = (value) => sessionStorage.setItem(pathKey, JSON.stringify(value));
+  const pageTitles = [
+    ['foundations/cryptography.html', '전자서명'],
+    ['foundations/calculus.html', '미분과 편미분'],
+    ['foundations/notation.html', '집합과 기호'],
+    ['foundations/algebra.html', '대수학'],
+    ['isogeny/01-finite-fields.html', '유한체'],
+    ['isogeny/02-elliptic-curves.html', '타원곡선'],
+    ['isogeny/03-isogenies.html', '아이소제니'],
+    ['isogeny/isogeny-textbook.html', 'SQIsign 전체 흐름']
+  ];
+  const currentPageTitle = pageTitles.find(([path]) => location.pathname.endsWith(path))?.[1] || document.title;
   let learningPath = readPath();
-  if (!learningPath && document.body.dataset.learningGoal) {
+  if (!learningPath) {
     learningPath = {
-      goal: document.body.dataset.learningGoal,
-      trail: [{ title: document.body.dataset.learningRoot || document.title, href: location.href }]
+      goal: document.body.dataset.learningGoal || 'SQIsign 이해',
+      trail: [{ title: 'SQIsign 전체 흐름', href: new URL('isogeny/isogeny-textbook.html', new URL('../', location.href)).href }]
     };
+    if (currentPageTitle !== 'SQIsign 전체 흐름') learningPath.trail.push({
+      title: currentPageTitle,
+      href: location.href,
+      reason: '이 개념 페이지에서 학습을 시작했습니다.'
+    });
     writePath(learningPath);
   }
-  document.querySelectorAll('[data-learning-link]').forEach((link) => {
-    link.addEventListener('click', () => {
-      const path = readPath() || {
-        goal: document.body.dataset.learningGoal || 'SQIsign 이해',
-        trail: [{ title: document.body.dataset.learningRoot || document.title, href: location.href }]
-      };
-      path.trail.push({
-        title: link.dataset.learningTitle || link.textContent.trim(),
-        href: link.href,
-        returnHref: location.href,
-        reason: link.dataset.learningReason || '원래 설명에서 낯선 개념을 확인하기 위해'
-      });
-      writePath(path);
+
+  const pushPath = ({ title, href, reason }) => {
+    const path = readPath() || learningPath;
+    path.trail.push({ title, href, returnHref: location.href, reason });
+    writePath(path);
+  };
+  window.PQCLearningPath = { push: pushPath };
+  document.addEventListener('click', (event) => {
+    const link = event.target.closest('[data-learning-link]');
+    if (!link) return;
+    pushPath({
+      title: link.dataset.learningTitle || link.textContent.trim(),
+      href: link.href,
+      reason: link.dataset.learningReason || '원래 설명에서 낯선 개념을 확인하기 위해'
     });
   });
 
   if (learningPath) {
+    const mapBranches = [
+      ['암호학', '전자서명', '해시'],
+      ['곡선의 언어', '유한체', '타원곡선', '아이소제니'],
+      ['서명 흐름', 'Commitment', 'Challenge', 'Response'],
+      ['비밀 계산', '엔도모피즘', '사원수 아이디얼', 'KLPT']
+    ];
     const nav = document.createElement('aside');
     nav.className = 'learning-float';
     const toggle = document.createElement('button');
     toggle.type = 'button';
     toggle.className = 'learning-float-toggle';
-    toggle.setAttribute('aria-expanded', 'false');
-    toggle.innerHTML = `<span>경로</span><b>${learningPath.trail.length - 1}</b>`;
+    const compactMap = matchMedia('(max-width: 620px)').matches;
+    toggle.setAttribute('aria-expanded', String(!compactMap));
+    toggle.innerHTML = compactMap
+      ? `<span>SQIsign › ${learningPath.trail.at(-1).title}</span><b aria-hidden="true">+</b>`
+      : '<span>지도</span><b aria-hidden="true">−</b>';
     const panel = document.createElement('div');
     panel.className = 'learning-float-panel';
-    panel.hidden = true;
+    panel.hidden = compactMap;
     panel.setAttribute('role', 'region');
     panel.setAttribute('aria-label', '현재 학습 경로');
     const goal = document.createElement('small');
     goal.textContent = `목표 · ${learningPath.goal}`;
     const title = document.createElement('strong');
-    title.textContent = learningPath.trail.at(-1).title;
+    title.textContent = '전체 지도';
+    const overview = document.createElement('ul');
+    overview.className = 'learning-overview';
+    const activeNames = learningPath.trail.map((step) => step.title.toLocaleLowerCase('ko'));
+    mapBranches.forEach(([branch, ...nodes]) => {
+      const item = document.createElement('li');
+      const label = document.createElement('b');
+      label.textContent = branch;
+      const chain = document.createElement('span');
+      nodes.forEach((node, index) => {
+        if (index) chain.append(' → ');
+        const nodeLabel = document.createElement('i');
+        nodeLabel.textContent = node;
+        if (activeNames.some((name) => name.includes(node.toLocaleLowerCase('ko')))) nodeLabel.className = 'is-active';
+        chain.append(nodeLabel);
+      });
+      item.append(label, chain);
+      overview.append(item);
+    });
+    const trailLabel = document.createElement('h3');
+    trailLabel.textContent = '내가 내려온 길';
     const list = document.createElement('ol');
+    list.className = 'learning-trail';
     learningPath.trail.forEach((step, index) => {
       const item = document.createElement('li');
-      item.textContent = step.title;
+      const stepTitle = document.createElement('span');
+      stepTitle.textContent = step.title;
+      item.append(stepTitle);
+      if (step.reason) {
+        const reason = document.createElement('small');
+        reason.textContent = step.reason;
+        item.append(reason);
+      }
       if (index === learningPath.trail.length - 1) item.setAttribute('aria-current', 'step');
       list.append(item);
     });
-    panel.append(goal, title, list);
+    panel.append(goal, title, overview, trailLabel, list);
     const currentStep = learningPath.trail.at(-1);
-    if (currentStep.reason) {
-      const reason = document.createElement('p');
-      reason.textContent = `왜 여기 있나요? ${currentStep.reason}`;
-      panel.append(reason);
-    }
     if (learningPath.trail.length > 1) {
       const back = document.createElement('a');
       back.className = 'learning-return';
@@ -106,12 +155,15 @@
     reset.textContent = '경로 지우기';
     reset.addEventListener('click', () => {
       sessionStorage.removeItem(pathKey);
-      nav.remove();
+      learningPath = { goal: 'SQIsign 이해', trail: [{ title: 'SQIsign 전체 흐름', href: location.href }] };
+      writePath(learningPath);
+      location.reload();
     });
     panel.append(reset);
     toggle.addEventListener('click', () => {
       panel.hidden = !panel.hidden;
       toggle.setAttribute('aria-expanded', String(!panel.hidden));
+      toggle.querySelector('b').textContent = panel.hidden ? '+' : '−';
     });
     nav.append(toggle, panel);
     document.body.append(nav);

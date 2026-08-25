@@ -102,6 +102,11 @@ function rememberDestination(link, term) {
     const destination = new URL(link.href);
     sessionStorage.setItem('glossary-target', destination.hash);
     sessionStorage.setItem('glossary-term', term);
+    window.PQCLearningPath?.push({
+      title: term,
+      href: link.href,
+      reason: `${document.title.replace(/\s*[—-].*$/, '')}에서 “${term}”이 낯설어서 내려왔습니다.`
+    });
   });
 }
 
