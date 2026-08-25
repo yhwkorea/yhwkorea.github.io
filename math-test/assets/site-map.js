@@ -4,13 +4,13 @@ export const globalAreas = [
   { id: 'middle-math', label: '중등 수학', href: 'school/02-middle.html', children: ['정수·유리수', '대수식', '방정식', '좌표', '기하', '확률'] },
   { id: 'secondary-math', label: '고등 기본', href: 'school/03-secondary.html', children: ['실수', '다항식', '방정식', '함수', '삼각비', '통계'] },
   { id: 'senior-math', label: '고등 심화', href: 'school/04-senior-secondary.html', children: ['집합·함수', '복소수', '조합', '기하', '미적분', '행렬·벡터'] },
+  { id: 'linear-algebra', label: '선형대수학', href: 'linear-algebra/linear-algebra-answers.html', children: ['벡터', '행렬', '선형변환', '고유값'] },
   { id: 'calculus', label: '미적분', href: 'foundations/calculus.html', children: ['미분', '편미분', '그래디언트', '특이점'] },
   { id: 'notation', label: '집합과 기호', href: 'foundations/notation.html', children: ['집합', '함수', '관계', '동치류'] },
-  { id: 'algebra', label: '대수학', href: 'foundations/algebra.html', children: ['군', '환', '아이디얼', '몫', '체'] },
+  { id: 'algebra', label: '추상대수학', href: 'foundations/algebra.html', children: ['군', '환', '아이디얼', '몫', '체'] },
   { id: 'finite-fields', label: '유한체', href: 'isogeny/01-finite-fields.html', children: ['나머지 연산', '확장체', 'Frobenius'] },
   { id: 'elliptic-curves', label: '타원곡선', href: 'isogeny/02-elliptic-curves.html', children: ['곡선', '무한원점', '군법칙', 'torsion'] },
   { id: 'isogeny', label: '아이소제니', href: 'isogeny/03-isogenies.html', children: ['사상', '커널', '차수', '그래프'] },
-  { id: 'sqisign', label: 'SQIsign', href: 'isogeny/isogeny-textbook.html', children: ['결과', '서명 흐름', '곡선 언어', '사원수 언어'] }
 ];
 
 export const journeys = {
@@ -40,7 +40,7 @@ export const journeys = {
   'secondary-math': { label: '고등 기본 수학 연결', root: 'school/03-secondary.html#real-numbers' },
   'senior-math': { label: '고등 심화 수학 연결', root: 'school/04-senior-secondary.html#sets' },
   notation: { label: '집합과 수학 기호 이해', root: 'foundations/notation.html#집합과-원소' },
-  algebra: { label: '대수학 구조 이해', root: 'foundations/algebra.html#연산이란-무엇인가' },
+  algebra: { label: '추상대수학 구조 이해', root: 'foundations/algebra.html#연산이란-무엇인가' },
   calculus: { label: '미분과 편미분 이해', root: 'foundations/calculus.html#미분은-무엇을-재나' },
   'finite-fields': { label: '유한체 이해', root: 'isogeny/01-finite-fields.html#체란-무엇인가' },
   'elliptic-curves': { label: '타원곡선 이해', root: 'isogeny/02-elliptic-curves.html#아핀평면과-대수곡선' },
@@ -94,6 +94,10 @@ export const cryptoBranches = [
 ];
 
 export const mathBranches = [
+  { label: '선형대수학', nodes: [
+    { label: '벡터·행렬·선형변환', href: 'linear-algebra/linear-algebra-answers.html' },
+    { label: '고유값·스펙트럼', href: 'linear-algebra/linear-algebra-answers.html' }
+  ] },
   { label: '집합과 기호', journey: 'notation', nodes: [
     { label: '집합·원소', href: 'foundations/notation.html#집합과-원소' },
     { label: '부분집합·집합 연산', href: 'foundations/notation.html#부분집합과-집합-연산' },
@@ -101,7 +105,7 @@ export const mathBranches = [
     { label: '함수·화살표', href: 'foundations/notation.html#함수와-화살표' },
     { label: '관계·동치류', href: 'foundations/notation.html#관계와-동치류-a' }
   ] },
-  { label: '대수학', journey: 'algebra', nodes: [
+  { label: '추상대수학', journey: 'algebra', nodes: [
     { label: '연산', href: 'foundations/algebra.html#연산이란-무엇인가' },
     { label: '군', href: 'foundations/algebra.html#군-연산-하나가-있는-구조' },
     { label: '환', href: 'foundations/algebra.html#환-덧셈과-곱셈이-함께-있는-구조' },
