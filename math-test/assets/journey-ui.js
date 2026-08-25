@@ -86,5 +86,10 @@ if (!window.PQCJourney) {
   addEventListener('pageshow', () => { reconcile(); render(); });
   addEventListener('popstate', () => { reconcile(); render(); });
   addEventListener('keydown', (event) => { if (event.key === 'Escape' && open) { open = false; render(); } });
+  document.addEventListener('pqc:open-atlas', (event) => {
+    open = true;
+    if (event.detail?.tab) tab = event.detail.tab;
+    render();
+  });
   render();
 }

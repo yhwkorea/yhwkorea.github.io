@@ -25,20 +25,10 @@ const reviewedNonConceptPhrases = new Set([
   '프로토콜이 아니라 깨지는 초안', '한 글자만 바뀌어도',
   '핵심 사실 (인용, Pizer 등).', '환 전체의 아무 원소를 곱해도'
 ]);
-const guideNavHrefs = [
-  '../index.html', '../foundations/cryptography.html', '../foundations/calculus.html',
-  '../foundations/notation.html', '../foundations/algebra.html', '../isogeny/01-finite-fields.html',
-  '../isogeny/02-elliptic-curves.html', '../isogeny/03-isogenies.html', '../isogeny/isogeny-textbook.html'
-];
-const activeGuideHref = new Map([
-  ['foundations/cryptography.html', '../foundations/cryptography.html'],
-  ['foundations/calculus.html', '../foundations/calculus.html'],
-  ['foundations/notation.html', '../foundations/notation.html'],
-  ['foundations/algebra.html', '../foundations/algebra.html'],
-  ['isogeny/01-finite-fields.html', '../isogeny/01-finite-fields.html'],
-  ['isogeny/02-elliptic-curves.html', '../isogeny/02-elliptic-curves.html'],
-  ['isogeny/03-isogenies.html', '../isogeny/03-isogenies.html'],
-  ['isogeny/isogeny-textbook.html', '../isogeny/isogeny-textbook.html']
+const utilityNavPages = new Set([
+  'foundations/cryptography.html', 'foundations/calculus.html', 'foundations/notation.html',
+  'foundations/algebra.html', 'isogeny/01-finite-fields.html', 'isogeny/02-elliptic-curves.html',
+  'isogeny/03-isogenies.html', 'isogeny/isogeny-textbook.html'
 ]);
 const scalarFields = ['id', 'title', 'summary', 'target', 'why', 'example', 'formal'];
 const arrayFields = ['terms', 'prerequisites', 'usedIn'];
@@ -138,19 +128,13 @@ for (const path of pages) {
     else ids.add(id);
   }
   pageData.set(path, { html, ids });
-  if (activeGuideHref.has(rel)) {
+  if (utilityNavPages.has(rel)) {
     const nav = html.match(/<nav>[\s\S]*?<\/nav>/)?.[0];
     if (!nav) errors.push(`${rel}: missing navigation`);
     else {
-      let previous = -1;
-      for (const href of guideNavHrefs) {
-        const position = nav.indexOf(`href="${href}"`);
-        if (position < 0) errors.push(`${rel}: navigation missing ${href}`);
-        else if (position <= previous) errors.push(`${rel}: navigation order mismatch at ${href}`);
-        previous = position;
-      }
-      const current = [...nav.matchAll(/<a\b[^>]*aria-current="page"[^>]*>/g)];
-      if (current.length !== 1 || !current[0][0].includes(`href="${activeGuideHref.get(rel)}"`)) errors.push(`${rel}: invalid active navigation item`);
+      if (!nav.includes('class="sidebar-home"') || !nav.includes('href="../index.html"')) errors.push(`${rel}: utility navigation missing home link`);
+      if (!nav.includes('class="sidebar-loading"')) errors.push(`${rel}: utility navigation missing loading state`);
+      if (/href="\.\.\/(?:foundations|isogeny)\//.test(nav)) errors.push(`${rel}: utility navigation must not contain fixed curriculum links`);
     }
   }
   for (const attribute of ['data-concept', 'data-concept-module']) {

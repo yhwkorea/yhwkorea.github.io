@@ -1,5 +1,6 @@
 const glossaryScript = document.currentScript;
 import('./journey-ui.js').catch((error) => console.error('학습 지도 초기화 실패', error));
+import('./sidebar-tools.js').catch((error) => console.error('왼쪽 탐색 도구 초기화 실패', error));
 Promise.all([import('./concepts/index.js'), import('./concept-catalog.js')]).then(([{ conceptsById, conceptsByTerm }, { areas }]) => {
 const assetBase = new URL('.', glossaryScript.src);
 const page = (path) => new URL(`../${path}`, assetBase).href;
