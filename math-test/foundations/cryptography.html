@@ -1,9 +1,22 @@
 <!doctype html>
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>암호학과 전자서명 — PQC 학습 가이드</title><link rel="stylesheet" href="../assets/katex/katex.min.css"><link rel="stylesheet" href="../assets/style.css?v=20260825-3"></head>
-<body data-chapter-view="true"><div class="layout"><aside class="sidebar"><div class="brand">PQC 학습 가이드</div><div class="brand-sub">결과에서 원리로 내려가기</div><nav><h5>학습 가이드</h5><ul><li><a href="../index.html">학습 홈</a></li><li><a href="../foundations/cryptography.html" class="active" aria-current="page">암호학과 전자서명</a></li><li><a href="../foundations/calculus.html">미분과 편미분</a></li><li><a href="../foundations/notation.html">집합과 기호</a></li><li><a href="../foundations/algebra.html">대수학</a></li><li><a href="../isogeny/01-finite-fields.html">유한체</a></li><li><a href="../isogeny/02-elliptic-curves.html">타원곡선</a></li><li><a href="../isogeny/03-isogenies.html">아이소제니</a></li><li><a href="../isogeny/isogeny-textbook.html">SQIsign</a></li></ul><h5>참고 자료</h5><ul><li><a href="../lattice/lattice-answers.html">Lattice 답안 (1–9)</a></li><li><a href="../algebra/algebra-answers.html">Algebra 답안 (1–16)</a></li><li><a href="../probability/probability-answers.html">Probability 답안 (1–10)</a></li><li><a href="../linear-algebra/linear-algebra-answers.html">Linear Algebra 답안 (1–17)</a></li><li><a href="../background/real-analysis.html">실해석학 보충</a></li></ul></nav></aside>
-<main class="content"><div class="content-inner"><div class="eyebrow">Cryptography foundations</div><h1 class="page-title">암호학과 전자서명</h1>
-<p class="page-sub">SQIsign이 해결하려는 문제부터 시작합니다. 아는 절은 건너뛰고, 낯선 개념만 펼쳐 보세요.</p>
+<title>현대 암호학 전체 지도 — PQC 학습 가이드</title><link rel="stylesheet" href="../assets/katex/katex.min.css"><link rel="stylesheet" href="../assets/style.css?v=20260825-4"></head>
+<body data-chapter-view="true"><div class="layout"><aside class="sidebar"><div class="brand">PQC 학습 가이드</div><div class="brand-sub">결과에서 원리로 내려가기</div><nav><h5>학습 가이드</h5><ul><li><a href="../index.html">학습 홈</a></li><li><a href="../foundations/cryptography.html" class="active" aria-current="page">현대 암호학</a></li><li><a href="../foundations/calculus.html">미분과 편미분</a></li><li><a href="../foundations/notation.html">집합과 기호</a></li><li><a href="../foundations/algebra.html">대수학</a></li><li><a href="../isogeny/01-finite-fields.html">유한체</a></li><li><a href="../isogeny/02-elliptic-curves.html">타원곡선</a></li><li><a href="../isogeny/03-isogenies.html">아이소제니</a></li><li><a href="../isogeny/isogeny-textbook.html">SQIsign</a></li></ul><h5>참고 자료</h5><ul><li><a href="../lattice/lattice-answers.html">Lattice 답안 (1–9)</a></li><li><a href="../algebra/algebra-answers.html">Algebra 답안 (1–16)</a></li><li><a href="../probability/probability-answers.html">Probability 답안 (1–10)</a></li><li><a href="../linear-algebra/linear-algebra-answers.html">Linear Algebra 답안 (1–17)</a></li><li><a href="../background/real-analysis.html">실해석학 보충</a></li></ul></nav></aside>
+<main class="content"><div class="content-inner"><div class="eyebrow">현대 암호학</div><h1 class="page-title">무엇을 지키고, 어떤 도구를 쓰는가</h1>
+<p class="page-sub">암호학 전체가 SQIsign으로 향하는 것은 아닙니다. 먼저 필요한 보안 성질을 고르고, 그 성질을 만드는 표준 도구를 구분합니다.</p>
+
+<section class="crypto-atlas" aria-labelledby="crypto-atlas-title">
+<h2 id="crypto-atlas-title">암호학 전체 지도</h2>
+<div class="crypto-atlas-grid">
+<div><b>비밀로 전송</b><span>대칭 암호 · AEAD</span><small>AES-GCM, ChaCha20-Poly1305</small></div>
+<div><b>변조 확인</b><span>해시 · MAC</span><small>SHA-2/3, HMAC, CMAC, KMAC</small></div>
+<div><b>열쇠 합의</b><span>키 교환 · KEM · KDF</span><small>(EC)DH, ML-KEM, HKDF</small></div>
+<div><b>누가 보냈나</b><span>전자서명 · 인증서</span><small>RSA-PSS, ECDSA, EdDSA, ML-DSA</small></div>
+<div><b>안전한 통신</b><span>프로토콜</span><small>TLS 1.3 = 위 도구들의 조합</small></div>
+<div><b>양자 이후</b><span>후양자암호</span><small>ML-KEM, ML-DSA, SLH-DSA · 연구 후보</small></div>
+</div>
+<p>이 지도에서 SQIsign은 마지막 칸의 여러 <b>후양자 전자서명 연구</b> 가운데 하나입니다. 암호학 전체의 출발점이나 모든 경로의 목적지가 아닙니다.</p>
+</section>
 
 <section class="signature-story" aria-label="전자서명의 실제 사용 과정">
   <div class="story-person"><span aria-hidden="true">👩‍💻</span><strong>개발자 지수</strong><small>업데이트 파일을 배포한다</small></div>
@@ -36,10 +49,55 @@
 <p>현재 널리 쓰이는 공개키 서명 중 RSA와 타원곡선 서명은 큰 정수의 인수분해나 이산로그 문제에 의존합니다. 충분히 큰 양자컴퓨터에서는 Shor 알고리즘이 이 문제들을 효율적으로 풀 수 있으므로 새로운 수학적 어려움에 기반한 서명이 필요합니다. 이것이 <strong data-concept="pqc">후양자암호(PQC)</strong>입니다.</p>
 <p>PQC는 “양자컴퓨터로 실행하는 암호”가 아니라, 보통 컴퓨터에서 실행하되 알려진 양자 공격에도 안전하도록 설계한 암호입니다.</p>
 
-<h2 id="sqisign의-기여">6. SQIsign은 여기서 무엇을 기여하나?</h2>
-<p>SQIsign도 입력과 출력만 보면 다른 전자서명과 같습니다. 비밀키로 메시지에 서명하고 공개키로 검증합니다. 차이는 그 안전성을 <strong>초특이 타원곡선 사이에서 숨겨진 Isogeny 구조를 찾기 어렵다</strong>는 문제에 둔다는 점입니다.</p>
-<p>따라서 먼저 기억할 것은 복잡한 곡선식이 아니라 이것입니다.</p>
-<div class="problem-block"><strong>SQIsign의 사용자 관점</strong><p>메시지와 비밀키를 넣으면 서명이 나오고, 메시지·서명·공개키를 넣으면 참/거짓이 나온다. Isogeny와 사원수 아이디얼은 이 기능을 안전하게 구현하기 위한 내부 수학이다.</p></div>
-<p><a class="primary-button" href="../isogeny/isogeny-textbook.html#먼저-sqisign-그림부터-읽자">이제 SQIsign 내부로 들어가기 →</a></p>
+<h2 id="대칭암호와-aead">6. 비밀로 보내기: 대칭 암호와 AEAD</h2>
+<p><strong data-concept="encryption">암호화</strong>는 평문을 키 없이는 읽기 어려운 암호문으로 바꿉니다. 같은 비밀키를 양쪽이 공유하는 방식이 대칭 암호이며, 표준 블록 암호의 대표가 AES입니다. AES-128·192·256은 모두 128비트 블록을 처리하고 이름의 숫자는 키 길이입니다.</p>
+<p>AES 한 블록만으로 긴 메시지를 안전하게 처리할 수는 없습니다. 실제 시스템은 운용 모드를 사용합니다. 현대적인 기본 선택은 암호화와 변조 검사를 함께 제공하는 <b>AEAD</b>이며, 대표적으로 AES-GCM과 ChaCha20-Poly1305가 있습니다.</p>
+<div class="warn-box"><span class="label">nonce는 장식이 아닙니다</span><p>같은 키에서 nonce를 잘못 재사용하면 GCM이나 ChaCha20-Poly1305의 안전성이 무너질 수 있습니다. “AES를 썼다”보다 키·nonce·태그를 어떤 규칙으로 관리했는지가 실제 안전성을 결정합니다.</p></div>
+
+<h2 id="해시-mac-kdf">7. 해시, MAC, KDF는 서로 다른 도구다</h2>
+<dl class="crypto-definitions">
+<dt>해시</dt><dd>임의 길이 입력을 고정 길이 지문으로 줄입니다. SHA-2와 SHA-3 계열이 표준입니다. 키가 없으므로 해시값만으로 누가 보냈는지는 증명하지 못합니다.</dd>
+<dt>MAC</dt><dd>공유 비밀키와 메시지로 인증 태그를 만듭니다. HMAC, CMAC, KMAC이 대표적입니다. 양쪽 모두 같은 키를 아니까 제3자에게 “누가 만들었는지” 증명하는 전자서명과는 다릅니다.</dd>
+<dt>KDF</dt><dd>초기 비밀에서 용도가 구분된 여러 키를 파생합니다. HKDF는 추출(Extract)과 확장(Expand)을 분리하며 TLS 1.3의 키 스케줄에도 사용됩니다.</dd>
+</dl>
+
+<h2 id="공개키-키교환-kem">8. 공개키 암호: 키 교환과 KEM</h2>
+<p>공개키 기술의 중요한 목적 중 하나는 처음 만난 두 사람이 통신용 대칭키를 마련하는 것입니다. 고전 방식에서는 유한체 또는 타원곡선 Diffie–Hellman으로 공동 비밀을 합의하고, KDF로 실제 통신 키를 만듭니다.</p>
+<p>KEM은 공개키로 캡슐화된 값과 공유 비밀을 만들고, 비밀키로 그 공유 비밀을 복원하는 인터페이스입니다. 큰 메시지를 KEM으로 직접 암호화하는 것이 아니라, KEM으로 얻은 짧은 공유 비밀에서 대칭키를 만들고 AEAD로 본문을 암호화합니다. NIST의 현재 표준 후양자 KEM은 <b>ML-KEM(FIPS 203)</b>입니다.</p>
+
+<h2 id="전자서명-표준">9. 전자서명에는 여러 계열이 있다</h2>
+<p>전자서명은 인증과 무결성을 공개키로 검증하게 합니다. 고전 NIST 표준 FIPS 186-5에는 RSA, ECDSA, EdDSA가 있으며, 이전 DSA는 기존 서명 검증 용도로만 남았습니다.</p>
+<table class="crypto-table"><thead><tr><th>계열</th><th>대표</th><th>기반과 상태</th></tr></thead><tbody>
+<tr><td>정수론</td><td>RSA-PSS</td><td>인수분해 문제 · 고전 표준</td></tr>
+<tr><td>타원곡선</td><td>ECDSA, EdDSA</td><td>이산로그 문제 · 고전 표준</td></tr>
+<tr><td>격자</td><td>ML-DSA</td><td>FIPS 204 · 후양자 표준</td></tr>
+<tr><td>해시 기반</td><td>SLH-DSA</td><td>FIPS 205 · 후양자 표준</td></tr>
+<tr><td>격자</td><td>FN-DSA(FALCON 계열)</td><td>FIPS 206 개발 중</td></tr>
+<tr><td>아이소제니</td><td>SQIsign</td><td>연구·후보 계열, NIST 표준 아님</td></tr>
+</tbody></table>
+
+<h2 id="인증서와-tls">10. 알고리즘을 묶어 통신으로 만드는 법</h2>
+<p>공개키 파일 하나만 받으면 그것이 정말 원하는 서버의 키인지 알 수 없습니다. X.509 인증서는 공개키와 이름을 인증기관의 서명으로 연결하고, 인증 경로 검증으로 신뢰의 사슬을 확인합니다.</p>
+<p>TLS 1.3은 하나의 암호 알고리즘이 아닙니다. 키 교환, 전자서명과 인증서, HKDF 키 스케줄, AEAD를 순서에 맞게 조립한 프로토콜입니다. 따라서 “AES를 안다”와 “안전한 웹 통신을 이해한다” 사이에는 키 교환·인증·키 파생·nonce 관리라는 층이 더 있습니다.</p>
+
+<h2 id="후양자-표준과-후보">11. 후양자 표준과 연구 후보를 구분하기</h2>
+<p>NIST는 2024년 ML-KEM(FIPS 203), ML-DSA(FIPS 204), SLH-DSA(FIPS 205)를 최종 표준으로 발표했습니다. HQC는 2025년 추가 KEM 표준화 대상으로 선정되었지만 아직 FIPS가 완성된 상태는 아니며, FN-DSA의 FIPS 206도 개발 중입니다.</p>
+<p><strong data-concept="pqc">후양자암호</strong>라는 분야 안에는 표준, 표준화 예정 알고리즘, 연구 후보, 깨진 제안이 함께 존재합니다. SIDH가 깨졌다고 모든 아이소제니 암호가 같은 방식으로 깨진 것은 아니지만, SQIsign 역시 현재 배포 표준으로 소개해서는 안 됩니다.</p>
+
+<h2 id="sqisign의-기여">12. SQIsign은 전체 지도에서 어디에 있나?</h2>
+<p>SQIsign은 <b>후양자 공개키 암호 → 전자서명 → 아이소제니 기반 연구</b> 경로에 있습니다. 대칭 암호, 해시, MAC, KEM을 대체하는 만능 암호가 아닙니다.</p>
+<div class="problem-block"><b>SQIsign의 사용자 관점</b><p>메시지와 비밀키를 넣으면 서명이 나오고, 메시지·서명·공개키를 넣으면 참/거짓이 나온다. 아이소제니와 사원수 아이디얼은 이 기능을 구현하기 위한 내부 수학입니다.</p></div>
+<p><a class="primary-button" href="../isogeny/isogeny-textbook.html#먼저-sqisign-그림부터-읽자" data-learning-link data-learning-start data-learning-title="SQIsign 전체 흐름" data-learning-reason="현대 암호학 지도에서 아이소제니 기반 전자서명을 선택했습니다.">SQIsign 경로 시작하기 →</a></p>
+
+<h2 id="공식-표준-출처">13. 공식 표준 원문</h2>
+<ul class="source-list">
+<li><a href="https://csrc.nist.gov/pubs/fips/197/final">NIST FIPS 197 — AES</a></li>
+<li><a href="https://csrc.nist.gov/pubs/fips/180-4/upd1/final">NIST FIPS 180-4 — SHA-2 계열</a> · <a href="https://csrc.nist.gov/pubs/fips/202/final">FIPS 202 — SHA-3</a></li>
+<li><a href="https://csrc.nist.gov/pubs/sp/800/38/d/final">NIST SP 800-38D — GCM/GMAC</a></li>
+<li><a href="https://csrc.nist.gov/pubs/fips/186-5/final">NIST FIPS 186-5 — RSA·ECDSA·EdDSA 서명</a></li>
+<li><a href="https://csrc.nist.gov/Projects/post-quantum-cryptography">NIST PQC — FIPS 203·204·205와 진행 상황</a></li>
+<li><a href="https://datatracker.ietf.org/doc/html/rfc8446">IETF RFC 8446 — TLS 1.3</a> · <a href="https://datatracker.ietf.org/doc/html/rfc5869">RFC 5869 — HKDF</a></li>
+<li><a href="https://datatracker.ietf.org/doc/html/rfc8439">RFC 8439 — ChaCha20-Poly1305</a> · <a href="https://datatracker.ietf.org/doc/html/rfc5280">RFC 5280 — X.509 PKI</a></li>
+</ul>
 </div></main></div>
-<script src="../assets/katex/katex.min.js"></script><script src="../assets/katex/auto-render.min.js"></script><script>renderMathInElement(document.body,{delimiters:[{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false},{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false}]});</script><script src="../assets/glossary.js?v=20260825-3"></script><script src="../assets/chapters.js?v=20260825-3"></script></body></html>
+<script src="../assets/katex/katex.min.js"></script><script src="../assets/katex/auto-render.min.js"></script><script>renderMathInElement(document.body,{delimiters:[{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false},{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false}]});</script><script src="../assets/glossary.js?v=20260825-4"></script><script src="../assets/chapters.js?v=20260825-4"></script></body></html>

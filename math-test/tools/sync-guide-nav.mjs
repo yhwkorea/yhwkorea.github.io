@@ -12,7 +12,7 @@ const pages = [
 ];
 const guideLinks = [
   ['home', '../index.html', '학습 홈'],
-  ['cryptography', '../foundations/cryptography.html', '암호학과 전자서명'],
+  ['cryptography', '../foundations/cryptography.html', '현대 암호학'],
   ['calculus', '../foundations/calculus.html', '미분과 편미분'],
   ['notation', '../foundations/notation.html', '집합과 기호'],
   ['algebra', '../foundations/algebra.html', '대수학'],

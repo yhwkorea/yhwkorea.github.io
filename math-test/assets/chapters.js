@@ -46,9 +46,16 @@
   ];
   const currentPageTitle = pageTitles.find(([path]) => location.pathname.endsWith(path))?.[1] || document.title;
   let learningPath = readPath();
-  if (!learningPath) {
+  if (learningPath?.trail?.length) {
+    const expectedPath = new URL(learningPath.trail.at(-1).href, location.href).pathname;
+    if (expectedPath !== location.pathname) {
+      sessionStorage.removeItem(pathKey);
+      learningPath = null;
+    }
+  }
+  if (!learningPath && document.body.dataset.learningGoal) {
     learningPath = {
-      goal: document.body.dataset.learningGoal || 'SQIsign 이해',
+      goal: document.body.dataset.learningGoal,
       trail: [{ title: 'SQIsign 전체 흐름', href: new URL('isogeny/isogeny-textbook.html', new URL('../', location.href)).href }]
     };
     if (currentPageTitle !== 'SQIsign 전체 흐름') learningPath.trail.push({
@@ -59,8 +66,13 @@
     writePath(learningPath);
   }
 
-  const pushPath = ({ title, href, reason }) => {
-    const path = readPath() || learningPath;
+  const pushPath = ({ title, href, reason, start = false }) => {
+    let path = readPath();
+    if (!path && start) path = {
+      goal: 'SQIsign 이해',
+      trail: [{ title: currentPageTitle, href: location.href }]
+    };
+    if (!path) return;
     path.trail.push({ title, href, returnHref: location.href, reason });
     writePath(path);
   };
@@ -71,7 +83,8 @@
     pushPath({
       title: link.dataset.learningTitle || link.textContent.trim(),
       href: link.href,
-      reason: link.dataset.learningReason || '원래 설명에서 낯선 개념을 확인하기 위해'
+      reason: link.dataset.learningReason || '원래 설명에서 낯선 개념을 확인하기 위해',
+      start: link.hasAttribute('data-learning-start')
     });
   });
 

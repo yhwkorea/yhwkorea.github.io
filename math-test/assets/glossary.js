@@ -2,6 +2,12 @@ const glossaryScript = document.currentScript;
 Promise.all([import('./concepts/index.js'), import('./concept-catalog.js')]).then(([{ conceptsById, conceptsByTerm }, { areas }]) => {
 const assetBase = new URL('.', glossaryScript.src);
 const page = (path) => new URL(`../${path}`, assetBase).href;
+document.addEventListener('click', (event) => {
+  const ordinaryNavigation = event.target.closest('.sidebar a, .area-card, .guide-card, .question-list a');
+  if (ordinaryNavigation && !ordinaryNavigation.matches('[data-learning-link]')) {
+    sessionStorage.removeItem('pqc-learning-path-v1');
+  }
+}, true);
 const areaByConcept = new Map();
 areas.forEach((area) => area.concepts.forEach((id) => {
   if (!areaByConcept.has(id)) areaByConcept.set(id, area);
