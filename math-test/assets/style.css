@@ -611,33 +611,37 @@ details.chapter.glossary-revealed {
    landing page: flat surfaces, restrained color, and hierarchy from type and
    rules rather than gradients, pills, and shadows. */
 :root {
-  --bg: #f4f1e9;
-  --surface: #faf8f2;
-  --surface-alt: #ece8de;
-  --ink: #171714;
-  --ink-soft: #55534d;
-  --ink-faint: #7b776e;
-  --border: #c9c3b6;
-  --accent: #263f52;
-  --accent-ink: #1e3546;
-  --accent-soft: #e3e6e5;
-  --warn: #8a3e2b;
-  --warn-soft: #eee1d9;
-  --cite: #665b3c;
-  --cite-soft: #ebe5d7;
+  --bg: #f5f7f7;
+  --surface: #ffffff;
+  --surface-alt: #e9eeee;
+  --ink: #182122;
+  --ink-soft: #4d5a5b;
+  --ink-faint: #788485;
+  --border: #c7d0d0;
+  --accent: #25696b;
+  --accent-ink: #175658;
+  --accent-soft: #deebeb;
+  --warn: #9a513e;
+  --warn-soft: #f1e4df;
+  --cite: #556a6b;
+  --cite-soft: #e5ecec;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #1b1b18;
-    --surface: #22221e;
-    --surface-alt: #2c2b26;
-    --ink: #efede5;
-    --ink-soft: #bbb7ad;
-    --ink-faint: #8d897f;
-    --border: #4b4941;
-    --accent: #a9bbc6;
-    --accent-ink: #c3d2da;
-    --accent-soft: #29343a;
+    --bg: #151b1c;
+    --surface: #1d2526;
+    --surface-alt: #273132;
+    --ink: #edf2f2;
+    --ink-soft: #b3c0c0;
+    --ink-faint: #859394;
+    --border: #3e4b4c;
+    --accent: #7eb9b9;
+    --accent-ink: #9bcaca;
+    --accent-soft: #233839;
+    --warn: #dc927d;
+    --warn-soft: #3b2b28;
+    --cite: #9aafaf;
+    --cite-soft: #263536;
   }
 }
 body {
