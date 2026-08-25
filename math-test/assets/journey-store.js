@@ -1,7 +1,7 @@
 import { journeys } from './site-map.js';
 
-const KEY = 'pqc-journey-v2';
-const OLD_KEY = 'pqc-learning-path-v1';
+const KEY = 'pqc-journey-v3';
+const OLD_KEYS = ['pqc-learning-path-v1', 'pqc-journey-v2'];
 const listeners = new Set();
 let state = load();
 
@@ -18,10 +18,10 @@ function validFrame(frame) {
 }
 
 function load() {
-  sessionStorage.removeItem(OLD_KEY);
+  OLD_KEYS.forEach((key) => sessionStorage.removeItem(key));
   try {
     const value = JSON.parse(sessionStorage.getItem(KEY) || 'null');
-    if (!value || value.schema !== 2 || !journeys[value.goalId] || !Array.isArray(value.frames) || !value.frames.every(validFrame)) {
+    if (!value || value.schema !== 3 || !journeys[value.goalId] || !Array.isArray(value.frames) || !value.frames.every(validFrame)) {
       sessionStorage.removeItem(KEY);
       return null;
     }
@@ -43,9 +43,9 @@ export function getJourney() { return state; }
 export function startJourney(goalId, origin = {}) {
   const goal = journeys[goalId];
   if (!goal) return;
-  const root = safeUrl(goal.root);
+  const root = safeUrl(new URL(`../${goal.root}`, import.meta.url).href);
   state = {
-    schema: 2,
+    schema: 3,
     goalId,
     status: 'active',
     startedAt: Date.now(),

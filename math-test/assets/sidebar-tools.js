@@ -1,5 +1,6 @@
 import { concepts } from './concepts/index.js';
 import { areaForPath } from './site-map.js';
+import { journeys } from './site-map.js';
 import { getJourney, subscribe } from './journey-store.js';
 
 const sidebar = document.querySelector('.sidebar');
@@ -78,7 +79,7 @@ if (sidebar && !sidebar.dataset.utilityReady) {
       const text = document.createElement('small'); text.textContent = '진행 중인 경로 없음'; host.append(text); return;
     }
     const current = journey.frames.at(-1);
-    const title = document.createElement('strong'); title.textContent = `SQIsign · ${journey.status === 'paused' ? '일시 중지' : `${journey.frames.length - 1}단계`}`;
+    const title = document.createElement('strong'); title.textContent = `${journeys[journey.goalId]?.label || '학습 경로'} · ${journey.status === 'paused' ? '일시 중지' : `${journey.frames.length - 1}단계`}`;
     const detail = document.createElement('small'); detail.textContent = current.label;
     const button = document.createElement('button'); button.type = 'button'; button.textContent = '내려온 길 보기';
     button.addEventListener('click', () => document.dispatchEvent(new CustomEvent('pqc:open-atlas', { detail: { tab: 'trail' } })));
