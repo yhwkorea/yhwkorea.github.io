@@ -1,4 +1,4 @@
-import { globalAreas, cryptoBranches, journeys, areaForPath } from './site-map.js';
+import { cryptoBranches, mathBranches, journeys, areaForPath } from './site-map.js';
 import { getJourney, startJourney, descend, reconcile, returnTo, endJourney, subscribe } from './journey-store.js';
 
 if (!window.PQCJourney) {
@@ -54,44 +54,38 @@ if (!window.PQCJourney) {
     if (tab === 'location') {
       const heading = document.createElement('strong');
       heading.textContent = current ? `현재 · ${current.label}` : '학습 자료 전체';
-      const cryptoTitle = document.createElement('h3'); cryptoTitle.textContent = '현대 암호학 가지';
-      const cryptoMap = document.createElement('div'); cryptoMap.className = 'crypto-map-branches';
-      cryptoBranches.forEach((branch) => {
-        const group = document.createElement('section');
-        const label = document.createElement('b'); label.textContent = branch.label;
-        const nodes = document.createElement('div');
-        branch.nodes.forEach((node) => {
-          const row = document.createElement('span');
-          const link = document.createElement('a'); link.href = new URL(`../${node.href}`, import.meta.url).href; link.textContent = node.label;
-          row.append(link);
-          if (node.journey) {
-            const start = document.createElement('button'); start.type = 'button'; start.textContent = '경로 시작';
-            start.setAttribute('aria-label', `${node.label} 학습 경로 시작`);
-            start.addEventListener('click', () => {
-              startJourney(node.journey, { href: location.href, reason: `전체 암호학 지도에서 ${node.label}을 선택했습니다.` });
-              location.href = link.href;
-            });
-            row.append(start);
-          }
-          nodes.append(row);
+      const makeBranchMap = (branches, context) => {
+        const map = document.createElement('div'); map.className = 'crypto-map-branches';
+        branches.forEach((branch) => {
+          const group = document.createElement('section');
+          if (branch.label === current?.label) group.className = 'active';
+          const label = document.createElement('b'); label.textContent = branch.label;
+          const nodes = document.createElement('div');
+          branch.nodes.forEach((node) => {
+            const row = document.createElement('span');
+            const link = document.createElement('a'); link.href = new URL(`../${node.href}`, import.meta.url).href; link.textContent = node.label;
+            row.append(link);
+            const journeyId = node.journey || branch.journey;
+            if (journeyId) {
+              const start = document.createElement('button'); start.type = 'button'; start.textContent = '경로 시작';
+              start.setAttribute('aria-label', `${node.label} 학습 경로 시작`);
+              start.addEventListener('click', () => {
+                startJourney(journeyId, { href: location.href, reason: `전체 ${context} 지도에서 ${node.label}을 선택했습니다.` });
+                location.href = link.href;
+              });
+              row.append(start);
+            }
+            nodes.append(row);
+          });
+          group.append(label, nodes); map.append(group);
         });
-        group.append(label, nodes); cryptoMap.append(group);
-      });
-      const otherTitle = document.createElement('h3'); otherTitle.textContent = '수학 기초와 연구 자료';
-      const list = document.createElement('ul'); list.className = 'atlas-area-list';
-      globalAreas.forEach((area) => {
-        if (area.id === 'cryptography') return;
-        const item = document.createElement('li');
-        if (area.id === current?.id) item.className = 'active';
-        const link = document.createElement('a');
-        link.href = new URL(`../${area.href}`, import.meta.url).href;
-        link.textContent = area.label;
-        const children = document.createElement('small'); children.textContent = area.children.join(' · ');
-        item.append(link, children); list.append(item);
-      });
-      body.append(heading, cryptoTitle, cryptoMap, otherTitle, list);
+        return map;
+      };
+      const cryptoTitle = document.createElement('h3'); cryptoTitle.textContent = '현대 암호학 가지';
+      const mathTitle = document.createElement('h3'); mathTitle.textContent = '수학 기초 가지';
+      body.append(heading, cryptoTitle, makeBranchMap(cryptoBranches, '암호학'), mathTitle, makeBranchMap(mathBranches, '수학'));
     } else if (!journey) {
-      body.innerHTML = '<strong>시작한 학습 경로가 없습니다.</strong><p>전체 지도에서 관심 있는 암호 옆의 ‘경로 시작’을 누르세요.</p>';
+      body.innerHTML = '<strong>시작한 학습 경로가 없습니다.</strong><p>전체 지도에서 관심 있는 암호나 수학 개념 옆의 ‘경로 시작’을 누르세요.</p>';
     } else {
       const heading = document.createElement('strong'); heading.textContent = `목표 · ${journeyMeta.label}`;
       const list = document.createElement('ol'); list.className = 'atlas-trail';

@@ -861,3 +861,4 @@ details.chapter[open] > summary h2::before { color: var(--warn); }
 @media(max-width:620px){body{padding-bottom:calc(64px + env(safe-area-inset-bottom))}.atlas-float{left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom))}.atlas-chip{width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.atlas-panel{position:fixed;left:0;right:0;bottom:0;width:auto;max-height:70dvh;border-radius:18px 18px 0 0;padding-bottom:calc(18px + env(safe-area-inset-bottom))}.crypto-map-branches>section{grid-template-columns:78px 1fr}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}.atlas-panel{transition:none!important}}
 .sidebar[data-utility-ready] nav{columns:1!important}
+.crypto-map-branches>section.active{margin:0 -6px;padding-left:6px;padding-right:6px;background:var(--accent-soft)}

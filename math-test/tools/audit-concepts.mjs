@@ -28,7 +28,9 @@ const reviewedNonConceptPhrases = new Set([
 const utilityNavPages = new Set([
   'foundations/cryptography.html', 'foundations/calculus.html', 'foundations/notation.html',
   'foundations/algebra.html', 'isogeny/01-finite-fields.html', 'isogeny/02-elliptic-curves.html',
-  'isogeny/03-isogenies.html', 'isogeny/isogeny-textbook.html'
+  'isogeny/03-isogenies.html', 'isogeny/isogeny-textbook.html',
+  'crypto/01-symmetric-hash.html', 'crypto/02-key-establishment.html',
+  'crypto/03-signatures.html', 'crypto/04-pqc-candidates.html', 'crypto/05-tls-pki.html'
 ]);
 const scalarFields = ['id', 'title', 'summary', 'target', 'why', 'example', 'formal'];
 const arrayFields = ['terms', 'prerequisites', 'usedIn'];
