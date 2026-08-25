@@ -82,6 +82,17 @@ import certificate from './certificate.js';
 import tls13 from './tls13.js';
 import mlDsa from './ml-dsa.js';
 import slhDsa from './slh-dsa.js';
+import hqc from './hqc.js';
+import fnDsa from './fn-dsa.js';
+import faest from './faest.js';
+import hawk from './hawk.js';
+import mayo from './mayo.js';
+import mqom from './mqom.js';
+import qrUov from './qr-uov.js';
+import sdith from './sdith.js';
+import snova from './snova.js';
+import uov from './uov.js';
+import ascon from './ascon.js';
 import subset from './subset.js';
 import injectiveFunction from './injective-function.js';
 import surjectiveFunction from './surjective-function.js';
@@ -114,7 +125,7 @@ import normalSubgroup from './normal-subgroup.js';
 import quotientGroup from './quotient-group.js';
 import func from './function.js';
 
-export const concepts = [publicKey, privateKey, authentication, integrity, encryption, entropy, drbg, nonce, blockCipher, aes, aead, hashFunction, mac, kdf, diffieHellman, kem, mlKem, digitalSignature, certificate, tls13, mlDsa, slhDsa, pqc, securityAssumption, sqisign, witness, commitment, challenge, response, identificationProtocol, fiatShamir, klpt, limit, slope, derivative, tangentLine, partialDerivative, gradient, characteristic, modularArithmetic, polynomial, irreduciblePolynomial, finiteField, extensionField, fieldAutomorphism, frobeniusMap, fieldNorm, affinePlane, projectivePlane, homogeneousPolynomial, algebraicCurve, singularPoint, smoothCurve, genus, discriminant, pointAtInfinity, rationalPoint, ellipticCurve, groupLaw, scalarMultiplication, algebraicClosure, jInvariant, torsion, rationalFunction, morphism, groupHomomorphism, functionField, separableMorphism, isogeny, kernel, degree, veluFormulas, dualIsogeny, galoisAction, graph, isogenyGraph, randomWalk, spectralGap, expanderGraph, ramanujanGraph, endomorphism, supersingular, quaternionAlgebra, order, quaternionIdeal, reducedNorm, deuringCorrespondence, set, element, subset, proposition, func, injectiveFunction, surjectiveFunction, binaryRelation, relation, equivalenceClass, binaryOperation, closureProperty, identityElement, inverseElement, group, abelianGroup, subgroup, normalSubgroup, quotientGroup, ring, commutativeRing, unit, zeroDivisor, integralDomain, ideal, principalIdeal, quotientRing, field];
+export const concepts = [publicKey, privateKey, authentication, integrity, encryption, entropy, drbg, nonce, blockCipher, aes, aead, hashFunction, mac, kdf, diffieHellman, kem, mlKem, digitalSignature, certificate, tls13, mlDsa, slhDsa, hqc, fnDsa, faest, hawk, mayo, mqom, qrUov, sdith, snova, uov, ascon, pqc, securityAssumption, sqisign, witness, commitment, challenge, response, identificationProtocol, fiatShamir, klpt, limit, slope, derivative, tangentLine, partialDerivative, gradient, characteristic, modularArithmetic, polynomial, irreduciblePolynomial, finiteField, extensionField, fieldAutomorphism, frobeniusMap, fieldNorm, affinePlane, projectivePlane, homogeneousPolynomial, algebraicCurve, singularPoint, smoothCurve, genus, discriminant, pointAtInfinity, rationalPoint, ellipticCurve, groupLaw, scalarMultiplication, algebraicClosure, jInvariant, torsion, rationalFunction, morphism, groupHomomorphism, functionField, separableMorphism, isogeny, kernel, degree, veluFormulas, dualIsogeny, galoisAction, graph, isogenyGraph, randomWalk, spectralGap, expanderGraph, ramanujanGraph, endomorphism, supersingular, quaternionAlgebra, order, quaternionIdeal, reducedNorm, deuringCorrespondence, set, element, subset, proposition, func, injectiveFunction, surjectiveFunction, binaryRelation, relation, equivalenceClass, binaryOperation, closureProperty, identityElement, inverseElement, group, abelianGroup, subgroup, normalSubgroup, quotientGroup, ring, commutativeRing, unit, zeroDivisor, integralDomain, ideal, principalIdeal, quotientRing, field];
 export const conceptsById = new Map(concepts.map((concept) => [concept.id, concept]));
 export const conceptsByTerm = new Map(concepts.flatMap((concept) => concept.terms.map((term) => [term.normalize('NFKC').toLocaleLowerCase('ko'), concept])));
 

@@ -1,0 +1,1 @@
+export default {id:'snova',title:'SNOVA',terms:['SNOVA'],summary:'다변수 이차방정식 문제에 기반한 NIST 추가 서명 3라운드 후보입니다.',target:'foundations/cryptography.html#추가-서명-후보',prerequisites:['digital-signature','pqc'],why:'작은 서명과 빠른 연산을 목표로 하는 다변수 설계를 평가합니다.',example:'2026년 NIST 추가 전자서명 3라운드 후보입니다.',formal:'비가환 ring 구조를 활용한 UOV 계열 다변수 서명입니다.',usedIn:['NIST 추가 서명','다변수 서명','PQC']};
