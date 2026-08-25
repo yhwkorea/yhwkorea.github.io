@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SQIsign — PQC 학습 가이드</title><link rel="stylesheet" href="../assets/katex/katex.min.css"><link rel="stylesheet" href="../assets/style.css?v=20260825-4"></head>
-<body data-chapter-view="true" data-learning-goal="SQIsign 이해" data-learning-root="SQIsign 전체 흐름"><div class="layout"><aside class="sidebar"><div class="brand">PQC 학습 가이드</div><div class="brand-sub">Isogeny에서 SQIsign까지</div><nav><h5>학습 가이드</h5><ul><li><a href="../index.html">학습 홈</a></li><li><a href="../foundations/cryptography.html">현대 암호학</a></li><li><a href="../foundations/calculus.html">미분과 편미분</a></li><li><a href="../foundations/notation.html">집합과 기호</a></li><li><a href="../foundations/algebra.html">대수학</a></li><li><a href="../isogeny/01-finite-fields.html">유한체</a></li><li><a href="../isogeny/02-elliptic-curves.html">타원곡선</a></li><li><a href="../isogeny/03-isogenies.html">아이소제니</a></li><li><a href="../isogeny/isogeny-textbook.html" class="active" aria-current="page">SQIsign</a></li></ul><h5>참고 자료</h5><ul><li><a href="../lattice/lattice-answers.html">Lattice 답안 (1–9)</a></li><li><a href="../algebra/algebra-answers.html">Algebra 답안 (1–16)</a></li><li><a href="../probability/probability-answers.html">Probability 답안 (1–10)</a></li><li><a href="../linear-algebra/linear-algebra-answers.html">Linear Algebra 답안 (1–17)</a></li><li><a href="../background/real-analysis.html">실해석학 보충</a></li></ul></nav></aside><main class="content"><div class="content-inner"><div class="eyebrow">Isogeny Foundations · SQIsign</div><h1 id="isogeny-기반-암호-처음-배우는-사람을-위한-챕터">Isogeny 기반 암호 — 처음 배우는 사람을 위한 챕터</h1>
+<title>SQIsign — PQC 학습 가이드</title><link rel="stylesheet" href="../assets/katex/katex.min.css"><link rel="stylesheet" href="../assets/style.css?v=20260825-5"></head>
+<body data-chapter-view="true"><div class="layout"><aside class="sidebar"><div class="brand">PQC 학습 가이드</div><div class="brand-sub">Isogeny에서 SQIsign까지</div><nav><h5>학습 가이드</h5><ul><li><a href="../index.html">학습 홈</a></li><li><a href="../foundations/cryptography.html">현대 암호학</a></li><li><a href="../foundations/calculus.html">미분과 편미분</a></li><li><a href="../foundations/notation.html">집합과 기호</a></li><li><a href="../foundations/algebra.html">대수학</a></li><li><a href="../isogeny/01-finite-fields.html">유한체</a></li><li><a href="../isogeny/02-elliptic-curves.html">타원곡선</a></li><li><a href="../isogeny/03-isogenies.html">아이소제니</a></li><li><a href="../isogeny/isogeny-textbook.html" class="active" aria-current="page">SQIsign</a></li></ul><h5>참고 자료</h5><ul><li><a href="../lattice/lattice-answers.html">Lattice 답안 (1–9)</a></li><li><a href="../algebra/algebra-answers.html">Algebra 답안 (1–16)</a></li><li><a href="../probability/probability-answers.html">Probability 답안 (1–10)</a></li><li><a href="../linear-algebra/linear-algebra-answers.html">Linear Algebra 답안 (1–17)</a></li><li><a href="../background/real-analysis.html">실해석학 보충</a></li></ul></nav></aside><main class="content"><div class="content-inner"><div class="eyebrow">Isogeny Foundations · SQIsign</div><h1 id="isogeny-기반-암호-처음-배우는-사람을-위한-챕터">Isogeny 기반 암호 — 처음 배우는 사람을 위한 챕터</h1>
 <p><strong>선행 지식:</strong> <code>~/pqc-guides/math-background/algebra/</code>의 유한체, <span class="math inline">\(\mathbb{Z}[i]\)</span> (Algebra 14). 이 챕터는 LWE/RLWE와 <strong>완전히 다른 수학 계열</strong>(타원곡선, 사원수대수)을 씁니다 — 격자를 몰라도 이 챕터만 따로 읽을 수 있습니다.</p>
 <p><strong>왜 이 챕터가 사용자의 기존 연구와 직결되는가:</strong> 아래 §6의 <span class="math inline">\(\mathbb{Z}[i]\)</span> 연결 지점이 바로 <span class="math inline">\(zi-sieve\)</span>/SQIsign 연구가 다루는 대상입니다. 이 챕터를 다 읽으면 그 연구가 전체 그림에서 어디에 있는지 보입니다.</p>
 <hr />
@@ -17,7 +17,7 @@
 <article class="learning-slide" hidden>
 <span class="slide-kicker">무엇이 움직이나</span>
 <h3>상태는 타원곡선, 화살표는 아이소제니입니다</h3>
-<p><span class="math inline">\(E_0,E_1,E_2,E_A\)</span>는 네 개의 상태이고, <span class="math inline">\(\varphi\)</span>는 상태 사이를 잇는 구조 보존 이동입니다. SQIsign은 비밀 이동을 드러내지 않고도 서명자가 그 구조를 안다는 사실을 보입니다.</p>
+<p><span class="math inline">\(E_0,E_{pk},E_{com},E_{chl}\)</span>는 네 개의 상태이고, <span class="math inline">\(\varphi\)</span>는 상태 사이를 잇는 구조 보존 이동입니다. SQIsign은 비밀 계산 자료를 드러내지 않고도 서명자가 그 구조를 안다는 사실을 보입니다.</p>
 <div class="slide-concepts">
 <a href="02-elliptic-curves.html#ef와-군법칙" data-learning-link data-learning-title="타원곡선" data-learning-reason="SQIsign 그림에서 E가 무엇인지 이해하기 위해">E가 낯설어요: 타원곡선</a>
 <a href="03-isogenies.html#isogeny의-정의" data-learning-link data-learning-title="아이소제니" data-learning-reason="SQIsign 그림의 화살표 φ를 이해하기 위해">φ가 낯설어요: 아이소제니</a>
@@ -26,7 +26,7 @@
 <article class="learning-slide" hidden>
 <span class="slide-kicker">서명 한 번의 흐름</span>
 <h3>임시 상태를 만들고, 메시지가 검사를 정하고, 비밀로 응답합니다</h3>
-<ol class="slide-steps"><li><b>Commitment</b><span>서명자가 임시 곡선 <span class="math inline">\(E_1\)</span>을 만듭니다.</span></li><li><b>Challenge</b><span>메시지와 <span class="math inline">\(E_1\)</span>의 해시가 목적지 <span class="math inline">\(E_2\)</span>를 정합니다.</span></li><li><b>Response</b><span>비밀 witness로 공개키 <span class="math inline">\(E_A\)</span>에서 같은 목적지에 도달합니다.</span></li></ol>
+<ol class="slide-steps"><li><b>Commitment</b><span>서명자가 기준곡선에서 임시 곡선 <span class="math inline">\(E_{com}\)</span>을 만듭니다.</span></li><li><b>Challenge</b><span>메시지와 commitment의 해시가 공개키 <span class="math inline">\(E_{pk}\)</span>에서 출발하는 검사 <span class="math inline">\(E_{pk}\to E_{chl}\)</span>를 정합니다.</span></li><li><b>Response</b><span>비밀 witness로 <span class="math inline">\(E_{com}\)</span>에서 같은 <span class="math inline">\(E_{chl}\)</span>에 도달하는 응답을 만듭니다.</span></li></ol>
 <p class="slide-choice">여기서는 세 단계의 역할만 잡고, 정확한 커널과 아이디얼 계산은 필요할 때 내려가면 됩니다.</p>
 </article>
 <article class="learning-slide" hidden>
@@ -36,22 +36,22 @@
 <div class="slide-concepts"><a href="#그림을-읽는-세-단계">세 단계 자세히 읽기</a><a href="#sqisign-개요-지식증명에서-서명까지">프로토콜 뼈대로 건너뛰기</a></div>
 </article>
 </section>
-<pre class="text"><code>              commitment                 challenge
-        E₀ ───── φ_com ─────▶ E₁ ───── φ_chall ─────▶ E₂
+<pre class="text"><code>                 secret                    challenge
+        E₀ ───── φ_sk ─────▶ E_pk ───── φ_chl ─────▶ E_chl
         │                                                ▲
-        │ φ_secret                                       │ φ_resp
+        │ φ_com                                          │ φ_rsp
         ▼                                                │
-        E_A ──────────────────────────────────────────────┘
-             공개키                                  서명에 담기는 응답</code></pre>
-<p>여기서 <span class="math inline">\(E_i\)</span>는 <a href="01-finite-fields.html">유한체 <span class="math inline">\(\mathbb F_{p^2}\)</span></a> 위의 <a href="02-elliptic-curves.html">타원곡선</a>이고, <span class="math inline">\(\varphi\)</span>는 곡선 사이의 <a href="03-isogenies.html">isogeny</a>입니다. 공개 기준점은 자기준동형사상환을 알고 있는 <span class="math inline">\((E_0,\mathrm{End}(E_0))\)</span>이고, 공개키는 곡선 <span class="math inline">\(E_A\)</span>입니다. 비밀키는 단순히 “숨겨 둔 경로 하나”라기보다 <span class="math inline">\(E_A\)</span>의 endomorphism ring으로 계산할 수 있게 해 주는 witness입니다. 실제 구현은 그 witness를 사원수 아이디얼과 보조 데이터로 저장합니다.</p>
+        E_com ────────────────────────────────────────────┘
+           commitment                         서명에 담기는 response</code></pre>
+<p>이 그림은 <strong>SQIsign v2.0.1</strong>의 방향입니다. <span class="math inline">\(E_i\)</span>는 <a href="01-finite-fields.html">유한체 <span class="math inline">\(\mathbb F_{p^2}\)</span></a> 위의 <a href="02-elliptic-curves.html">타원곡선</a>이고, <span class="math inline">\(\varphi\)</span>는 곡선 사이의 <a href="03-isogenies.html">아이소제니</a>입니다. 공개키는 <span class="math inline">\(E_{pk}\)</span>이고, 비밀키는 단순한 경로 문자열이 아니라 <span class="math inline">\(\mathrm{End}(E_{pk})\)</span>로 계산할 수 있게 하는 사원수 아이디얼과 보조 데이터입니다.</p>
 <h3 id="그림을-읽는-세-단계">그림을 읽는 세 단계</h3>
 <ol type="1">
-<li><strong data-concept="commitment">Commitment.</strong> 서명자는 무작위 아이디얼 <span class="math inline">\(I_{com}\)</span>을 곡선 쪽으로 옮겨 <span class="math inline">\(\varphi_{com}:E_0\to E_1\)</span>을 만든 뒤 <span class="math inline">\(E_1\)</span>만 공개합니다.</li>
-<li><strong data-concept="challenge">Challenge.</strong> 상호작용 프로토콜의 검증자 대신 해시가 <span class="math inline">\(K_{chall}=H(m,j(E_1))\in E_1[D_{chall}]\)</span>를 정합니다. 이 커널이 <span class="math inline">\(\varphi_{chall}:E_1\to E_2\)</span>를 결정하므로, 메시지나 commitment를 바꾸면 오른쪽 위 경로도 바뀝니다.</li>
-<li><strong data-concept="response">Response.</strong> 서명자는 비밀 witness를 사용해 <span class="math inline">\(E_A\to E_2\)</span>인 <span class="math inline">\(\varphi_{resp}\)</span>를 계산합니다. 검증자는 이를 복원해 실제 도착점이 challenge가 만든 <span class="math inline">\(E_2\)</span>인지 확인합니다.</li>
+<li><strong data-concept="commitment">Commitment.</strong> 서명자는 challenge를 보기 전에 무작위 <span class="math inline">\(\varphi_{com}:E_0\to E_{com}\)</span>을 만들고 <span class="math inline">\(E_{com}\)</span>을 고정합니다.</li>
+<li><strong data-concept="challenge">Challenge.</strong> 해시는 메시지와 commitment에서 공개키 곡선 출발의 <span class="math inline">\(\varphi_{chl}:E_{pk}\to E_{chl}\)</span>을 정합니다.</li>
+<li><strong data-concept="response">Response.</strong> 서명자는 비밀 witness를 사용해 <span class="math inline">\(\varphi_{rsp}:E_{com}\to E_{chl}\)</span>을 계산합니다. 최신판은 이 응답을 bounded-degree 아이소제니의 보간 데이터로 표현합니다.</li>
 </ol>
 <h3 id="가장-중요한-보안-함정">가장 중요한 보안 함정</h3>
-<p>“<span class="math inline">\(E_A\)</span>에서 <span class="math inline">\(E_2\)</span>로 가는 화살표를 냈으니 비밀을 안다”만으로는 부족합니다. 공격자가 애초에 <span class="math inline">\(E_A\to E_1\)</span>인 경로를 골라 commitment를 만들면, challenge를 뒤에 합성해 <span class="math inline">\(E_A\to E_2\)</span>를 비밀 없이 만들 수 있기 때문입니다. 따라서 실제 SQIsign은 challenge가 response의 부분-isogeny로 그대로 들어가지 못하게 하는 조건을 검증합니다. 이 조건이 빠진 단순한 사각형 그림은 <strong>프로토콜이 아니라 깨지는 초안</strong>입니다.</p>
+<p>사각형 모양만 맞춘다고 지식증명이 되는 것은 아닙니다. 공격자가 <span class="math inline">\(E_{pk}\to E_{com}\)</span>인 cheating commitment를 잡으면, 그 쌍대와 challenge를 합성해 비밀 없이 response처럼 보이는 화살표를 만들 수 있습니다. 실제 사양은 response가 challenge를 그대로 품는 퇴화된 구성이 되지 않도록 차수 조건과 검사를 둡니다.</p>
 <h3 id="이-뒤의-학습-순서">이 뒤의 학습 순서</h3>
 <ul>
 <li><a href="01-finite-fields.html">유한체</a>: 좌표와 연산이 사는 <span class="math inline">\(\mathbb F_p\)</span>, <span class="math inline">\(\mathbb F_{p^2}\)</span></li>
@@ -62,7 +62,7 @@
 <li>§5–6: endomorphism ring과 사원수 아이디얼 — 서명자가 응답을 계산하는 세계</li>
 <li>§7: Fiat–Shamir, 실제 commitment/challenge/response, 검증</li>
 </ul>
-<p>이 단원은 SQIsign 사양서 v2의 high-level protocol을 학습용으로 다시 배열한 것입니다. 현재 SQIsign은 NIST 추가 전자서명 공모 후보이며 아직 표준으로 확정된 알고리즘은 아닙니다.</p>
+<p>이 단원은 2025년 7월 공개된 SQIsign v2.0.1의 high-level protocol을 학습용으로 다시 배열한 것입니다. SQIsign은 NIST 추가 전자서명 공모 후보이며 아직 표준으로 확정된 알고리즘은 아닙니다.</p>
 <hr />
 <h2 id="왜-다른-수학이-필요한가">1. 왜 다른 수학이 필요한가</h2>
 <p>LWE/RLWE는 전부 “격자에서 짧은/가까운 벡터 찾기”라는 한 가지 어려움에 기댑니다. 만약 언젠가 격자 문제를 깨는 알고리즘(양자든 고전이든)이 나오면 그 계열 암호는 전부 한꺼번에 무너집니다. <strong>다른 수학적 기반을 가진 암호가 하나쯤 더 있으면</strong> 이런 위험을 분산시킬 수 있습니다 — 한쪽 가정이 깨져도 다른 쪽까지 한꺼번에 무너지진 않도록. Isogeny 기반 암호는 타원곡선들 사이의 <strong>아이소제니(isogeny) 그래프 위에서 길찾기</strong>가 어렵다는 사실에 기댑니다 — 격자와 무관한 문제입니다.</p>
@@ -88,7 +88,7 @@ E:\ y^2 = x^3+ax+b \qquad (a,b\in F,\ \ 4a^3+27b^2\neq0)
 <h2 id="isogeny-그래프">4. Isogeny 그래프</h2>
 <p>소수 <span class="math inline">\(\ell\)</span>을 고정하자 (<span class="math inline">\(\ell\neq p\)</span>, <span class="math inline">\(p\)</span>는 밑체의 특성). <strong><span class="math inline">\(\ell\)</span>-아이소제니 그래프</strong>: 꼭짓점은 곡선의 <span class="math inline">\(j\)</span>-불변량들, 간선은 차수 <span class="math inline">\(\ell\)</span>인 아이소제니들.</p>
 <p><strong>핵심 사실 (인용, Pizer 등).</strong> <span class="math inline">\(E\)</span>가 <strong data-concept="supersingular">초특이(supersingular)</strong>(정의: <span class="math inline">\(E(\bar{\mathbb{F}}_p)[p]=\{\mathcal{O}\}\)</span>, 즉 <span class="math inline">\(p\)</span>-torsion이 자명 — “일반적이지 않은” 소수의 경우)일 때, <span class="math inline">\(\ell\)</span>-아이소제니 그래프는 <strong data-concept="ramanujan-graph">Ramanujan 그래프</strong>(<span data-concept="spectral-gap">스펙트럼 갭</span>이 최대에 가까운 <span data-concept="expander-graph">익스팬더 그래프</span>)다. 초특이 곡선은 정확히 <span class="math inline">\(\lfloor p/12\rfloor\)</span> 개 정도(대략) 존재하며, 모두 <span class="math inline">\(\mathbb{F}_{p^2}\)</span> 위에 정의된다.</p>
-<p><strong>왜 이게 암호에 중요한가.</strong> <span data-concept="expander-graph">익스팬더 그래프</span> 위의 <span data-concept="random-walk">무작위 걷기</span>는 빠르게(짧은 걸음 수로) 그래프 전체에 고르게 퍼집니다. 즉 “<span class="math inline">\(E_1\)</span>에서 랜덤하게 <span class="math inline">\(n\)</span>번 걸어서 <span class="math inline">\(E_2\)</span>에 도착”하는 과정이 좋은 의사난수처럼 행동하고, 반대로 <strong>“<span class="math inline">\(E_1\)</span>과 <span class="math inline">\(E_2\)</span>가 주어졌을 때 그 사이의 경로(=아이소제니들의 합성)를 찾기”</strong>는 (그래프가 크고 경로가 충분히 길면) 어렵다고 믿어집니다 — 이것이 isogeny 기반 암호의 핵심 가정입니다.</p>
+<p><strong>왜 이게 암호에 중요한가.</strong> <span data-concept="expander-graph">익스팬더 그래프</span> 위의 <span data-concept="random-walk">무작위 걷기</span>는 짧은 걸음으로도 그래프 전체에 잘 퍼져 키와 commitment가 특정 구석에 몰리지 않게 합니다. 다만 <strong>잘 섞인다는 사실이 경로 찾기의 어려움을 증명하는 것은 아닙니다.</strong> SQIsign의 보안은 초특이 곡선의 endomorphism ring을 계산하는 별도의 어려움에 기대며, 그래프 그림은 그 문제의 직관을 제공합니다.</p>
 <hr />
 <h2 id="왜-초특이-곡선인가-자기동형사상환endomorphism-ring">5. 왜 초특이 곡선인가: 자기준동형사상환(endomorphism ring)</h2>
 <p><strong>정의 5.1.</strong> <span class="math inline">\(E\)</span>의 <strong data-concept="endomorphism">자기준동형사상환</strong> <span class="math inline">\(\mathrm{End}(E) := \{\varphi:E\to E\ \text{엔도모피즘}\} \cup\{[0]\}\)</span> (덧셈: 점별 덧셈, 곱셈: 합성). 여기서 엔도모피즘은 역함수를 요구하지 않으므로 자기동형사상(automorphism)보다 넓은 개념입니다.</p>
@@ -119,16 +119,16 @@ E_0:\ y^2=x^3+x
 <hr />
 <h2 id="sqisign-개요-지식증명에서-서명까지">7. SQIsign 개요: 지식증명에서 서명까지</h2>
 <p><strong data-concept="security-assumption">하드 문제.</strong> 초특이 곡선 <span class="math inline">\(E\)</span>가 주어졌을 때 <span class="math inline">\(\mathrm{End}(E)\)</span>를 계산하기 (동치로, <span class="math inline">\(E_0\)</span>(자기준동형사상환을 정확히 아는 §6의 시작 곡선)에서 <span class="math inline">\(E\)</span>로 가는 아이소제니를 찾기)는 어렵다고 믿어집니다 — 이게 §4의 “그래프 위 경로 찾기”와 §5의 Deuring 대응으로 “어려운 아이디얼 찾기”와 (Wesolowski 2021년경 증명된 결과로) 본질적으로 동치임이 알려져 있습니다.</p>
-<p><strong>키 생성.</strong> 공개키는 정규화된 곡선 <span class="math inline">\(E_A\)</span>입니다. 개념적으로 비밀 <strong data-concept="witness">witness</strong>는 <span class="math inline">\(\mathrm{End}(E_A)\)</span>이고, 구현에서는 <span class="math inline">\(E_0\to E_A\)</span>인 비밀 isogeny에 대응하는 사원수 아이디얼과 응답 계산에 필요한 보조 데이터를 저장합니다. 따라서 “비밀키=경로”는 좋은 첫 직관이지만, 실제 키 형식을 그대로 말한 것은 아닙니다.</p>
+<p><strong>키 생성.</strong> 공개키는 정규화된 곡선 <span class="math inline">\(E_{pk}\)</span>입니다. 개념적으로 비밀 <strong data-concept="witness">witness</strong>는 <span class="math inline">\(\mathrm{End}(E_{pk})\)</span>를 계산할 수 있는 지식이고, 구현에서는 <span class="math inline">\(E_0\to E_{pk}\)</span>에 대응하는 사원수 아이디얼과 보조행렬을 저장합니다. 따라서 “비밀키=경로”는 첫 직관일 뿐 실제 키 형식을 그대로 말한 것은 아닙니다.</p>
 <p><strong data-concept="fiat-shamir">서명 (Fiat–Shamir로 변환된 <span data-concept="identification-protocol">식별 프로토콜</span>의 뼈대).</strong></p>
 <ol type="1">
-<li><strong data-concept="commitment">Commit:</strong> 무작위 <span class="math inline">\(I_{com}\)</span>과 그에 대응하는 <span class="math inline">\(\varphi_{com}:E_0\to E_1\)</span>을 계산하고 정규화된 <span class="math inline">\(E_1\)</span>을 얻습니다.</li>
-<li><strong data-concept="challenge">Challenge:</strong> <span class="math inline">\(H(m,j(E_1))\)</span>가 <span class="math inline">\(E_1[D_{chall}]\)</span>의 커널 생성점을 정하고, 이것이 <span class="math inline">\(\varphi_{chall}:E_1\to E_2\)</span>를 결정합니다. Fiat–Shamir 때문에 서명에는 challenge를 따로 보낼 필요가 없습니다.</li>
-<li><strong data-concept="response">Response:</strong> 아이디얼 쪽에서 비밀·commitment·challenge 정보를 결합한 뒤 <span data-concept="klpt">KLPT류 알고리즘</span>으로 계산하기 쉬운 동치 아이디얼을 찾고, 이를 <span class="math inline">\(\varphi_{resp}:E_A\to E_2\)</span>로 번역합니다.</li>
-<li><strong>검증:</strong> 메시지와 commitment에서 challenge를 다시 만들고, 압축된 response를 복원해 출발점이 공개키 <span class="math inline">\(E_A\)</span>, 도착점이 <span class="math inline">\(E_2\)</span>인지 검사합니다. 동시에 challenge가 response에 그대로 포함되는 퇴화된 경우를 거부해야 합니다.</li>
+<li><strong data-concept="commitment">Commit:</strong> 무작위 <span class="math inline">\(I_{com}\)</span>과 대응하는 <span class="math inline">\(\varphi_{com}:E_0\to E_{com}\)</span>을 계산합니다.</li>
+<li><strong data-concept="challenge">Challenge:</strong> 메시지와 commitment의 해시가 공개키에서 출발하는 <span class="math inline">\(\varphi_{chl}:E_{pk}\to E_{chl}\)</span>을 정합니다. Fiat–Shamir 때문에 대화형 검증자가 따로 필요 없습니다.</li>
+<li><strong data-concept="response">Response:</strong> 비밀·commitment·challenge 아이디얼을 결합하고 bounded norm 조건을 만족하도록 표본한 뒤 <span class="math inline">\(\varphi_{rsp}:E_{com}\to E_{chl}\)</span>을 만듭니다. 최신 구현은 보조 타원곡선, 아벨 곡면과 <span class="math inline">\((2,2)\)</span>-아이소제니를 이용해 response의 보간 데이터를 계산합니다.</li>
+<li><strong>검증:</strong> 메시지와 commitment에서 challenge를 다시 만들고, 보간 데이터로 response를 평가하여 도착점과 차수 조건을 확인합니다.</li>
 </ol>
-<p>핵심 도구는 “response” 단계 — 비밀 order <span class="math inline">\(\mathrm{End}(E_A)\)</span>를 알아야 <span class="math inline">\(E_A\to E_2\)</span> 아이소제니를 (다항시간에) <strong>계산</strong>할 수 있는데, 이는 대수 쪽(사원수 아이디얼)에서 KLPT 알고리즘류로 처리한 뒤 Deuring 대응으로 다시 곡선으로 옮기는 절차입니다. 이 알고리즘의 세부(KLPT: 주어진 아이디얼류에서 매끄러운 norm을 갖는 대표원 찾기)는 이 챕터의 범위를 넘는 별도 연구 주제라 인용으로 남깁니다 — 다만 이제 그 알고리즘이 <strong>왜 사원수 쪽에서 도는지</strong>(§5), 그리고 <span class="math inline">\(\mathbb{Z}[i]\)</span>가 어디서 시작 지점 역할을 하는지(§6)는 전부 설명됐습니다.</p>
-<p><strong>공식 자료.</strong> <a href="https://csrc.nist.gov/csrc/media/Projects/pqc-dig-sig/documents/round-1/spec-files/sqisign-spec-web.pdf">SQIsign Algorithm Specifications v2 (NIST 제출본)</a>, <a href="https://github.com/SQISign/the-sqisign">공식 구현</a>. 사양은 서명 절차 자체가 계속 개선되는 분야이므로, 파라미터와 직렬화 형식은 이 링크의 현재 버전을 기준으로 확인해야 합니다.</p>
+<div class="warn-box"><span class="label">Round 1과 최신판을 구분합니다</span><p><span data-concept="klpt">KLPT</span>는 고전 SQIsign/Round 1의 response를 이해할 때 중요합니다. 최신 v2.0.1은 KLPT를 핵심 response 절차에서 제거하고 bounded-degree 균등 표본화와 higher-dimensional 아이소제니 계산을 사용합니다.</p></div>
+<p><strong>공식 자료.</strong> <a href="https://sqisign.org/spec/sqisign-20250707.pdf">SQIsign Algorithm Specifications v2.0.1 (2025-07-07)</a>, <a href="https://github.com/SQISign/the-sqisign">공식 구현</a>. 사양이 계속 개선되는 연구 분야이므로 파라미터와 직렬화 형식은 공식 최신판에서 확인해야 합니다.</p>
 <hr />
 <h2 id="요약-이-챕터의-의존관계">8. 요약: 이 챕터의 의존관계</h2>
 <pre><code>math-background/algebra (유한체, ℤ[i], Galois)                ← 여기서 필요한 배경
@@ -145,6 +145,6 @@ E_0:\ y^2=x^3+x
 필요한지 배경이 잡힙니다.</code></pre>
 </div></main></div>
 <script src="../assets/katex/katex.min.js"></script><script src="../assets/katex/auto-render.min.js"></script>
-<script>renderMathInElement(document.body,{delimiters:[{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false},{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false}]});</script><script src="../assets/glossary.js?v=20260825-4"></script>
-<script src="../assets/chapters.js?v=20260825-4"></script>
+<script>renderMathInElement(document.body,{delimiters:[{left:"\\[",right:"\\]",display:true},{left:"\\(",right:"\\)",display:false},{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false}]});</script><script src="../assets/glossary.js?v=20260825-5"></script>
+<script src="../assets/chapters.js?v=20260825-5"></script>
 </body></html>

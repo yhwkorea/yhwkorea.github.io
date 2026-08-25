@@ -1,0 +1,1 @@
+export default {id:'aes',title:'AES',terms:['AES','고급 암호화 표준'],summary:'128비트 블록과 128·192·256비트 키를 쓰는 표준 블록 암호입니다.',target:'foundations/cryptography.html#대칭암호와-aead',prerequisites:['block-cipher'],why:'빠르고 널리 지원되는 대칭 암호의 표준 부품입니다.',example:'AES-256의 256은 블록 크기가 아니라 키 길이입니다.',formal:'FIPS 197에 정의된 substitution–permutation network 블록 암호입니다.',usedIn:['AES-GCM','CMAC','스토리지 암호화']};

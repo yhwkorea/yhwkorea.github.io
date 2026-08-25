@@ -1,13 +1,8 @@
 const glossaryScript = document.currentScript;
+import('./journey-ui.js').catch((error) => console.error('학습 지도 초기화 실패', error));
 Promise.all([import('./concepts/index.js'), import('./concept-catalog.js')]).then(([{ conceptsById, conceptsByTerm }, { areas }]) => {
 const assetBase = new URL('.', glossaryScript.src);
 const page = (path) => new URL(`../${path}`, assetBase).href;
-document.addEventListener('click', (event) => {
-  const ordinaryNavigation = event.target.closest('.sidebar a, .area-card, .guide-card, .question-list a');
-  if (ordinaryNavigation && !ordinaryNavigation.matches('[data-learning-link]')) {
-    sessionStorage.removeItem('pqc-learning-path-v1');
-  }
-}, true);
 const areaByConcept = new Map();
 areas.forEach((area) => area.concepts.forEach((id) => {
   if (!areaByConcept.has(id)) areaByConcept.set(id, area);
@@ -108,9 +103,11 @@ function rememberDestination(link, term) {
     const destination = new URL(link.href);
     sessionStorage.setItem('glossary-target', destination.hash);
     sessionStorage.setItem('glossary-term', term);
-    window.PQCLearningPath?.push({
-      title: term,
+    window.PQCJourney?.descend({
+      nodeId: link.closest('[data-concept]')?.dataset.concept || term,
+      label: term,
       href: link.href,
+      sourceHref: location.href,
       reason: `${document.title.replace(/\s*[—-].*$/, '')}에서 “${term}”이 낯설어서 내려왔습니다.`
     });
   });
