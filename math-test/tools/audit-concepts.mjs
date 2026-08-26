@@ -40,6 +40,7 @@ const utilityNavPages = new Set([
 ]);
 const scalarFields = ['id', 'title', 'summary', 'target', 'why', 'example', 'formal'];
 const arrayFields = ['terms', 'prerequisites', 'usedIn'];
+const encyclopediaFields = ['intuition', 'beginner', 'notation', 'nonExample', 'calculation', 'theorem', 'proofIdea', 'counterexample', 'applications', 'sources'];
 
 function nonempty(value) { return typeof value === 'string' && value.trim(); }
 function normalizeTerm(value) { return value.normalize('NFKC').toLocaleLowerCase('ko').replace(/\s+/g, ' ').trim(); }
@@ -62,6 +63,13 @@ for (const concept of concepts) {
   for (const field of arrayFields) {
     const value = concept[field];
     if (!Array.isArray(value) || (field !== 'prerequisites' && value.length === 0) || value.some((item) => !nonempty(item))) errors.push(`${concept.id || '(unknown)'}: invalid field ${field}`);
+  }
+  if (concept.depth === 'encyclopedia') {
+    for (const field of encyclopediaFields) {
+      const value = concept[field];
+      if (value == null || (typeof value === 'string' && !value.trim()) || (Array.isArray(value) && !value.length)) errors.push(`${concept.id}: encyclopedia field ${field} is missing`);
+    }
+    if (!Array.isArray(concept.sources) || concept.sources.some((source) => !source || !nonempty(source.title) || !nonempty(source.href) || !nonempty(source.locator))) errors.push(`${concept.id}: invalid encyclopedia sources`);
   }
   if (!nonempty(concept.id)) continue;
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(concept.id)) errors.push(`${concept.id}: invalid id format`);

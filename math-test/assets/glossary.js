@@ -1,7 +1,7 @@
 const glossaryScript = document.currentScript;
-import('./journey-ui.js').catch((error) => console.error('학습 지도 초기화 실패', error));
-import('./sidebar-tools.js').catch((error) => console.error('왼쪽 탐색 도구 초기화 실패', error));
-Promise.all([import('./concepts/index.js'), import('./concept-catalog.js')]).then(([{ conceptsById, conceptsByTerm }, { areas }]) => {
+import('./journey-ui.js?v=20260825-14').catch((error) => console.error('학습 지도 초기화 실패', error));
+import('./sidebar-tools.js?v=20260825-14').catch((error) => console.error('왼쪽 탐색 도구 초기화 실패', error));
+Promise.all([import('./concepts/index.js?v=20260825-14'), import('./concept-catalog.js?v=20260825-14')]).then(([{ conceptsById, conceptsByTerm }, { areas }]) => {
 const assetBase = new URL('.', glossaryScript.src);
 const page = (path) => new URL(`../${path}`, assetBase).href;
 const areaByConcept = new Map();
@@ -97,6 +97,39 @@ function appendConceptText(host, value, ownerId = '') {
     host.append(button);
     cursor = best.index + best.candidate.term.length;
   }
+}
+
+function renderConceptValue(host, concept, field) {
+  host.replaceChildren();
+  const value = concept[field];
+  if (field === 'sources') {
+    const list = document.createElement('ul');
+    list.className = 'concept-source-list';
+    value.forEach((source) => {
+      const item = document.createElement('li');
+      const link = document.createElement('a');
+      link.href = source.href;
+      link.textContent = `${source.author ? `${source.author}, ` : ''}${source.title}`;
+      link.target = '_blank';
+      link.rel = 'noreferrer';
+      item.append(link);
+      if (source.locator) item.append(` · ${source.locator}`);
+      list.append(item);
+    });
+    host.append(list);
+    return;
+  }
+  if (Array.isArray(value)) {
+    const list = document.createElement('ul');
+    value.forEach((entry) => {
+      const item = document.createElement('li');
+      appendConceptText(item, entry, concept.id);
+      list.append(item);
+    });
+    host.append(list);
+    return;
+  }
+  appendConceptText(host, value, concept.id);
 }
 
 function rememberDestination(link, term) {
@@ -229,7 +262,14 @@ document.querySelectorAll('[data-concept-module]').forEach((host) => {
   const panel = document.createElement('div');
   panel.className = 'concept-module-panel';
   panel.id = `concept-${concept.id}-detail-${++moduleInstance}`;
-  const modes = [['example', '계산 예시'], ['why', '왜 필요한가?'], ['formal', '엄밀한 정의']];
+  const availableModes = [
+    ['why', '왜 등장했나'], ['intuition', '직관'], ['beginner', '먼저 읽기'],
+    ['notation', '기호'], ['example', '예시'], ['nonExample', '비예시'],
+    ['calculation', '계산 과정'], ['formal', '엄밀한 정의'], ['theorem', '핵심 정리'],
+    ['proofIdea', '증명'], ['counterexample', '반례'], ['applications', '어디에 쓰이나'],
+    ['sources', '원서·출처']
+  ];
+  const modes = availableModes.filter(([field]) => concept[field] != null);
   const buttons = modes.map(([field, label]) => {
     const button = document.createElement('button');
     button.type = 'button';
@@ -242,7 +282,7 @@ document.querySelectorAll('[data-concept-module]').forEach((host) => {
       button.setAttribute('aria-expanded', String(!closing));
       panel.hidden = closing;
       if (closing) panel.replaceChildren();
-      else appendConceptText(panel, concept[field], concept.id);
+      else renderConceptValue(panel, concept, field);
     });
     tabs.append(button);
     return button;

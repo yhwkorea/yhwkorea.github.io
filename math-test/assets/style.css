@@ -409,6 +409,9 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 .concept-module-panel[hidden] { display: none; }
 .concept-prerequisites { margin: 10px 0 0; color: var(--ink-soft); font-size: .8rem; }
 .concept-prerequisites a { color: var(--concept-ink); font-weight: 650; }
+.concept-source-list { margin: 0; padding-left: 1.2rem; }
+.concept-source-list li { margin: .35rem 0; }
+.concept-source-list a { color: var(--concept-ink); font-weight: 700; }
 
 .chapter-index { max-width: 600px; margin: 30px 0 26px; padding: 20px 22px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); }
 .chapter-index > span { color: var(--accent); font: 700 .72rem/1.4 -apple-system, sans-serif; letter-spacing: .1em; text-transform: uppercase; }
