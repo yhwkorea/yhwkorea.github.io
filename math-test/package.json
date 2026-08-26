@@ -2,7 +2,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "audit:concepts": "node tools/audit-concepts.mjs",
+    "sync:concepts": "node tools/sync-concept-index.mjs",
+    "check:concept-index": "node tools/sync-concept-index.mjs --check",
+    "audit:concepts": "node tools/sync-concept-index.mjs --check && node tools/audit-concepts.mjs",
     "sync:nav": "node tools/sync-guide-nav.mjs"
   }
 }

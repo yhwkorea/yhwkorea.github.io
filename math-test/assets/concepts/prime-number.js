@@ -1,0 +1,1 @@
+export default {id:'prime-number',title:'소수',terms:['소수','prime number'],summary:'양의 약수가 1과 자기 자신뿐인 1보다 큰 정수입니다.',target:'university/04-number-theory.html#primes',prerequisites:['divisibility','integer'],why:'정수를 곱셈으로 분해하는 기본 블록입니다.',example:'2,3,5,7은 소수이고 9=3·3은 합성수입니다.',formal:'p>1이고 d|p이면 d=1 또는 d=p인 양의 정수 p를 소수라 합니다.',usedIn:['유일분해','소수체','RSA','이차잉여']};
