@@ -40,7 +40,7 @@ const utilityNavPages = new Set([
 ]);
 const scalarFields = ['id', 'title', 'summary', 'target', 'why', 'example', 'formal'];
 const arrayFields = ['terms', 'prerequisites', 'usedIn'];
-const encyclopediaFields = ['intuition', 'beginner', 'notation', 'nonExample', 'calculation', 'theorem', 'proofIdea', 'counterexample', 'applications', 'sources'];
+const encyclopediaFields = ['intuition', 'beginner', 'notation', 'nonExample', 'calculation', 'theorem', 'theoremAssumptions', 'proofIdea', 'counterexample', 'applications', 'sources'];
 
 function nonempty(value) { return typeof value === 'string' && value.trim(); }
 function normalizeTerm(value) { return value.normalize('NFKC').toLocaleLowerCase('ko').replace(/\s+/g, ' ').trim(); }
@@ -70,6 +70,7 @@ for (const concept of concepts) {
       if (value == null || (typeof value === 'string' && !value.trim()) || (Array.isArray(value) && !value.length)) errors.push(`${concept.id}: encyclopedia field ${field} is missing`);
     }
     if (!Array.isArray(concept.sources) || concept.sources.some((source) => !source || !nonempty(source.title) || !nonempty(source.href) || !nonempty(source.locator))) errors.push(`${concept.id}: invalid encyclopedia sources`);
+    for (const field of ['next', 'related']) if (!Array.isArray(concept[field]) || !concept[field].length) errors.push(`${concept.id}: encyclopedia relation ${field} is missing`);
   }
   if (!nonempty(concept.id)) continue;
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(concept.id)) errors.push(`${concept.id}: invalid id format`);
@@ -87,6 +88,7 @@ for (const concept of concepts) {
 
 for (const concept of concepts) if (concept && Array.isArray(concept.prerequisites)) {
   for (const prerequisite of concept.prerequisites) if (!byId.has(prerequisite)) errors.push(`${concept.id}: unknown prerequisite ${prerequisite}`);
+  for (const field of ['next', 'related']) if (Array.isArray(concept[field])) for (const id of concept[field]) if (!byId.has(id)) errors.push(`${concept.id}: unknown ${field} concept ${id}`);
 }
 
 const state = new Map();

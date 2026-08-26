@@ -1,7 +1,7 @@
 const glossaryScript = document.currentScript;
-import('./journey-ui.js?v=20260825-14').catch((error) => console.error('학습 지도 초기화 실패', error));
-import('./sidebar-tools.js?v=20260825-14').catch((error) => console.error('왼쪽 탐색 도구 초기화 실패', error));
-Promise.all([import('./concepts/index.js?v=20260825-14'), import('./concept-catalog.js?v=20260825-14')]).then(([{ conceptsById, conceptsByTerm }, { areas }]) => {
+import('./journey-ui.js?v=20260826-15').catch((error) => console.error('학습 지도 초기화 실패', error));
+import('./sidebar-tools.js?v=20260826-15').catch((error) => console.error('왼쪽 탐색 도구 초기화 실패', error));
+Promise.all([import('./concepts/index.js?v=20260826-15'), import('./concept-catalog.js?v=20260826-15')]).then(([{ conceptsById, conceptsByTerm }, { areas }]) => {
 const assetBase = new URL('.', glossaryScript.src);
 const page = (path) => new URL(`../${path}`, assetBase).href;
 const areaByConcept = new Map();
@@ -265,7 +265,7 @@ document.querySelectorAll('[data-concept-module]').forEach((host) => {
   const availableModes = [
     ['why', '왜 등장했나'], ['intuition', '직관'], ['beginner', '먼저 읽기'],
     ['notation', '기호'], ['example', '예시'], ['nonExample', '비예시'],
-    ['calculation', '계산 과정'], ['formal', '엄밀한 정의'], ['theorem', '핵심 정리'],
+    ['calculation', '계산 과정'], ['formal', '엄밀한 정의'], ['theorem', '핵심 정리'], ['theoremAssumptions', '정리의 가정'],
     ['proofIdea', '증명'], ['counterexample', '반례'], ['applications', '어디에 쓰이나'],
     ['sources', '원서·출처']
   ];
@@ -301,7 +301,21 @@ document.querySelectorAll('[data-concept-module]').forEach((host) => {
     rememberDestination(link, prerequisite.title);
     prerequisites.append(link);
   });
+  const next = document.createElement('p');
+  next.className = 'concept-prerequisites concept-next';
+  if (concept.next?.length) {
+    next.append('이어서 보기: ');
+    concept.next.forEach((id, index) => {
+      const destination = conceptsById.get(id);
+      if (!destination) return;
+      if (index) next.append(' · ');
+      const link = document.createElement('a');
+      link.href = page(destination.target); link.textContent = destination.title;
+      rememberDestination(link, destination.title); next.append(link);
+    });
+  }
   host.append(summary, tabs, panel, prerequisites);
+  if (concept.next?.length) host.append(next);
 });
 
 function hide({ restoreFocus = false } = {}) {

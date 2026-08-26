@@ -1,0 +1,20 @@
+export default {
+  id:'linear-transformation', title:'선형변환', terms:['선형변환','선형사상','linear transformation','linear map'],
+  summary:'벡터의 덧셈과 스칼라곱을 보존하는 벡터공간 사이의 함수입니다.', target:'university/01-linear-algebra.html#linear-maps', prerequisites:['vector-space','function'],
+  why:'좌표계에 의존하는 행렬 계산 뒤에서 실제로 무엇이 공간을 움직이는지 분리하기 위해 등장합니다.',
+  intuition:'원점을 고정한 채 평행한 격자선을 계속 평행하고 같은 간격 비율로 보내는 변형입니다. 회전·확대·투영은 선형이지만 평행이동은 원점을 옮기므로 선형이 아닙니다.',
+  beginner:'입력을 더한 뒤 변환한 결과와 각각 변환해 더한 결과가 같고, 입력을 몇 배 한 효과가 출력에서도 그대로 유지되면 선형입니다.',
+  notation:['T:V→W: V에서 W로 가는 선형변환','T(v): 벡터 v의 상','ker T: 0으로 가는 입력','im T: 실제로 도달하는 출력'],
+  example:'T:R²→R², T(x,y)=(x+2y,3x−y)는 선형입니다. T((x,y)+(u,v))=T(x,y)+T(u,v)이고 T(c(x,y))=cT(x,y)가 성분별 계산으로 성립합니다.',
+  nonExample:'S(x,y)=(x+1,y)는 S(0,0)=(1,0)≠0이므로 선형변환이 아닙니다. 이는 affine 평행이동입니다.',
+  calculation:'표준기저 e₁=(1,0), e₂=(0,1)의 상은 T(e₁)=(1,3), T(e₂)=(2,−1)입니다. 이를 열로 세운 A=[[1,2],[3,−1]]에 대해 T(x,y)=A(x,y)ᵀ가 됩니다. 선형변환은 기저벡터의 상만 알면 모든 입력에서 결정됩니다.',
+  formal:'F-벡터공간 V,W 사이 함수 T:V→W가 모든 u,v∈V와 a,b∈F에 대해 T(au+bv)=aT(u)+bT(v)를 만족하면 F-선형변환입니다.',
+  theorem:'기저 결정 정리: V의 기저 v₁,…,vₙ과 W의 임의 벡터 w₁,…,wₙ이 주어지면 T(vᵢ)=wᵢ를 만족하는 선형변환 T:V→W가 유일하게 존재합니다.',
+  theoremAssumptions:['V와 W는 같은 체 F 위의 벡터공간','v₁,…,vₙ은 V의 기저','각 wᵢ는 W의 임의 벡터'],
+  proofIdea:'모든 v∈V는 유일하게 v=∑aᵢvᵢ로 표현되므로 T(v)=∑aᵢwᵢ로 정의할 수 있습니다. 기저 좌표의 유일성이 well-defined와 유일성을 동시에 보장합니다.',
+  counterexample:'함수가 직선을 직선으로 보낸다고 선형인 것은 아닙니다. 평행이동은 모든 직선을 직선으로 보내지만 0을 보존하지 않으므로 선형성이 깨집니다.',
+  applications:['행렬을 좌표 없는 함수로 해석','미분연산자와 적분연산자','그래픽의 회전·투영','부호·격자 기반 암호의 선형 계산'],
+  sources:[{author:'Sheldon Axler',title:'Linear Algebra Done Right',locator:'3rd ed., §3A–3C',href:'https://linear.axler.net/'},{author:'Gilbert Strang',title:'MIT 18.06SC Linear Algebra',locator:'Linear Transformations and Their Matrices',href:'https://ocw.mit.edu/courses/18-06sc-linear-algebra-fall-2011/'}],
+  usedIn:['행렬표현','핵','상','rank-nullity','고유값'],
+  next:['null-space','range-linear-map','rank-nullity','eigenvalue'], related:['matrix','function','group-homomorphism'], depth:'encyclopedia'
+};

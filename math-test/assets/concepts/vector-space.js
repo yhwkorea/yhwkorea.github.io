@@ -14,6 +14,7 @@ export default {
   calculation: 'p(x)=1+2x와 q(x)=x−x²를 벡터로 보면 3p−2q=3+6x−2x+2x²=3+4x+2x²입니다. 좌표기저 (1,x,x²)에서는 (1,2,0)과 (0,1,−1)의 계산 3(1,2,0)−2(0,1,−1)=(3,4,2)와 같습니다.',
   formal: '체 F 위 집합 V에 연산 +:V×V→V와 ·:F×V→V가 주어졌다고 하자. (V,+)가 아벨군이고, 모든 a,b∈F와 u,v∈V에 대해 a(u+v)=au+av, (a+b)v=av+bv, (ab)v=a(bv), 1v=v를 만족하면 V를 F-벡터공간이라 합니다.',
   theorem: '부분공간 판정법: 공집합이 아닌 U⊆V가 모든 u,v∈U와 a,b∈F에 대해 au+bv∈U를 만족하면 U는 V의 부분벡터공간입니다. 덧셈·스칼라곱 공리를 하나씩 다시 확인하는 일을 이 조건 하나로 줄입니다.',
+  theoremAssumptions: ['V는 체 F 위의 벡터공간', 'U는 V의 공집합이 아닌 부분집합', 'U는 모든 두 원소의 선형결합에 닫힘'],
   proofIdea: 'U가 비어 있지 않아 w∈U를 잡을 수 있습니다. a=b=0을 넣으면 0∈U, a=1,b=1이면 덧셈에 닫히고, a=−1,b=0이면 덧셈 역원에 닫힙니다. 나머지 결합·분배 공리는 V에서 이미 성립하므로 U에 그대로 제한됩니다.',
   counterexample: '덧셈에만 닫혀 있다고 충분하지 않습니다. 정수격자 Z²는 두 격자점을 더하면 다시 Z²이지만, R 위에서 (1,0)에 스칼라 1/2을 곱한 (1/2,0)은 Z²에 없으므로 R-벡터공간이 아닙니다.',
   applications: ['연립방정식의 해집합과 영공간', '함수공간과 미분방정식', '오류정정부호와 유한체 선형대수', '격자암호에서 주변 실수공간과 정수격자의 구분'],
@@ -22,5 +23,7 @@ export default {
     { author: 'Gilbert Strang', title: 'MIT 18.06SC Linear Algebra', locator: 'Unit I, Vector Spaces and Subspaces', href: 'https://ocw.mit.edu/courses/18-06sc-linear-algebra-fall-2011/' }
   ],
   usedIn: ['부분공간', '기저', '차원', '선형변환', '격자'],
+  next: ['subspace', 'linear-combination', 'basis', 'linear-transformation'],
+  related: ['matrix', 'field', 'abelian-group'],
   depth: 'encyclopedia'
 };
