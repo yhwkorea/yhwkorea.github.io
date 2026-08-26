@@ -1,0 +1,1 @@
+export default {id:'convex-set',title:'볼록집합',terms:['볼록집합','convex set'],summary:'집합 안의 두 점을 잇는 선분 전체가 다시 집합 안에 있는 집합입니다.',target:'university/14-optimization.html#convexity',prerequisites:['set','vector-space'],why:'국소해가 전역해가 되는 최적화 구조의 가능영역을 정의합니다.',example:'공·반공간·아핀부분공간은 볼록집합입니다.',formal:'x,y∈C와 0≤t≤1에 대해 tx+(1−t)y∈C이면 C는 볼록입니다.',usedIn:['볼록함수','볼록최적화','분리정리','선형계획']};
