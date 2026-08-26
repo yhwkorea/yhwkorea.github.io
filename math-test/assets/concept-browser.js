@@ -1,7 +1,7 @@
 const script = document.currentScript;
 Promise.all([
-  import('./concepts/index.js?v=20260826-37'),
-  import('./concept-catalog.js?v=20260826-37')
+  import('./concepts/index.js?v=20260826-38'),
+  import('./concept-catalog.js?v=20260826-38')
 ]).then(([{ concepts, conceptsById }, { areas, commonQuestions }]) => {
   const host = document.querySelector('[data-concept-browser]');
   if (!host) return;
