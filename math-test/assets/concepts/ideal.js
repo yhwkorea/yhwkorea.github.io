@@ -1,10 +1,1 @@
-export default {
-  id: 'ideal', title: '아이디얼', terms: ['아이디얼', 'ideal'],
-  summary: '환의 일부 원소를 0으로 취급해도 덧셈과 곱셈이 모순 없이 남게 하는 부분집합입니다.',
-  target: 'foundations/algebra.html#아이디얼-몫환을-만들-수-있는-부분집합',
-  prerequisites: ['set', 'group', 'ring', 'commutative-ring'],
-  why: '환에서 원소들을 묶어 몫환을 만들 때, 대표원을 바꾸어도 계산 결과가 같게 만들기 위해 필요합니다.',
-  example: '6Z는 Z의 아이디얼입니다. 2와 8을 같은 묶음으로 보아도 덧셈과 곱셈이 잘 정의됩니다.',
-  formal: '가환환 R의 부분집합 I가 덧셈 부분군이고, 모든 r∈R와 a∈I에 대해 ra∈I이면 I는 아이디얼입니다.',
-  usedIn: ['몫환 R/I', 'F[x]/(f)로 유한체 만들기', 'SQIsign의 사원수 좌아이디얼']
-};
+export default {id:'ideal',title:'아이디얼',terms:['아이디얼','ideal'],summary:'환의 원소를 0으로 묶어도 덧셈과 곱셈이 잘 정의되게 하는 흡수적인 덧셈 부분군입니다.',target:'foundations/algebra.html#아이디얼-몫환을-만들-수-있는-부분집합',prerequisites:['ring','commutative-ring','subgroup'],why:'몫환을 만들고 준동형의 커널·다항방정식의 영점·정수의 나눗셈을 하나의 부분구조로 설명합니다.',intuition:'아이디얼 I의 원소들을 모두 “0 취급”하려면 환의 아무 원소를 곱해도 여전히 0 취급이어야 합니다. 이 흡수성이 대표원을 바꿔도 곱셈이 같게 합니다.',beginner:'Z에서 6의 배수들은 더하거나 정수를 곱해도 다시 6의 배수입니다. 이를 0으로 보면 나머지 0,…,5만 남는 Z/6Z가 됩니다.',notation:['I◁R 또는 I⊆R: 아이디얼','(a): a가 생성하는 주아이디얼','R/I: 몫환','I+J, IJ: 아이디얼의 합과 곱'],example:'nZ는 Z의 아이디얼이고 F[x]에서 f의 모든 배수 (f)는 주아이디얼입니다.',nonExample:'Z의 짝수가 아닌 “양의 정수”는 덧셈 역원에 닫히지 않아 아이디얼이 아닙니다. 행렬환의 대각행렬은 부분환이지만 바깥 행렬을 곱하면 대각이 아니어서 양쪽 아이디얼이 아닙니다.',calculation:'I=6Z에서 [2]=[8], [3]=[15]입니다. [2][3]=[6]=[0]이고 [8][15]=[120]=[0]으로 대표원을 바꿔도 같습니다.',formal:'가환환 R의 부분집합 I가 (I,+)≤(R,+)이고 모든 r∈R,a∈I에 ra∈I이면 I는 아이디얼입니다.',theorem:'가환환 준동형 f:R→S의 커널은 R의 아이디얼이며 R/ker f≅im f입니다.',theoremAssumptions:['R,S는 가환환','f는 1을 보존하는 환 준동형'],proofIdea:'커널은 덧셈과 역원에 닫히고 f(ra)=f(r)f(a)=0이므로 흡수됩니다. 잉여류 [r]를 f(r)로 보내면 잘 정의된 동형을 얻습니다.',counterexample:'단순 부분환으로는 몫환 곱셈이 잘 정의되지 않을 수 있습니다. 아이디얼의 흡수조건이 대표원 변화에서 생기는 aj+ib+ij를 다시 I 안에 넣습니다.',applications:['몫환과 유한체 구성','대수기하의 대수집합','사원수 아이디얼과 SQIsign','정수론의 소아이디얼'],sources:[{author:'Thomas W. Judson',title:'Abstract Algebra: Theory and Applications',locator:'Ideals and quotient rings',href:'https://abstract.ups.edu/'},{author:'MIT OpenCourseWare',title:'18.703 Modern Algebra',locator:'Ideals, quotient rings, homomorphism theorems',href:'https://ocw.mit.edu/courses/18-703-modern-algebra-spring-2013/'}],usedIn:['몫환','소아이디얼','좌표환','사원수 아이디얼'],next:['principal-ideal','quotient-ring','coordinate-ring','quaternion-ideal'],related:['ring','normal-subgroup','kernel'],depth:'encyclopedia'};

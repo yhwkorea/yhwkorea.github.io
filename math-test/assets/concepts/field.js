@@ -1,10 +1,1 @@
-export default {
-  id: 'field', title: '체', terms: ['체'],
-  summary: '0이 아닌 모든 원소가 곱셈 역원을 가져 나눗셈이 가능한 가환환입니다.',
-  target: 'foundations/algebra.html#정역과-체',
-  prerequisites: ['commutative-ring'],
-  why: '0이 아닌 수로 언제나 나눌 수 있는 계산 환경을 정확히 구분합니다.',
-  example: 'F7에서 3의 역원은 5입니다. 3·5=15≡1 (mod 7)이기 때문입니다.',
-  formal: '1≠0인 가환환 F에서 모든 a≠0이 a⁻¹을 가지면 F는 체입니다.',
-  usedIn: ['유한체', '타원곡선 좌표', 'isogeny 계산']
-};
+export default {id:'field',title:'체',terms:['체'],summary:'덧셈·뺄셈·곱셈과 0이 아닌 수로 나눗셈을 언제나 수행할 수 있는 가환 대수구조입니다.',target:'foundations/algebra.html#정역과-체',prerequisites:['commutative-ring','unit'],why:'분수·좌표·다항식 계수처럼 나눗셈이 필요한 계산 환경을 정확히 구분하고 선형대수와 대수기하의 스칼라를 제공합니다.',intuition:'체는 사칙연산이 닫힌 숫자 세계입니다. 나눗셈은 0으로만 금지되고 나머지 원소는 모두 곱셈 역원을 가집니다.',beginner:'정수에서는 1÷2가 정수가 아니므로 체가 아닙니다. 유리수·실수·복소수에서는 0이 아닌 수로 나눈 결과가 다시 같은 집합에 있으므로 체입니다.',notation:['F,K,k: 체','F×=F\{0}: 곱셈군','a⁻¹: 0이 아닌 a의 곱셈 역원','char F: 체의 표수'],example:'F₇={0,…,6}에서 3⁻¹=5입니다. 3·5=15≡1 mod 7이기 때문입니다.',nonExample:'Z는 가환환이지만 2의 곱셈 역원이 Z에 없어 체가 아닙니다. Z/6Z도 2·3=0인 영인자를 가져 체가 아닙니다.',calculation:'F₇에서 4/3=4·3⁻¹=4·5=20≡6 mod 7입니다. 나눗셈은 역원을 곱하는 연산입니다.',formal:'1≠0인 가환환 F에서 모든 a∈F\{0}에 aa⁻¹=1인 a⁻¹∈F가 존재하면 F를 체라 합니다.',theorem:'가환환 F가 체인 것과 그 아이디얼이 (0),F뿐인 것은 동치입니다.',theoremAssumptions:['F는 1≠0인 가환환'],proofIdea:'체의 비영 아이디얼 I가 a≠0을 포함하면 a⁻¹a=1∈I여서 I=F입니다. 반대로 (a)=F이면 1=ra인 r이 존재해 모든 비영 a가 역원을 가집니다.',counterexample:'모든 유한 가환환이 체인 것은 아닙니다. Z/6Z는 유한하지만 영인자가 있습니다. 반면 유한 정역은 곱셈사상의 단사성과 유한성으로 체가 됩니다.',applications:['벡터공간의 스칼라','유한체 암호 계산','타원곡선 좌표','다항식과 체확장'],sources:[{author:'Thomas W. Judson',title:'Abstract Algebra: Theory and Applications',locator:'Fields and field extensions',href:'https://abstract.ups.edu/'},{author:'MIT OpenCourseWare',title:'18.703 Modern Algebra',locator:'Rings and fields',href:'https://ocw.mit.edu/courses/18-703-modern-algebra-spring-2013/'}],usedIn:['유한체','벡터공간','다항식환','타원곡선'],next:['finite-field','extension-field','vector-space','polynomial-ring'],related:['commutative-ring','integral-domain','unit'],depth:'encyclopedia'};
