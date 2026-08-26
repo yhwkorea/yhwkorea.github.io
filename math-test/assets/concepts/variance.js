@@ -1,0 +1,1 @@
+export default {id:'variance',title:'분산',terms:['분산','variance'],summary:'확률변수가 평균에서 떨어진 정도의 제곱을 평균낸 퍼짐의 척도입니다.',target:'university/02-probability.html#expectation',prerequisites:['expectation'],why:'평균이 같은 분포들의 불확실성과 집중 정도를 구분합니다.',example:'상수 확률변수는 항상 평균과 같으므로 분산이 0입니다.',formal:'Var(X)=E[(X−E[X])²]=E[X²]−E[X]²입니다.',usedIn:['표준편차','Chebyshev 부등식','중심극한정리','오차분석']};

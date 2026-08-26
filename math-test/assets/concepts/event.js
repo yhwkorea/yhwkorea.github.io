@@ -1,0 +1,1 @@
+export default {id:'event',title:'사건',terms:['확률 사건','event'],summary:'표본공간에서 관심 있는 결과들을 모은 부분집합입니다.',target:'university/02-probability.html#sample-space',prerequisites:['probability-space','subset'],why:'무작위 결과에 대한 질문을 집합연산으로 계산합니다.',example:'주사위에서 짝수가 나오는 사건은 {2,4,6}입니다.',formal:'확률공간 (Ω,F,P)에서 F의 원소 A를 사건이라 합니다.',usedIn:['조건부확률','독립','확률변수','Bayes 정리']};
