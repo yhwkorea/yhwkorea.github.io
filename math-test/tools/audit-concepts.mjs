@@ -37,6 +37,7 @@ const utilityNavPages = new Set([
   'university/03-real-analysis.html', 'university/04-number-theory.html',
   'university/05-discrete-math.html', 'university/06-differential-equations.html',
   'university/07-topology.html', 'university/08-complex-analysis.html'
+  , 'university/09-measure-theory.html', 'university/10-functional-analysis.html'
 ]);
 const scalarFields = ['id', 'title', 'summary', 'target', 'why', 'example', 'formal'];
 const arrayFields = ['terms', 'prerequisites', 'usedIn'];
