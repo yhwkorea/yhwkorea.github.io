@@ -1,0 +1,1 @@
+export default {id:'countable-set',title:'가산집합',terms:['가산집합','countable set'],summary:'유한하거나 자연수 집합의 부분집합과 같은 크기인 집합입니다.',target:'university/17-set-theory.html#countability',prerequisites:['cardinality','integer'],why:'원소를 순서대로 나열 가능한 무한과 불가능한 무한을 구분합니다.',example:'N,Z,Q는 가산이지만 R은 비가산입니다.',formal:'A가 유한하거나 A→N 단사가 존재하면 A를 가산이라 합니다.',usedIn:['확률의 이산분포','기저의 가산성','계산가능성','측도 0']};
