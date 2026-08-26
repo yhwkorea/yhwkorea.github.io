@@ -1,4 +1,4 @@
-import { cryptoBranches, schoolBranches, mathBranches, journeys, areaForPath } from './site-map.js?v=20260826-15';
+import { cryptoBranches, schoolBranches, mathBranches, journeys, areaForPath } from './site-map.js?v=20260826-16';
 import { getJourney, startJourney, descend, reconcile, returnTo, endJourney, subscribe } from './journey-store.js';
 
 if (!window.PQCJourney) {
