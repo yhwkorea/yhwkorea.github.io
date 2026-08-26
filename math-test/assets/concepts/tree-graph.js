@@ -1,0 +1,1 @@
+export default {id:'tree-graph',title:'트리',terms:['트리 그래프','tree graph'],summary:'연결되어 있으면서 순환이 없는 그래프입니다.',target:'university/05-discrete-math.html#graphs',prerequisites:['graph'],why:'최소한의 간선으로 모든 꼭짓점을 연결하는 계층 구조를 모델링합니다.',example:'n개 꼭짓점을 가진 모든 트리는 정확히 n−1개 간선을 가집니다.',formal:'무방향 그래프가 연결이고 cycle을 포함하지 않으면 트리입니다.',usedIn:['최소신장트리','탐색','구문트리','네트워크']};
