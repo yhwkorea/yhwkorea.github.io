@@ -1,9 +1,1 @@
-export default {
-  id: 'derivative', title: '미분', terms: ['미분', '도함수'],
-  summary: '입력이 아주 조금 변할 때 출력이 얼마나 빠르게 변하는지를 나타내는 방법입니다.',
-  target: 'foundations/calculus.html#미분은-무엇을-재나', prerequisites: ['function', 'limit', 'slope'],
-  why: '그래프의 한 점에서 기울기와 변화 방향을 알아내기 위해 사용합니다.',
-  example: 'f(x)=x²이면 f\'(x)=2x이므로 x=3에서 순간 기울기는 6입니다.',
-  formal: "f'(a)=lim_{h→0}(f(a+h)-f(a))/h가 존재할 때 이를 a에서의 미분계수라 합니다.",
-  usedIn: ['접선', '최댓값·최솟값', '편미분', '곡선의 특이점 판정']
-};
+export default {id:'derivative',title:'미분',terms:['미분','도함수'],summary:'입력이 아주 조금 변할 때 출력의 1차 변화율을 극한으로 측정하는 연산입니다.',target:'foundations/calculus.html#미분은-무엇을-재나',prerequisites:['function','limit','slope'],why:'순간속도·접선기울기·민감도·최적점을 계산하고 비선형함수를 국소적인 선형함수로 근사합니다.',intuition:'곡선을 한 점 근처에서 계속 확대하면 직선처럼 보입니다. 그 직선의 기울기가 미분계수이고 이 선형근사가 함수의 첫 변화량을 설명합니다.',beginner:'평균속도는 시간 구간 전체의 이동거리 나누기 시간입니다. 구간 길이를 0에 가깝게 줄인 평균속도의 극한이 순간속도입니다.',notation:["f'(a): a에서의 미분계수",'f′: 도함수','dy/dx: 미분 표기','df_a: a에서의 선형근사','Δx 또는 h: 입력 변화량'],example:'f(x)=x²이면 (f(x+h)−f(x))/h=2x+h이므로 h→0에서 f′(x)=2x입니다.',nonExample:'f(x)=|x|는 x=0에서 왼쪽 기울기 −1, 오른쪽 기울기 1이 달라 미분가능하지 않습니다.',calculation:'f(x)=x³−2x이면 f′(x)=3x²−2이고 x=2에서 f′(2)=10입니다. 작은 h에서 f(2+h)≈f(2)+10h입니다.',formal:"f'(a)=lim_{h→0}(f(a+h)−f(a))/h가 유한하게 존재할 때 f는 a에서 미분가능하다고 합니다.",theorem:'미분가능한 함수는 그 점에서 연속입니다.',theoremAssumptions:['f는 a에서 미분가능'],proofIdea:'f(a+h)−f(a)=h·[(f(a+h)−f(a))/h]이고 h→0일 때 첫 인수는 0, 둘째 인수는 f′(a)로 수렴하므로 차가 0으로 갑니다.',counterexample:'연속이면 미분가능하다는 역은 거짓입니다. |x|는 0에서 연속이지만 미분가능하지 않으며, 모든 점에서 연속이지만 어디서도 미분되지 않는 함수도 존재합니다.',applications:['최적화와 gradient descent','미분방정식','오차·민감도 분석','곡선의 특이점 판정'],sources:[{author:'OpenStax',title:'Calculus Volume 1',locator:'Chapter 3, Derivatives',href:'https://openstax.org/details/books/calculus-volume-1'},{author:'MIT OpenCourseWare',title:'18.01SC Single Variable Calculus',locator:'Differentiation',href:'https://ocw.mit.edu/courses/18-01sc-single-variable-calculus-fall-2010/'}],usedIn:['접선','최댓값·최솟값','편미분','미분방정식'],next:['tangent-line','partial-derivative','mean-value-theorem','gradient'],related:['limit','continuity','linear-transformation'],depth:'encyclopedia'};
