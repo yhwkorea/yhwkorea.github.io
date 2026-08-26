@@ -1,10 +1,1 @@
-export default {
-  id: 'equivalence-relation', title: '동치관계', terms: ['동치관계'],
-  summary: '어떤 두 원소를 같은 종류로 볼지 정하며, 반사성·대칭성·추이성을 만족하는 관계입니다.',
-  target: 'foundations/notation.html#관계와-동치류-a',
-  prerequisites: ['set'],
-  why: '서로 다른 표현을 하나의 대상으로 묶되, 그 묶음이 모순 없이 나뉘게 하기 위해 필요합니다.',
-  example: '정수에서 a-b가 6의 배수이면 a와 b가 같다고 보면 1, 7, 13이 한 묶음입니다.',
-  formal: '모든 a,b,c에 대해 a~a, a~b⇒b~a, a~b이고 b~c⇒a~c를 만족하는 이항관계입니다.',
-  usedIn: ['동치류', '몫집합', '몫환', '사영공간']
-};
+export default {id:'equivalence-relation',title:'동치관계',terms:['동치관계'],summary:'어떤 두 원소를 같은 종류로 묶을지 정하며 반사성·대칭성·추이성을 만족하는 관계입니다.',target:'foundations/notation.html#관계와-동치류-a',prerequisites:['set','relation'],why:'서로 다른 표현을 하나의 대상으로 취급하면서 전체 집합이 겹치지 않는 일관된 묶음들로 분할되게 합니다.',intuition:'색이 같은 카드끼리 한 상자에 넣는 규칙처럼, 누구나 자기 상자에 속하고 서로 같은 상자라는 판단이 양방향이며 연결되어야 합니다.',beginner:'정수를 3으로 나눈 나머지가 같으면 같은 묶음으로 봅니다. 1,4,7은 서로 다른 정수지만 모두 나머지 1인 한 동치류입니다.',notation:['a∼b: a와 b가 관계 있음','[a]: a와 동치인 모든 원소의 동치류','A/∼: 모든 동치류의 집합'],example:'정수에서 a∼b iff 3|(a−b)는 동치관계이며 [0],[1],[2] 세 동치류를 만듭니다.',nonExample:'실수에서 a<b는 반사적이지도 대칭적이지도 않아 동치관계가 아닙니다. “친구이다”도 추이적일 필요가 없습니다.',calculation:'mod 3 관계에서 [1]={…,−5,−2,1,4,7,…}이고 [1]=[4]입니다. 반면 [1]∩[2]=∅입니다.',formal:'집합 A 위 관계 ∼가 모든 a,b,c∈A에 대해 a∼a, a∼b⇒b∼a, (a∼b∧b∼c)⇒a∼c를 만족하면 동치관계입니다.',theorem:'동치관계의 동치류들은 A를 분할하며, 반대로 A의 모든 분할은 하나의 동치관계를 정의합니다.',theoremAssumptions:['A는 집합','∼는 A 위 동치관계'],proofIdea:'반사성으로 모든 원소가 자기 동치류에 들어갑니다. 두 동치류가 한 점을 공유하면 대칭성과 추이성으로 서로 포함되어 같아집니다.',counterexample:'반사성과 대칭성만으로는 묶음이 일관되지 않습니다. a∼b,b∼c인데 a∼c가 아니면 b를 통해 같은 묶음이어야 할 a,c가 갈라집니다.',applications:['몫집합·몫군·몫환','사영공간','동형류 분류','측도론의 a.e. 함수'],sources:[{author:'Oscar Levin',title:'Discrete Mathematics: An Open Introduction',locator:'Relations and equivalence relations',href:'https://discrete.openmathbooks.org/dmoi3.html'},{author:'MIT OpenCourseWare',title:'6.042J Mathematics for Computer Science',locator:'Relations and partitions',href:'https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-spring-2015/'}],usedIn:['동치류','몫집합','몫환','위상동형류'],next:['equivalence-class','quotient-group','quotient-ring','projective-plane'],related:['relation','set','equivalence-class'],depth:'encyclopedia'};

@@ -190,6 +190,8 @@ for (const target of targetChecks) {
 }
 
 console.log(`concepts: ${concepts.length}`);
+const encyclopediaCount = concepts.filter((concept) => concept.depth === 'encyclopedia').length;
+console.log(`encyclopedia depth: ${encyclopediaCount}/${concepts.length} (${(100 * encyclopediaCount / concepts.length).toFixed(1)}%)`);
 console.log(`html pages: ${pages.length}`);
 console.log(`unreviewed emphasized-text candidates: ${visibleCandidates.size}`);
 for (const [term, locations] of [...visibleCandidates].sort().slice(0, 80)) console.log(`  ? ${term} :: ${[...locations].join(', ')}`);

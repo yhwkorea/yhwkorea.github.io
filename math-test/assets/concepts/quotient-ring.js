@@ -1,10 +1,1 @@
-export default {
-  id: 'quotient-ring', title: '몫환', terms: ['몫환'],
-  summary: '아이디얼만큼 차이 나는 원소를 같은 동치류로 보아 만든 새로운 환입니다.',
-  target: 'foundations/algebra.html#아이디얼-몫환을-만들-수-있는-부분집합',
-  prerequisites: ['equivalence-class', 'ring', 'ideal'],
-  why: '특정 원소나 다항식을 0이라고 선언한 새로운 계산 세계를 일관되게 만들기 위해 사용합니다.',
-  example: 'Z/6Z에서는 [2]=[8]이고 [2][3]=[6]=[0]입니다.',
-  formal: 'R/I의 원소는 [a]=a+I이고 [a]+[b]=[a+b], [a][b]=[ab]로 연산합니다.',
-  usedIn: ['나머지 연산', '유한체 F[x]/(f)', '대수적 구조의 단순화']
-};
+export default {id:'quotient-ring',title:'몫환',terms:['몫환'],summary:'아이디얼만큼 차이 나는 원소를 같은 동치류로 묶고 그 동치류 위에 연산을 준 환입니다.',target:'foundations/algebra.html#아이디얼-몫환을-만들-수-있는-부분집합',prerequisites:['equivalence-class','ring','ideal'],why:'특정 원소나 다항식을 0으로 선언한 새로운 계산 세계를 대표원 선택과 무관하게 만듭니다.',intuition:'정수에서 시계처럼 n칸마다 같은 위치로 돌아오게 하거나, 다항식 f를 0이라고 약속해 f의 근을 새 원소로 만드는 구성입니다.',beginner:'Z/6Z에서는 2와 8이 6만큼 차이나므로 같은 원소 [2]입니다. 실제 원소는 정수 하나가 아니라 같은 나머지를 가진 정수들의 묶음입니다.',notation:['R/I: 환 R을 아이디얼 I로 나눈 몫환','[a]=a+I: a의 잉여류','π:R→R/I: 자연스러운 몫사상'],example:'Z/6Z의 원소는 [0],…,[5]이고 [4]+[5]=[9]=[3], [2][3]=[6]=[0]입니다.',nonExample:'I가 단순 부분환일 뿐 아이디얼이 아니면 대표원을 바꾸었을 때 곱이 달라져 R/I의 곱셈이 잘 정의되지 않을 수 있습니다.',calculation:'F₂[x]/(x²+x+1)에서 α=[x]라 하면 α²+α+1=0, 즉 α²=α+1입니다. 따라서 α³=α(α+1)=α²+α=1입니다.',formal:'R/I={a+I:a∈R}에 (a+I)+(b+I)=(a+b)+I, (a+I)(b+I)=ab+I를 준 환입니다.',theorem:'I가 가환환 R의 극대아이디얼인 것과 R/I가 체인 것은 동치입니다.',theoremAssumptions:['R은 1을 가진 가환환','I는 proper ideal'],proofIdea:'R/I의 아이디얼은 I를 포함하는 R의 아이디얼과 대응합니다. 체의 아이디얼이 0과 전체뿐인 성질을 이 대응에 적용합니다.',counterexample:'Z/6Z는 몫환이지만 체가 아닙니다. [2][3]=[0]인 영인자가 있으므로 몫환이라는 사실만으로 나눗셈이 가능하지 않습니다.',applications:['나머지 연산','유한체 F[x]/(f)','좌표환','준동형의 상'],sources:[{author:'Thomas W. Judson',title:'Abstract Algebra: Theory and Applications',locator:'Quotient rings and homomorphism theorems',href:'https://abstract.ups.edu/'},{author:'MIT OpenCourseWare',title:'18.703 Modern Algebra',locator:'Ideals and quotient rings',href:'https://ocw.mit.edu/courses/18-703-modern-algebra-spring-2013/'}],usedIn:['모듈러 연산','유한체','좌표환','환 동형정리'],next:['modular-arithmetic','finite-field','coordinate-ring','first-isomorphism-theorem'],related:['ideal','equivalence-class','quotient-group'],depth:'encyclopedia'};

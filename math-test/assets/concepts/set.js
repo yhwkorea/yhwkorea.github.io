@@ -1,10 +1,1 @@
-export default {
-  id: 'set', title: '집합', terms: ['집합'],
-  summary: '서로 구별되는 대상들을 하나의 범위로 모아 취급한 것입니다.',
-  target: 'foundations/notation.html#집합과-원소',
-  prerequisites: [],
-  why: '여러 대상을 한꺼번에 말하고, 그 안에 무엇이 들어 있는지 정확히 구분하기 위해 사용합니다.',
-  example: 'A={1,2,3}이면 2는 A의 원소이고 4는 A의 원소가 아닙니다.',
-  formal: '집합은 원소들의 모임이며, a∈A는 a가 A에 속한다는 명제입니다.',
-  usedIn: ['함수의 정의역과 공역', '군·환·체의 바탕 집합', '곡선 위 점들의 집합']
-};
+export default {id:'set',title:'집합',terms:['집합'],summary:'서로 구별되는 대상들을 소속 여부가 명확한 하나의 모음으로 취급한 것입니다.',target:'foundations/notation.html#집합과-원소',prerequisites:[],why:'여러 대상을 한꺼번에 지칭하고 함수·관계·대수구조가 작동할 범위를 정확히 정합니다.',intuition:'상자 안에 대상을 넣는 그림으로 시작할 수 있지만 집합에서 중요한 것은 순서나 중복이 아니라 어떤 대상이 들어 있는지뿐입니다.',beginner:'A={1,2,3}이면 2는 A 안에 있고 4는 없습니다. {1,2,2,3}도 같은 집합 {1,2,3}이며 적은 순서를 바꿔도 집합은 같습니다.',notation:['a∈A: a는 A의 원소','a∉A: a는 A의 원소가 아님','∅: 원소가 없는 공집합','{x:P(x)}: 조건 P를 만족하는 원소들의 집합','P(A): A의 멱집합'],example:'짝수 정수의 집합 E={2k:k∈Z}는 원소가 무한히 많아도 조건으로 정확히 정의됩니다.',nonExample:'“아주 큰 수들의 모임”은 ‘아주 크다’의 기준이 정해지지 않아 소속 여부가 명확하지 않습니다.',calculation:'A={1,2,3},B={3,4}이면 A∪B={1,2,3,4}, A∩B={3}, A\B={1,2}, P(B)={∅,{3},{4},{3,4}}입니다.',formal:'공리적 집합론에서는 집합을 더 원시적인 용어로 정의하지 않고 ∈ 관계와 공리로 규정합니다. 외연성 공리는 같은 원소들을 갖는 두 집합이 같다고 말합니다.',theorem:'외연성: 모든 x에 대해 x∈A⇔x∈B이면 A=B입니다.',theoremAssumptions:['A,B는 집합','모든 대상 x에 대한 소속이 일치'],proofIdea:'집합의 동일성을 원소의 소속만으로 결정한다는 외연성 공리를 직접 적용합니다.',counterexample:'원소가 집합이 될 수 있으므로 a∈A와 {a}⊆A는 관련되지만 A∈B와 A⊆B는 전혀 다른 주장입니다. 기호를 바꾸어 써서는 안 됩니다.',applications:['함수의 정의역·공역','확률의 사건','군·환·체의 바탕집합','위상과 측도'],sources:[{author:'Open Logic Project',title:'Set Theory: An Open Introduction',locator:'Sets, extensionality, basic operations',href:'https://builds.openlogicproject.org/'},{author:'MIT OpenCourseWare',title:'6.042J Mathematics for Computer Science',locator:'Sets and functions',href:'https://ocw.mit.edu/courses/6-042j-mathematics-for-computer-science-spring-2015/'}],usedIn:['원소와 부분집합','함수','관계','수학 구조'],next:['element','subset','function','equivalence-relation'],related:['proposition','cardinality','sigma-algebra'],depth:'encyclopedia'};
