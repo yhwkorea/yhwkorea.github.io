@@ -409,6 +409,13 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 .concept-module-panel[hidden] { display: none; }
 .concept-prerequisites { margin: 10px 0 0; color: var(--ink-soft); font-size: .8rem; }
 .concept-prerequisites a { color: var(--concept-ink); font-weight: 650; }
+.concept-neighborhood { margin-top: 12px; border-top: 1px solid color-mix(in srgb, var(--concept-color) 35%, transparent); }
+.concept-neighborhood > summary { padding: 10px 0 0; color: var(--concept-ink); cursor: pointer; font: 700 .8rem/1.45 -apple-system, sans-serif; }
+.concept-neighborhood-map { display: grid; gap: 7px; margin-top: 9px; }
+.concept-neighborhood-map p { display: grid; grid-template-columns: minmax(118px, .8fr) minmax(0, 2fr); gap: 9px; margin: 0; padding: 7px 9px; border-radius: 7px; background: var(--surface); color: var(--ink-soft); font-size: .78rem; }
+.concept-neighborhood-map b { color: var(--ink); font-size: .74rem; }
+.concept-neighborhood-map a { color: var(--concept-ink); font-weight: 650; }
+@media (max-width: 520px) { .concept-neighborhood-map p { grid-template-columns: 1fr; gap: 3px; } }
 .concept-source-list { margin: 0; padding-left: 1.2rem; }
 .concept-source-list li { margin: .35rem 0; }
 .concept-source-list a { color: var(--concept-ink); font-weight: 700; }

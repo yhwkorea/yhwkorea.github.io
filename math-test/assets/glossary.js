@@ -1,12 +1,16 @@
 const glossaryScript = document.currentScript;
-import('./journey-ui.js?v=20260827-46').catch((error) => console.error('학습 지도 초기화 실패', error));
-import('./sidebar-tools.js?v=20260827-46').catch((error) => console.error('왼쪽 탐색 도구 초기화 실패', error));
-Promise.all([import('./concepts/index.js?v=20260827-46'), import('./concept-catalog.js?v=20260827-46')]).then(([{ conceptsById, conceptsByTerm }, { areas }]) => {
+import('./journey-ui.js?v=20260827-47').catch((error) => console.error('학습 지도 초기화 실패', error));
+import('./sidebar-tools.js?v=20260827-47').catch((error) => console.error('왼쪽 탐색 도구 초기화 실패', error));
+Promise.all([import('./concepts/index.js?v=20260827-47'), import('./concept-catalog.js?v=20260827-47')]).then(([{ conceptsById, conceptsByTerm }, { areas }]) => {
 const assetBase = new URL('.', glossaryScript.src);
 const page = (path) => new URL(`../${path}`, assetBase).href;
 const areaByConcept = new Map();
 areas.forEach((area) => area.concepts.forEach((id) => {
   if (!areaByConcept.has(id)) areaByConcept.set(id, area);
+}));
+const dependentsByConcept = new Map([...conceptsById.keys()].map((id) => [id, []]));
+conceptsById.forEach((concept) => concept.prerequisites.forEach((id) => {
+  dependentsByConcept.get(id)?.push(concept.id);
 }));
 const decorateArea = (element, concept) => {
   const targetPage = concept.target.split('#')[0];
@@ -145,6 +149,51 @@ function rememberDestination(link, term) {
       reason: `${document.title.replace(/\s*[—-].*$/, '')}에서 “${term}”이 낯설어서 내려왔습니다.`
     });
   });
+}
+
+function conceptLink(id) {
+  const destination = conceptsById.get(id);
+  if (!destination) return null;
+  const link = document.createElement('a');
+  link.href = page(destination.target);
+  link.textContent = destination.title;
+  rememberDestination(link, destination.title);
+  return link;
+}
+
+function appendConceptLinks(host, ids) {
+  ids.forEach((id, index) => {
+    const link = conceptLink(id);
+    if (!link) return;
+    if (index) host.append(' · ');
+    host.append(link);
+  });
+}
+
+function conceptNeighborhood(concept) {
+  const details = document.createElement('details');
+  details.className = 'concept-neighborhood';
+  const summary = document.createElement('summary');
+  summary.textContent = '이 개념의 연결 지도';
+  const map = document.createElement('div');
+  map.className = 'concept-neighborhood-map';
+  const groups = [
+    ['먼저 알아둘 것', concept.prerequisites],
+    ['함께 보면 좋은 것', concept.related || []],
+    ['이어서 볼 것', concept.next || []],
+    ['이 개념을 사용하는 항목', dependentsByConcept.get(concept.id) || []]
+  ];
+  groups.forEach(([label, ids]) => {
+    if (!ids.length) return;
+    const row = document.createElement('p');
+    const heading = document.createElement('b');
+    heading.textContent = label;
+    row.append(heading);
+    appendConceptLinks(row, [...new Set(ids)]);
+    map.append(row);
+  });
+  details.append(summary, map);
+  return details;
 }
 
 function renderPopover(found) {
@@ -292,13 +341,9 @@ document.querySelectorAll('[data-concept-module]').forEach((host) => {
   prerequisites.className = 'concept-prerequisites';
   prerequisites.append('낯설면 먼저: ');
   concept.prerequisites.forEach((id, index) => {
-    const prerequisite = conceptsById.get(id);
-    if (!prerequisite) return;
+    const link = conceptLink(id);
+    if (!link) return;
     if (index) prerequisites.append(' · ');
-    const link = document.createElement('a');
-    link.href = page(prerequisite.target);
-    link.textContent = prerequisite.title;
-    rememberDestination(link, prerequisite.title);
     prerequisites.append(link);
   });
   const next = document.createElement('p');
@@ -306,16 +351,15 @@ document.querySelectorAll('[data-concept-module]').forEach((host) => {
   if (concept.next?.length) {
     next.append('이어서 보기: ');
     concept.next.forEach((id, index) => {
-      const destination = conceptsById.get(id);
-      if (!destination) return;
+      const link = conceptLink(id);
+      if (!link) return;
       if (index) next.append(' · ');
-      const link = document.createElement('a');
-      link.href = page(destination.target); link.textContent = destination.title;
-      rememberDestination(link, destination.title); next.append(link);
+      next.append(link);
     });
   }
   host.append(summary, tabs, panel, prerequisites);
   if (concept.next?.length) host.append(next);
+  host.append(conceptNeighborhood(concept));
 });
 
 function hide({ restoreFocus = false } = {}) {
