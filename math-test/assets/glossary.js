@@ -1,7 +1,7 @@
 const glossaryScript = document.currentScript;
-import('./journey-ui.js?v=20260827-43').catch((error) => console.error('학습 지도 초기화 실패', error));
-import('./sidebar-tools.js?v=20260827-43').catch((error) => console.error('왼쪽 탐색 도구 초기화 실패', error));
-Promise.all([import('./concepts/index.js?v=20260827-43'), import('./concept-catalog.js?v=20260827-43')]).then(([{ conceptsById, conceptsByTerm }, { areas }]) => {
+import('./journey-ui.js?v=20260827-44').catch((error) => console.error('학습 지도 초기화 실패', error));
+import('./sidebar-tools.js?v=20260827-44').catch((error) => console.error('왼쪽 탐색 도구 초기화 실패', error));
+Promise.all([import('./concepts/index.js?v=20260827-44'), import('./concept-catalog.js?v=20260827-44')]).then(([{ conceptsById, conceptsByTerm }, { areas }]) => {
 const assetBase = new URL('.', glossaryScript.src);
 const page = (path) => new URL(`../${path}`, assetBase).href;
 const areaByConcept = new Map();
