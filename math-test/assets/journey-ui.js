@@ -1,5 +1,7 @@
-import { cryptoBranches, schoolBranches, mathBranches, journeys, areaForPath } from './site-map.js?v=20260827-52';
+import { cryptoBranches, schoolBranches, mathBranches, journeys, areaForPath } from './site-map.js?v=20260831-53';
 import { getJourney, startJourney, descend, reconcile, returnTo, endJourney, subscribe } from './journey-store.js';
+import { conceptsById } from './concepts/index.js?v=20260831-53';
+import { buildDependents, renderConceptGraph } from './concept-graph.js?v=20260831-53';
 
 if (!window.PQCJourney) {
   window.PQCJourney = { start: startJourney, descend, end: endJourney };
@@ -16,6 +18,17 @@ if (!window.PQCJourney) {
   document.body.append(host);
   let open = false;
   let tab = 'location';
+  const dependentsByConcept = buildDependents(conceptsById);
+  const pagePath = location.pathname.split('/math-test/').pop() || '';
+  const conceptAtLocation = () => {
+    const hash = (() => { try { return decodeURIComponent(location.hash.slice(1)); } catch { return location.hash.slice(1); } })();
+    const matches = [...conceptsById.values()].filter((concept) => concept.target.split('#')[0] === pagePath);
+    return matches.find((concept) => concept.target.split('#')[1] === hash)
+      || conceptsById.get(document.querySelector('[data-concept-module]')?.dataset.conceptModule)
+      || conceptsById.get(document.querySelector('[data-concept]')?.dataset.concept)
+      || null;
+  };
+  let graphConceptId = conceptAtLocation()?.id || null;
 
   function render() {
     const current = areaForPath(location.pathname);
@@ -43,7 +56,7 @@ if (!window.PQCJourney) {
     close.type = 'button'; close.className = 'atlas-close'; close.textContent = '닫기';
     close.addEventListener('click', () => { open = false; render(); toggle.focus(); });
     const tabs = document.createElement('div'); tabs.className = 'atlas-tabs';
-    [['location', '현재 위치'], ['trail', '내가 내려온 길']].forEach(([id, label]) => {
+    [['location', '전체 지도'], ['graph', '개념 그래프'], ['trail', '내가 내려온 길']].forEach(([id, label]) => {
       const button = document.createElement('button');
       button.type = 'button'; button.textContent = label;
       button.className = tab === id ? 'active' : '';
@@ -85,6 +98,29 @@ if (!window.PQCJourney) {
       const schoolTitle = document.createElement('h3'); schoolTitle.textContent = '초·중·고 수학 가지';
       const mathTitle = document.createElement('h3'); mathTitle.textContent = '대학 수학·암호 선수개념';
       body.append(heading, cryptoTitle, makeBranchMap(cryptoBranches, '암호학'), schoolTitle, makeBranchMap(schoolBranches, '학교 수학'), mathTitle, makeBranchMap(mathBranches, '수학'));
+    } else if (tab === 'graph') {
+      panel.classList.add('atlas-panel-graph');
+      const selected = conceptsById.get(graphConceptId) || conceptAtLocation();
+      if (!selected) {
+        body.innerHTML = '<strong>현재 선택한 개념이 없습니다.</strong><p>본문에서 밑줄 친 용어를 누르고 ‘연결 지도’를 선택하세요.</p>';
+      } else {
+        graphConceptId = selected.id;
+        const graph = document.createElement('div');
+        renderConceptGraph(graph, {
+          centerId: selected.id,
+          conceptsById,
+          dependentsByConcept,
+          hrefFor: (concept) => new URL(`../${concept.target}`, import.meta.url).href,
+          onNavigate: (link, concept) => link.addEventListener('click', () => descend({
+            nodeId: concept.id,
+            label: concept.title,
+            href: link.href,
+            sourceHref: location.href,
+            reason: `${selected.title}의 연결 그래프에서 이동했습니다.`
+          }))
+        });
+        body.append(graph);
+      }
     } else if (!journey) {
       body.innerHTML = '<strong>시작한 학습 경로가 없습니다.</strong><p>전체 지도에서 관심 있는 암호나 수학 개념 옆의 ‘경로 시작’을 누르세요.</p>';
     } else {
@@ -111,6 +147,16 @@ if (!window.PQCJourney) {
     open = true;
     if (event.detail?.tab) tab = event.detail.tab;
     render();
+  });
+  document.addEventListener('pqc:open-concept-map', (event) => {
+    graphConceptId = event.detail?.conceptId || conceptAtLocation()?.id || null;
+    open = true;
+    tab = 'graph';
+    render();
+  });
+  addEventListener('hashchange', () => {
+    graphConceptId = conceptAtLocation()?.id || graphConceptId;
+    if (open && tab === 'graph') render();
   });
   render();
 }

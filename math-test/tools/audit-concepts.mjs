@@ -152,6 +152,10 @@ for (const path of pages) {
     else ids.add(id);
   }
   pageData.set(path, { html, ids });
+  if (/\bdata-chapter-view\s*=\s*(["'])true\1/i.test(html)
+      && !/<script[^>]+src\s*=\s*(["'])[^"']*assets\/chapters\.js(?:\?[^"']*)?\1/i.test(html)) {
+    errors.push(`${rel}: chapter view requires assets/chapters.js`);
+  }
   if (utilityNavPages.has(rel)) {
     const nav = html.match(/<nav>[\s\S]*?<\/nav>/)?.[0];
     if (!nav) errors.push(`${rel}: missing navigation`);

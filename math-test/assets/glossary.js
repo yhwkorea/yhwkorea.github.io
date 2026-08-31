@@ -1,17 +1,14 @@
 const glossaryScript = document.currentScript;
-import('./journey-ui.js?v=20260827-52').catch((error) => console.error('학습 지도 초기화 실패', error));
-import('./sidebar-tools.js?v=20260827-52').catch((error) => console.error('왼쪽 탐색 도구 초기화 실패', error));
-Promise.all([import('./concepts/index.js?v=20260827-52'), import('./concept-catalog.js?v=20260827-52')]).then(([{ conceptsById, conceptsByTerm }, { areas }]) => {
+import('./journey-ui.js?v=20260831-53').catch((error) => console.error('학습 지도 초기화 실패', error));
+import('./sidebar-tools.js?v=20260831-53').catch((error) => console.error('왼쪽 탐색 도구 초기화 실패', error));
+Promise.all([import('./concepts/index.js?v=20260831-53'), import('./concept-catalog.js?v=20260831-53'), import('./concept-graph.js?v=20260831-53')]).then(([{ conceptsById, conceptsByTerm }, { areas }, { buildDependents, renderConceptGraph }]) => {
 const assetBase = new URL('.', glossaryScript.src);
 const page = (path) => new URL(`../${path}`, assetBase).href;
 const areaByConcept = new Map();
 areas.forEach((area) => area.concepts.forEach((id) => {
   if (!areaByConcept.has(id)) areaByConcept.set(id, area);
 }));
-const dependentsByConcept = new Map([...conceptsById.keys()].map((id) => [id, []]));
-conceptsById.forEach((concept) => concept.prerequisites.forEach((id) => {
-  dependentsByConcept.get(id)?.push(concept.id);
-}));
+const dependentsByConcept = buildDependents(conceptsById);
 const decorateArea = (element, concept) => {
   const targetPage = concept.target.split('#')[0];
   const area = areas.find((candidate) => candidate.href === targetPage) || areaByConcept.get(concept.id);
@@ -161,36 +158,18 @@ function conceptLink(id) {
   return link;
 }
 
-function appendConceptLinks(host, ids) {
-  ids.forEach((id, index) => {
-    const link = conceptLink(id);
-    if (!link) return;
-    if (index) host.append(' · ');
-    host.append(link);
-  });
-}
-
 function conceptNeighborhood(concept) {
   const details = document.createElement('details');
   details.className = 'concept-neighborhood';
   const summary = document.createElement('summary');
   summary.textContent = '이 개념의 연결 지도';
   const map = document.createElement('div');
-  map.className = 'concept-neighborhood-map';
-  const groups = [
-    ['먼저 알아둘 것', concept.prerequisites],
-    ['함께 보면 좋은 것', concept.related || []],
-    ['이어서 볼 것', concept.next || []],
-    ['이 개념을 사용하는 항목', dependentsByConcept.get(concept.id) || []]
-  ];
-  groups.forEach(([label, ids]) => {
-    if (!ids.length) return;
-    const row = document.createElement('p');
-    const heading = document.createElement('b');
-    heading.textContent = label;
-    row.append(heading);
-    appendConceptLinks(row, [...new Set(ids)]);
-    map.append(row);
+  renderConceptGraph(map, {
+    centerId: concept.id,
+    conceptsById,
+    dependentsByConcept,
+    hrefFor: (destination) => page(destination.target),
+    onNavigate: (link, destination) => rememberDestination(link, destination.title)
   });
   details.append(summary, map);
   return details;
@@ -237,6 +216,14 @@ function renderPopover(found) {
       button.addEventListener('click', () => { appendConceptText(text, found.concept[field], found.concept.id); });
       actions.append(button);
     }
+    const graph = document.createElement('button');
+    graph.type = 'button';
+    graph.textContent = '연결 지도';
+    graph.addEventListener('click', () => {
+      document.dispatchEvent(new CustomEvent('pqc:open-concept-map', { detail: { conceptId: found.concept.id } }));
+      hide();
+    });
+    actions.append(graph);
     actions.append(link);
     pop.append(actions);
   } else {
