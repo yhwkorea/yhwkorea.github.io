@@ -409,6 +409,11 @@ hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
 .concept-module-panel[hidden] { display: none; }
 .concept-prerequisites { margin: 10px 0 0; color: var(--ink-soft); font-size: .8rem; }
 .concept-prerequisites a { color: var(--concept-ink); font-weight: 650; }
+.lesson-next { margin: 22px 0; padding: 14px 16px; border-left: 3px solid var(--accent); background: var(--surface-soft); display: grid; grid-template-columns: auto 1fr; gap: 3px 14px; align-items: baseline; }
+.lesson-next > span { color: var(--ink-soft); font-size: .8rem; }
+.lesson-next > a { color: var(--ink); font-weight: 750; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.lesson-next > small { grid-column: 2; color: var(--ink-soft); }
+@media (max-width: 640px) { .lesson-next { grid-template-columns: 1fr; } .lesson-next > small { grid-column: 1; } }
 .concept-neighborhood { margin-top: 12px; border-top: 1px solid color-mix(in srgb, var(--concept-color) 35%, transparent); }
 .concept-neighborhood > summary { padding: 10px 0 0; color: var(--concept-ink); cursor: pointer; font: 700 .8rem/1.45 -apple-system, sans-serif; }
 .local-concept-graph { margin-top: 9px; color: var(--ink); }
