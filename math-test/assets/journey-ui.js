@@ -1,7 +1,7 @@
-import { cryptoBranches, schoolBranches, mathBranches, journeys, areaForPath } from './site-map.js?v=20260901-55';
+import { cryptoBranches, schoolBranches, mathBranches, journeys, areaForPath } from './site-map.js?v=20260901-56';
 import { getJourney, startJourney, descend, reconcile, returnTo, endJourney, subscribe } from './journey-store.js';
-import { conceptsById } from './concepts/index.js?v=20260901-55';
-import { buildDependents, renderConceptGraph } from './concept-graph.js?v=20260901-55';
+import { conceptsById } from './concepts/index.js?v=20260901-56';
+import { buildDependents, renderConceptGraph } from './concept-graph.js?v=20260901-56';
 
 if (!window.PQCJourney) {
   window.PQCJourney = { start: startJourney, descend, end: endJourney };
@@ -16,9 +16,8 @@ if (!window.PQCJourney) {
   const host = document.createElement('aside');
   host.className = 'atlas-float';
   document.body.append(host);
-  const desktopDock = matchMedia('(min-width: 1200px)');
   let open = false;
-  let tab = 'graph';
+  let tab = 'location';
   const dependentsByConcept = buildDependents(conceptsById);
   const pagePath = location.pathname.split('/math-test/').pop() || '';
   const conceptAtLocation = () => {
@@ -30,7 +29,6 @@ if (!window.PQCJourney) {
       || null;
   };
   let graphConceptId = conceptAtLocation()?.id || null;
-  if (desktopDock.matches && graphConceptId) open = true;
 
   function render() {
     const current = areaForPath(location.pathname);
@@ -39,8 +37,6 @@ if (!window.PQCJourney) {
     const last = journey?.frames.at(-1);
     host.replaceChildren();
     host.classList.toggle('atlas-open', open);
-    host.classList.toggle('atlas-docked', desktopDock.matches);
-    document.body.classList.toggle('atlas-dock-visible', open && desktopDock.matches);
     const toggle = document.createElement('button');
     toggle.type = 'button';
     toggle.className = 'atlas-chip';
@@ -58,7 +54,7 @@ if (!window.PQCJourney) {
     panel.className = 'atlas-panel';
     panel.setAttribute('aria-label', '학습 내비게이션');
     const close = document.createElement('button');
-    close.type = 'button'; close.className = 'atlas-close'; close.textContent = desktopDock.matches ? '접기' : '닫기';
+    close.type = 'button'; close.className = 'atlas-close'; close.textContent = '닫기';
     close.addEventListener('click', () => { open = false; render(); toggle.focus(); });
     const tabs = document.createElement('div'); tabs.className = 'atlas-tabs';
     [['location', '전체 지도'], ['graph', '개념 그래프'], ['trail', '내가 내려온 길']].forEach(([id, label]) => {
@@ -164,24 +160,6 @@ if (!window.PQCJourney) {
   addEventListener('hashchange', () => {
     graphConceptId = conceptAtLocation()?.id || graphConceptId;
     if (open && tab === 'graph') render();
-  });
-  const conceptsOnPage = [...conceptsById.values()].filter((concept) => concept.target.split('#')[0] === pagePath);
-  const conceptBySection = new Map(conceptsOnPage.map((concept) => [concept.target.split('#')[1], concept]));
-  let scrollFrame;
-  const updateConceptFromScroll = () => {
-    scrollFrame = undefined;
-    const headings = [...document.querySelectorAll('h2[id]')].filter((heading) => conceptBySection.has(heading.id));
-    const readingLine = innerHeight * .58;
-    const active = headings.sort((a, b) => Math.abs(a.getBoundingClientRect().top - readingLine) - Math.abs(b.getBoundingClientRect().top - readingLine))[0];
-    const concept = active && conceptBySection.get(active.id);
-    if (!concept || concept.id === graphConceptId) return;
-    graphConceptId = concept.id;
-    if (open && tab === 'graph') render();
-  };
-  addEventListener('scroll', () => { if (!scrollFrame) scrollFrame = requestAnimationFrame(updateConceptFromScroll); }, { passive: true });
-  desktopDock.addEventListener('change', () => {
-    if (desktopDock.matches && graphConceptId) { open = true; tab = 'graph'; }
-    render();
   });
   render();
 }

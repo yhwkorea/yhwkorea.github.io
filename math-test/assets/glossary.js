@@ -1,7 +1,8 @@
 const glossaryScript = document.currentScript;
-import('./journey-ui.js?v=20260901-55').catch((error) => console.error('학습 지도 초기화 실패', error));
-import('./sidebar-tools.js?v=20260901-55').catch((error) => console.error('왼쪽 탐색 도구 초기화 실패', error));
-Promise.all([import('./concepts/index.js?v=20260901-55'), import('./concept-catalog.js?v=20260901-55'), import('./concept-graph.js?v=20260901-55')]).then(([{ conceptsById, conceptsByTerm }, { areas }, { buildDependents, renderConceptGraph }]) => {
+import('./journey-ui.js?v=20260901-56').catch((error) => console.error('학습 지도 초기화 실패', error));
+import('./sidebar-tools.js?v=20260901-56').catch((error) => console.error('왼쪽 탐색 도구 초기화 실패', error));
+import('./study-workspace.js?v=20260901-56').catch((error) => console.error('학습 작업대 초기화 실패', error));
+Promise.all([import('./concepts/index.js?v=20260901-56'), import('./concept-catalog.js?v=20260901-56'), import('./concept-graph.js?v=20260901-56')]).then(([{ conceptsById, conceptsByTerm }, { areas }, { buildDependents, renderConceptGraph }]) => {
 const assetBase = new URL('.', glossaryScript.src);
 const page = (path) => new URL(`../${path}`, assetBase).href;
 const areaByConcept = new Map();
@@ -9,6 +10,31 @@ areas.forEach((area) => area.concepts.forEach((id) => {
   if (!areaByConcept.has(id)) areaByConcept.set(id, area);
 }));
 const dependentsByConcept = buildDependents(conceptsById);
+const addButtons = new Map();
+const addToWorkspace = (conceptId) => document.dispatchEvent(new CustomEvent('pqc:add-study-concept', { detail: { conceptId } }));
+const workspaceHas = (conceptId) => {
+  try { return JSON.parse(localStorage.getItem('pqc-study-workspace-v1') || '[]').some((item) => item?.id === conceptId); } catch { return false; }
+};
+const conceptAddButton = (concept, compact = false) => {
+  const button = document.createElement('button');
+  button.type = 'button'; button.className = compact ? 'concept-quick-add' : 'concept-workspace-add';
+  const added = workspaceHas(concept.id);
+  button.textContent = added ? '✓' : compact ? '+' : '+ 작업대에 추가';
+  button.classList.toggle('added', added);
+  button.setAttribute('aria-label', `${concept.title} 내 학습 작업대에 추가`);
+  button.addEventListener('click', (event) => { event.preventDefault(); event.stopPropagation(); addToWorkspace(concept.id); });
+  if (!addButtons.has(concept.id)) addButtons.set(concept.id, []);
+  addButtons.get(concept.id).push({ button, compact });
+  return button;
+};
+document.addEventListener('pqc:study-workspace-changed', (event) => {
+  const selected = new Set(event.detail?.ids || []);
+  addButtons.forEach((entries, id) => entries.forEach(({ button, compact }) => {
+    const added = selected.has(id); button.classList.toggle('added', added);
+    button.textContent = added ? '✓' : compact ? '+' : '+ 작업대에 추가';
+    button.title = added ? '작업대에 추가됨' : '';
+  }));
+});
 const decorateArea = (element, concept) => {
   const targetPage = concept.target.split('#')[0];
   const area = areas.find((candidate) => candidate.href === targetPage) || areaByConcept.get(concept.id);
@@ -221,6 +247,7 @@ function renderPopover(found) {
       button.addEventListener('click', () => { appendConceptText(text, found.concept[field], found.concept.id); });
       actions.append(button);
     }
+    actions.append(conceptAddButton(found.concept));
     const graph = document.createElement('button');
     graph.type = 'button';
     graph.textContent = '연결 지도';
@@ -282,6 +309,7 @@ document.querySelectorAll('[data-concept]').forEach((trigger) => {
   trigger.addEventListener('keydown', (event) => {
     if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); show(); }
   });
+  trigger.insertAdjacentElement('afterend', conceptAddButton(concept, true));
 });
 
 document.querySelectorAll('[data-concept-module]').forEach((host) => {
@@ -295,6 +323,7 @@ document.querySelectorAll('[data-concept-module]').forEach((host) => {
     badge.textContent = `${area.title} 개념`;
     host.append(badge);
   }
+  host.append(conceptAddButton(concept));
   const summary = document.createElement('p');
   summary.className = 'concept-module-summary';
   appendConceptText(summary, concept.summary, concept.id);
