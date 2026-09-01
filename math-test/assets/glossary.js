@@ -1,7 +1,7 @@
 const glossaryScript = document.currentScript;
-import('./journey-ui.js?v=20260831-53').catch((error) => console.error('학습 지도 초기화 실패', error));
-import('./sidebar-tools.js?v=20260831-53').catch((error) => console.error('왼쪽 탐색 도구 초기화 실패', error));
-Promise.all([import('./concepts/index.js?v=20260831-53'), import('./concept-catalog.js?v=20260831-53'), import('./concept-graph.js?v=20260831-53')]).then(([{ conceptsById, conceptsByTerm }, { areas }, { buildDependents, renderConceptGraph }]) => {
+import('./journey-ui.js?v=20260831-54').catch((error) => console.error('학습 지도 초기화 실패', error));
+import('./sidebar-tools.js?v=20260831-54').catch((error) => console.error('왼쪽 탐색 도구 초기화 실패', error));
+Promise.all([import('./concepts/index.js?v=20260831-54'), import('./concept-catalog.js?v=20260831-54'), import('./concept-graph.js?v=20260831-54')]).then(([{ conceptsById, conceptsByTerm }, { areas }, { buildDependents, renderConceptGraph }]) => {
 const assetBase = new URL('.', glossaryScript.src);
 const page = (path) => new URL(`../${path}`, assetBase).href;
 const areaByConcept = new Map();
@@ -164,12 +164,17 @@ function conceptNeighborhood(concept) {
   const summary = document.createElement('summary');
   summary.textContent = '이 개념의 연결 지도';
   const map = document.createElement('div');
-  renderConceptGraph(map, {
-    centerId: concept.id,
-    conceptsById,
-    dependentsByConcept,
-    hrefFor: (destination) => page(destination.target),
-    onNavigate: (link, destination) => rememberDestination(link, destination.title)
+  let rendered = false;
+  details.addEventListener('toggle', () => {
+    if (!details.open || rendered) return;
+    rendered = true;
+    renderConceptGraph(map, {
+      centerId: concept.id,
+      conceptsById,
+      dependentsByConcept,
+      hrefFor: (destination) => page(destination.target),
+      onNavigate: (link, destination) => rememberDestination(link, destination.title)
+    });
   });
   details.append(summary, map);
   return details;

@@ -1,7 +1,7 @@
-import { cryptoBranches, schoolBranches, mathBranches, journeys, areaForPath } from './site-map.js?v=20260831-53';
+import { cryptoBranches, schoolBranches, mathBranches, journeys, areaForPath } from './site-map.js?v=20260831-54';
 import { getJourney, startJourney, descend, reconcile, returnTo, endJourney, subscribe } from './journey-store.js';
-import { conceptsById } from './concepts/index.js?v=20260831-53';
-import { buildDependents, renderConceptGraph } from './concept-graph.js?v=20260831-53';
+import { conceptsById } from './concepts/index.js?v=20260831-54';
+import { buildDependents, renderConceptGraph } from './concept-graph.js?v=20260831-54';
 
 if (!window.PQCJourney) {
   window.PQCJourney = { start: startJourney, descend, end: endJourney };
@@ -110,6 +110,8 @@ if (!window.PQCJourney) {
           centerId: selected.id,
           conceptsById,
           dependentsByConcept,
+          allowGlobal: true,
+          initialDepth: 2,
           hrefFor: (concept) => new URL(`../${concept.target}`, import.meta.url).href,
           onNavigate: (link, concept) => link.addEventListener('click', () => descend({
             nodeId: concept.id,

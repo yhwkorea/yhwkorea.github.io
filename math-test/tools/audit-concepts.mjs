@@ -139,6 +139,11 @@ async function htmlFiles(directory) {
 }
 
 const pages = await htmlFiles(root);
+for (const [asset, minimumBytes] of [['assets/vendor/cytoscape.min.js', 400000], ['assets/vendor/cytoscape.LICENSE', 500]]) {
+  const path = join(root, asset);
+  if (!existsSync(path)) errors.push(`interactive graph: missing vendored ${asset}`);
+  else if ((await readFile(path)).byteLength < minimumBytes) errors.push(`interactive graph: incomplete vendored ${asset}`);
+}
 const pageData = new Map();
 const visibleCandidates = new Map();
 for (const path of pages) {
