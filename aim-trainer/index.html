@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sol Aim Trainer</title>
+<style>
+  :root {
+    --bg: #0d1117; --panel: #161b22; --border: #30363d;
+    --accent: #58a6ff; --good: #3fb950; --bad: #f85149;
+    --text: #e6edf3; --muted: #8b949e;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    display: flex; flex-direction: column;
+    overflow: hidden; user-select: none;
+  }
+  header {
+    display: flex; align-items: center; gap: 16px;
+    padding: 10px 16px; background: var(--panel);
+    border-bottom: 1px solid var(--border); flex-wrap: wrap;
+  }
+  header h1 { font-size: 16px; color: var(--accent); letter-spacing: .5px; }
+  .modes { display: flex; gap: 6px; }
+  .mode-btn, .ctrl-btn {
+    background: #21262d; color: var(--text);
+    border: 1px solid var(--border); padding: 6px 12px;
+    border-radius: 6px; cursor: pointer; font-size: 13px; transition: .15s;
+  }
+  .mode-btn:hover, .ctrl-btn:hover { border-color: var(--accent); }
+  .mode-btn.active { background: var(--accent); color: #0d1117; font-weight: 600; border-color: var(--accent); }
+  .spacer { flex: 1; }
+  .setting { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
+  .setting input[type=range] { width: 90px; accent-color: var(--accent); }
+  .setting input[type=checkbox] { accent-color: var(--accent); width:15px; height:15px; }
+  select { background:#21262d; color:var(--text); border:1px solid var(--border); border-radius:6px; padding:4px; }
+  .stats {
+    display: flex; gap: 22px; padding: 8px 16px;
+    background: var(--panel); border-bottom: 1px solid var(--border);
+    font-variant-numeric: tabular-nums;
+  }
+  .stat { text-align: center; }
+  .stat .label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
+  .stat .value { font-size: 20px; font-weight: 700; }
+  #arena { position: relative; flex: 1; overflow: hidden; cursor: crosshair; }
+  canvas#cv { display: block; width: 100%; height: 100%; }
+  .veil {
+    position: absolute; inset: 0; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 14px;
+    background: rgba(13,17,23,.86); backdrop-filter: blur(2px);
+    text-align: center; padding: 20px; overflow:auto;
+  }
+  .veil.hidden { display: none; }
+  .veil h2 { font-size: 26px; }
+  .veil p { color: var(--muted); max-width: 460px; line-height: 1.5; font-size: 14px; }
+  .big {
+    font-size: 18px; padding: 12px 30px; background: var(--good);
+    color: #0d1117; border: none; border-radius: 8px; cursor: pointer; font-weight: 700;
+  }
+  .big:hover { filter: brightness(1.1); }
+  .result-grid { display: grid; grid-template-columns: repeat(2, auto); gap: 8px 36px; margin: 6px 0; font-variant-numeric: tabular-nums; }
+  .result-grid .rl { color: var(--muted); text-align: right; font-size: 14px; }
+  .result-grid .rv { font-weight: 700; text-align: left; font-size: 16px; }
+  .delta-up { color: var(--good); } .delta-down { color: var(--bad); }
+  kbd { background:#21262d; border:1px solid var(--border); border-radius:4px; padding:1px 6px; font-size:12px; }
+  #analysis { z-index: 5; }
+  .panel-card { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 18px 22px; max-width: 760px; width: 100%; }
+  .an-head { display:flex; align-items:center; gap:12px; margin-bottom:14px; flex-wrap:wrap; }
+  .an-head h2 { font-size: 22px; }
+  .an-tabs { display:flex; gap:6px; flex-wrap:wrap; }
+  .sumrow { display:flex; gap:26px; flex-wrap:wrap; margin:10px 0 16px; font-variant-numeric: tabular-nums; }
+  .sumrow .s .l { font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:.5px; }
+  .sumrow .s .v { font-size:22px; font-weight:700; }
+  .chartwrap { background:#0d1117; border:1px solid var(--border); border-radius:8px; padding:10px; }
+  .chart-cap { font-size:11px; color:var(--muted); margin-bottom:4px; }
+  canvas.spark { width:100%; height:140px; display:block; }
+  table.hist { width:100%; border-collapse:collapse; margin-top:14px; font-size:12px; font-variant-numeric:tabular-nums; }
+  table.hist th, table.hist td { text-align:right; padding:5px 8px; border-bottom:1px solid var(--border); }
+  table.hist th { color:var(--muted); font-weight:600; text-transform:uppercase; font-size:10px; letter-spacing:.5px; }
+  table.hist td:first-child, table.hist th:first-child { text-align:left; }
+  .empty { color:var(--muted); padding:30px; font-size:14px; }
+  .row-actions { display:flex; gap:8px; margin-top:14px; }
+  .danger { border-color:#5a2222 !important; color:#f0a;}
+  .coach { margin-top:14px; padding:12px 16px; background:#1c2333; border:1px solid #2d4a6b; border-radius:8px; text-align:left; max-width:480px; }
+  .coach-h { font-size:13px; color:var(--accent); font-weight:700; margin-bottom:8px; }
+  .coach-tip { font-size:13px; line-height:1.55; margin:6px 0; color:var(--text); }
+  .coach-tip b { color:#f0c674; }
+</style>
+</head>
+<body>
+<header>
+  <h1>SOL · AIM</h1>
+  <div class="modes" id="modes">
+    <button class="mode-btn" data-mode="react">Reaction</button>
+    <button class="mode-btn" data-mode="precision">Precision</button>
+    <button class="mode-btn active" data-mode="kite">Kite</button>
+    <button class="mode-btn" data-mode="flick">Flick</button>
+    <button class="mode-btn" data-mode="track">Tracking</button>
+  </div>
+  <div class="spacer"></div>
+  <div class="setting">크기 <input type="range" id="sizeRange" min="16" max="70" value="44"></div>
+  <div class="setting">속도 <input type="range" id="speedRange" min="1" max="10" value="5"></div>
+  <div class="setting">시간
+    <select id="durSelect">
+      <option value="30">30s</option>
+      <option value="60" selected>60s</option>
+      <option value="120">120s</option>
+    </select>
+  </div>
+  <button class="ctrl-btn" id="statsBtn">📊 기록</button>
+  <button class="ctrl-btn" id="restartBtn">재시작</button>
+</header>
+
+<div class="stats">
+  <div class="stat"><div class="label" id="lblTime">남은 시간</div><div class="value" id="sTime">60.0</div></div>
+  <div class="stat"><div class="label">점수</div><div class="value" id="sScore" style="color:var(--accent)">0</div></div>
+  <div class="stat"><div class="label">명중</div><div class="value" id="sHits">0</div></div>
+  <div class="stat"><div class="label">놓침</div><div class="value" id="sMiss" style="color:var(--bad)">0</div></div>
+  <div class="stat"><div class="label">정확도</div><div class="value" id="sAcc">100%</div></div>
+  <div class="stat"><div class="label">평균 반응</div><div class="value" id="sRt">—</div></div>
+  <div class="stat"><div class="label">300ms↓</div><div class="value" id="sU3" style="color:var(--good)">0</div></div>
+</div>
+
+<div id="arena">
+  <canvas id="cv"></canvas>
+
+  <div id="overlay" class="veil">
+    <h2 id="ovTitle">Sol Aim Trainer</h2>
+    <p id="ovText">
+      <b>Reaction</b> — 화면 <b>무작위 위치·타이밍</b>에 뜨는 타겟을 인지하자마자 빠르게 이동+클릭. <b>인지→클릭 시간(ms)</b> 측정. 목표 300ms.<br>
+      <b>Gridshot</b> — 동시에 뜨는 여러 타겟을 빠르게 클릭.<br>
+      <b>Flick</b> — 한 번에 하나, 조준+클릭 처리율.<br>
+      <b>Tracking</b> — 움직이는 타겟 위에 커서 유지.<br><br>
+      매 판 자동 저장 · 상단 <b>📊 기록</b>에서 추세 분석.
+    </p>
+    <div id="ovResult"></div>
+    <button class="big" id="startBtn">시작 (클릭)</button>
+  </div>
+
+  <div id="analysis" class="veil hidden">
+    <div class="panel-card">
+      <div class="an-head">
+        <h2>기록 · 분석</h2>
+        <div class="an-tabs" id="anTabs">
+          <button class="mode-btn" data-f="react">Reaction</button>
+          <button class="mode-btn active" data-f="all">전체</button>
+          <button class="mode-btn" data-f="flick">Flick</button>
+          <button class="mode-btn" data-f="track">Tracking</button>
+        </div>
+        <div class="spacer"></div>
+        <button class="ctrl-btn" id="anClose">닫기</button>
+      </div>
+      <div id="anBody"></div>
+      <div class="row-actions">
+        <button class="ctrl-btn" id="anExport">📋 내보내기</button>
+        <button class="ctrl-btn" id="anImport">📥 가져오기</button>
+        <button class="ctrl-btn danger" id="anClear">기록 전체 삭제</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  const cv = document.getElementById('cv');
+  const ctx = cv.getContext('2d');
+  const arena = document.getElementById('arena');
+  const overlay = document.getElementById('overlay');
+  const analysis = document.getElementById('analysis');
+  const el = id => document.getElementById(id);
+  const ui = {
+    time: el('sTime'), score: el('sScore'), hits: el('sHits'),
+    miss: el('sMiss'), acc: el('sAcc'), rt: el('sRt'), u3: el('sU3'),
+    ovTitle: el('ovTitle'), ovText: el('ovText'), ovResult: el('ovResult'),
+  };
+
+  const STORE_KEY = 'solAimStats.v1';
+  let mode = 'kite', running = false;
+  let W = 0, H = 0, DPR = 1;
+  const cfg = { size: 44, speed: 5, duration: 60 };
+  const state = {
+    targets: [], score: 0, hits: 0, miss: 0, rtSum: 0, rtCount: 0,
+    timeLeft: 60, endAt: 0, trackTime: 0, lastTs: 0,
+    // reaction-specific
+    phase: 'show', showAt: 0, bestRt: Infinity, under300: 0, lastRt: 0, lastFake: false, fakes: 0,
+    // cursor-trajectory tracking
+    trail: [], trials: [], lastTrail: [], showMouse: { x: 0, y: 0 },
+    // precision(느린 학습) 모드
+    targetGoal: 25, clean: 0, lastClean: 0,
+    // ballistic/corrective 시각화 (직전 궤적의 전환점 인덱스)
+    lastTransIdx: -1,
+    // kite(롤 카이팅) 모드: 플레이어/적 상태
+    kite: null,
+  };
+  const mouse = { x: 0, y: 0, inside: false };
+  let aHeld = false;   // kite: A키(attack-move) 누름 상태
+
+  function loadRecords() { try { return JSON.parse(localStorage.getItem(STORE_KEY)) || []; } catch { return []; } }
+  function saveRecord(rec) { const r = loadRecords(); r.push(rec); localStorage.setItem(STORE_KEY, JSON.stringify(r)); }
+
+  function resize() {
+    DPR = window.devicePixelRatio || 1;
+    W = arena.clientWidth; H = arena.clientHeight;
+    cv.width = W*DPR; cv.height = H*DPR;
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+  }
+  window.addEventListener('resize', resize);
+
+  const rand = (a,b) => a + Math.random()*(b-a);
+  function makeTarget() {
+    const r = cfg.size;
+    const t = { x: rand(r,W-r), y: rand(r,H-r), r, vx:0, vy:0, born: performance.now() };
+    if (mode === 'track') {
+      const sp = cfg.speed*22, ang = rand(0,Math.PI*2);
+      t.vx = Math.cos(ang)*sp; t.vy = Math.sin(ang)*sp;
+    }
+    return t;
+  }
+  function makeReactTarget(now) {
+    const r = cfg.size;
+    // 무작위 위치 출현 → 인지 + 마우스 이동 + 클릭 전체 시간 측정
+    return { x: rand(r, W-r), y: rand(r, H-r), r, vx:0, vy:0, born: now };
+  }
+  function scheduleReact(now) { state.phase = 'wait'; state.targets = []; state.showAt = now + rand(700, 2600); }
+
+  // kite: 적을 화면 가장자리 무작위 위치에 재생성
+  function respawnEnemy(k) {
+    const e = Math.floor(rand(0,4)); k.ehp = 100;
+    if (e===0){ k.ex=rand(40,W-40); k.ey=40; }
+    else if (e===1){ k.ex=rand(40,W-40); k.ey=H-40; }
+    else if (e===2){ k.ex=40; k.ey=rand(40,H-40); }
+    else { k.ex=W-40; k.ey=rand(40,H-40); }
+  }
+
+  // 한 번의 명중에 대한 커서 궤적 메트릭: 인지 지연 / 이동 시간 / 경로 효율 / 오버슈팅
+  function trialMetrics(t, now) {
+    const trail = state.trail, sx = state.showMouse.x, sy = state.showMouse.y;
+    const dist = Math.hypot(t.x - sx, t.y - sy);             // 출현 위치→타겟 직선거리
+    let firstMoveT = null;
+    for (const p of trail) { if (Math.hypot(p.x - sx, p.y - sy) > 5) { firstMoveT = p.t; break; } }
+    const rd = Math.max(0, (firstMoveT !== null ? firstMoveT : now) - t.born); // 인지 지연
+    const mt = Math.max(0, now - (firstMoveT !== null ? firstMoveT : now));     // 이동 시간
+    let pathLen = 0;
+    for (let i = 1; i < trail.length; i++) pathLen += Math.hypot(trail[i].x - trail[i-1].x, trail[i].y - trail[i-1].y);
+    const eff = pathLen > 3 ? Math.min(1, dist / pathLen) : 1; // 직선거리/실제경로
+    let maxFromStart = 0;
+    for (const p of trail) maxFromStart = Math.max(maxFromStart, Math.hypot(p.x - sx, p.y - sy));
+    const over = maxFromStart > dist + t.r ? 1 : 0;            // 타겟 너머로 지나침
+    // 감도 진단: 타겟 방향으로 처음 멈춘(감속) 지점의 도달 비율. >1 오버슈팅(감도↑) / <1 언더슈팅(감도↓)
+    let reach = 1;
+    if (dist > 1 && trail.length >= 3) {
+      const ux = (t.x - sx) / dist, uy = (t.y - sy) / dist;   // 타겟 방향 단위벡터
+      let projPrev = -Infinity, maxProj = 0, reachAbs = null;
+      for (let i = 0; i < trail.length; i++) {
+        const proj = (trail[i].x - sx) * ux + (trail[i].y - sy) * uy; // 타겟방향 진행거리
+        if (i > 1 && proj < projPrev - 2 && reachAbs === null) { reachAbs = projPrev; break; } // 첫 후퇴 = 감속점
+        projPrev = proj; if (proj > maxProj) maxProj = proj;
+      }
+      if (reachAbs === null) reachAbs = maxProj;               // 후퇴 없이 도달
+      reach = +(Math.max(0, reachAbs) / dist).toFixed(2);
+    }
+    // 속도 프로파일: ballistic(큰 빠른 이동, ≈팔) → corrective(미세 보정, ≈손목) 전환 찾기
+    let ballisticPct = 100, corrMs = 0, transIdx = -1;
+    if (dist > 1 && trail.length >= 4) {
+      const bx = (t.x - sx) / dist, by = (t.y - sy) / dist;
+      const vel = [];
+      for (let i = 1; i < trail.length; i++) {
+        const dd = Math.hypot(trail[i].x - trail[i-1].x, trail[i].y - trail[i-1].y);
+        const dtt = Math.max(1, trail[i].t - trail[i-1].t);
+        vel.push({ v: dd / dtt, t: trail[i].t, proj: (trail[i].x - sx) * bx + (trail[i].y - sy) * by, idx: i });
+      }
+      const vmax = Math.max(...vel.map(o => o.v));
+      if (vmax > 0) {
+        let peaked = false;
+        for (const o of vel) {
+          if (o.v >= vmax * 0.6) peaked = true;                 // 피크 가속 도달
+          if (peaked && o.v < vmax * 0.25) {                    // 큰 감속 = ballistic 종료
+            transIdx = o.idx;
+            ballisticPct = Math.round(Math.max(0, Math.min(130, o.proj / dist * 100)));
+            corrMs = Math.round(vel[vel.length-1].t - o.t);
+            break;
+          }
+        }
+      }
+    }
+    return { rd: Math.round(rd), mt: Math.round(mt), dist: Math.round(dist), eff: +eff.toFixed(2), over, reach, ballisticPct, corrMs, transIdx };
+  }
+
+  function spawnInitial(now) {
+    state.targets = [];
+    if (mode === 'grid') {
+      const n = 3 + Math.round(cfg.speed/3);
+      for (let i=0;i<n;i++) state.targets.push(makeTarget());
+    } else if (mode === 'react') {
+      scheduleReact(now);
+    } else if (mode === 'precision') {
+      state.targets.push(makeTarget());
+      state.showMouse = { x: mouse.x, y: mouse.y };
+      state.trail = mouse.inside ? [{ x: mouse.x, y: mouse.y, t: now }] : [];
+    } else if (mode === 'kite') {
+      state.targets = [];   // 자체 enemy 사용
+    } else {
+      state.targets.push(makeTarget());
+      if (mode === 'flick') { state.showMouse = { x: mouse.x, y: mouse.y }; state.trail = mouse.inside ? [{ x: mouse.x, y: mouse.y, t: now }] : []; }
+    }
+  }
+
+  function start() {
+    analysis.classList.add('hidden');
+    resize();
+    cfg.size = +el('sizeRange').value;
+    cfg.speed = +el('speedRange').value;
+    cfg.duration = +el('durSelect').value;
+    const now = performance.now();
+    Object.assign(state, {
+      score:0, hits:0, miss:0, rtSum:0, rtCount:0, trackTime:0, timeLeft: cfg.duration,
+      phase:'show', showAt:0, bestRt: Infinity, under300:0, lastRt:0, lastFake:false, fakes:0,
+      trail:[], trials:[], lastTrail:[], showMouse:{x:0,y:0},
+      clean:0, lastClean:0,
+    });
+    state.targetGoal = 25;
+    if (mode === 'kite') state.kite = {px:W/2, py:H*0.72, tx:W/2, ty:H*0.72, ex:W/2, ey:H*0.18, ehp:100, lastAtk:0, kills:0, taken:0, atk:0, invuln:0};
+    state.endAt = now + cfg.duration*1000;
+    state.lastTs = now;
+    spawnInitial(now);
+    running = true;
+    overlay.classList.add('hidden');
+    updateStats();
+    requestAnimationFrame(loop);
+  }
+
+  function end() {
+    running = false;
+    const acc = (state.hits + state.miss) > 0 ? (state.hits/(state.hits+state.miss)*100) : 100;
+    const avgRt = state.rtCount ? state.rtSum/state.rtCount : 0;
+    const rt = Math.round(avgRt);
+    const best = state.bestRt === Infinity ? 0 : Math.round(state.bestRt);
+    const perMin = state.score / (cfg.duration/60);
+    const tr = state.trials;
+    const tavg = k => tr.length ? tr.reduce((s,x)=>s+x[k],0)/tr.length : 0;
+    const overRate = tr.length ? Math.round(tr.reduce((s,x)=>s+x.over,0)/tr.length*100) : 0;
+
+    const rec = {
+      t: Date.now(), mode, duration: cfg.duration, size: cfg.size, speed: cfg.speed,
+      score: state.score, perMin: Math.round(perMin),
+      hits: state.hits, miss: state.miss, acc: +acc.toFixed(1),
+      rt, trackTime: +state.trackTime.toFixed(1),
+      bestRt: best, under300: state.under300, fakes: state.fakes,
+      avgRd: Math.round(tavg('rd')), avgMt: Math.round(tavg('mt')),
+      avgEff: +tavg('eff').toFixed(2), overRate, avgDist: Math.round(tavg('dist')),
+      avgReach: +tavg('reach').toFixed(2),
+      clean: state.clean||0,
+      avgBallistic: Math.round(tavg('ballisticPct')), avgCorrMs: Math.round(tavg('corrMs')),
+    };
+    const prior = loadRecords().filter(r => r.mode === mode);
+    const priorAvg = prior.length ? prior.reduce((s,r)=>s+r.score,0)/prior.length : null;
+    const priorRt = prior.filter(r=>r.rt>0);
+    const priorRtAvg = priorRt.length ? priorRt.reduce((s,r)=>s+r.rt,0)/priorRt.length : null;
+    saveRecord(rec);
+    if (location.hostname === 'localhost' || location.hostname === '127.0.0.1')   // 로컬 서버일 때만 수집
+      fetch('/log', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(rec) }).catch(()=>{});
+
+    ui.ovTitle.textContent = '결과';
+    ui.ovText.innerHTML = `<b>${modeName(mode)}</b> · ${mode==='precision'?state.targetGoal+'타겟':cfg.duration+'s'}${mode==='kite'?' · 롤 카이팅 연습':' · 크기 '+cfg.size+(mode==='react'?' · 무작위 위치':(mode==='precision'?' · 정밀(느린 학습)':' · 속도 '+cfg.speed))}`;
+    let rows = '';
+    const add = (l,v) => rows += `<div class="rl">${l}</div><div class="rv">${v}</div>`;
+
+    if (mode === 'kite') {
+      const k = state.kite;
+      const possible = Math.floor(cfg.duration*1000/600);
+      const eff = possible ? Math.round(k.atk/possible*100) : 0;
+      add('처치', k.kills);
+      add('공격 횟수', k.atk);
+      add('피격', k.taken);
+      add('공격 효율(쿨다운 활용)', `${eff}%`);
+    } else if (mode === 'precision') {
+      const clean = state.clean||0, total = state.hits;
+      const cleanPct = total ? Math.round(clean/total*100) : 0;
+      add('완료 타겟', total);
+      add('클린 명중', `${clean} / ${total} (${cleanPct}%)`);
+      add('경로 효율', `${Math.round(tavg('eff')*100)}%`);
+      add('오버슈팅', `${overRate}%`);
+      add('빗맞힘', state.miss);
+      add('평균 속도(참고)', rt ? `${rt} ms` : '—');
+      if (total) {
+        const bp = Math.round(tavg('ballisticPct'));
+        const [md, mc] = motionDiag(bp);
+        add('팔→손목', `<span class="${mc}">${md}</span>`);
+        add('· Ballistic 도달', `${bp}%`);
+        add('· 보정 시간', `${Math.round(tavg('corrMs'))} ms`);
+      }
+      const priorC = prior.filter(r=>r.clean!==undefined && r.hits>0);
+      if (priorC.length) {
+        const pAvg = priorC.reduce((s,r)=>s+(r.clean/r.hits*100),0)/priorC.length;
+        const d = cleanPct - pAvg;
+        add(`이전 클린율(${priorC.length}판)`, `<span class="${d>=0?'delta-up':'delta-down'}">${d>=0?'▲ ':'▼ '}${Math.abs(d).toFixed(0)}%p</span>`);
+      }
+    } else if (mode === 'react') {
+      const total = state.hits;
+      const pct = total ? Math.round(state.under300/total*100) : 0;
+      add('시도(명중)', total);
+      add('평균 반응', rt ? `${rt} ms` : '—');
+      add('최고(최저)', best ? `${best} ms` : '—');
+      add('300ms↓ 달성', total ? `${state.under300} / ${total} (${pct}%)` : '—');
+      add('성급한 클릭', state.fakes);
+      if (total) {
+        add('· 인지 지연', `${Math.round(tavg('rd'))} ms`);
+        add('· 이동 시간', `${Math.round(tavg('mt'))} ms`);
+        add('경로 효율', `${Math.round(tavg('eff')*100)}%`);
+        add('오버슈팅', `${overRate}%`);
+        const rch = +tavg('reach').toFixed(2);
+        const [diag, dcls] = sensDiag(rch);
+        add('감도 진단', `<span class="${dcls}">${diag} (reach ${rch})</span>`);
+        const bp = Math.round(tavg('ballisticPct'));
+        const [md, mc] = motionDiag(bp);
+        add('팔→손목', `<span class="${mc}">${md}</span>`);
+        add('· Ballistic 도달', `${bp}%`);
+        add('· 보정 시간', `${Math.round(tavg('corrMs'))} ms`);
+      }
+      if (rt) {
+        const goalCls = rt <= 300 ? 'delta-up' : 'delta-down';
+        add('목표 300ms', `<span class="${goalCls}">${rt<=300?'✓ 달성':(rt-300)+'ms 초과'}</span>`);
+      }
+      if (priorRtAvg !== null && rt) {
+        const d = priorRtAvg - rt; // 양수면 빨라짐(개선)
+        const cls = d>=0?'delta-up':'delta-down';
+        add(`이전 평균 반응(${priorRt.length}판)`, `<span class="${cls}">${d>=0?'▲ ':'▼ '}${Math.abs(d).toFixed(0)}ms ${d>=0?'단축':'증가'}</span>`);
+      }
+    } else {
+      add('점수', state.score);
+      add('분당 점수', Math.round(perMin));
+      if (mode !== 'track') {
+        add('명중 / 놓침', `${state.hits} / ${state.miss}`);
+        add('정확도', acc.toFixed(1)+'%');
+        add('평균 반응', rt ? rt+' ms' : '—');
+        if (mode === 'flick' && tr.length) {
+          add('· 이동 시간', `${Math.round(tavg('mt'))} ms`);
+          add('경로 효율', `${Math.round(tavg('eff')*100)}%`);
+          add('오버슈팅', `${overRate}%`);
+          const bp = Math.round(tavg('ballisticPct'));
+          const [md, mc] = motionDiag(bp);
+          add('팔→손목', `<span class="${mc}">${md}</span>`);
+          add('· Ballistic 도달', `${bp}%`);
+        }
+      } else {
+        add('추적 시간', state.trackTime.toFixed(1)+' s');
+        add('추적 비율', (state.trackTime/cfg.duration*100).toFixed(1)+'%');
+      }
+      if (priorAvg !== null) {
+        const dPct = ((rec.score - priorAvg)/Math.max(1,priorAvg))*100;
+        const cls = dPct>=0?'delta-up':'delta-down';
+        add(`이전 평균(${prior.length}판)`, `<span class="${cls}">${dPct>=0?'▲':'▼'} ${Math.abs(dPct).toFixed(1)}%</span>`);
+      } else { add('기록', '첫 판 저장됨'); }
+    }
+    const kEff = (mode==='kite' && state.kite) ? Math.round(state.kite.atk/Math.max(1,Math.floor(cfg.duration*1000/600))*100) : 0;
+    const cTips = coachFeedback({
+      mode, acc, overRate,
+      ballisticPct: Math.round(tavg('ballisticPct')), corrMs: Math.round(tavg('corrMs')),
+      eff: tavg('eff'), cleanPct: state.hits ? Math.round((state.clean||0)/state.hits*100) : 100,
+      rt, under300: state.under300, total: state.hits, miss: state.miss, hasTraj: tr.length > 0,
+      kills: state.kite?state.kite.kills:0, taken: state.kite?state.kite.taken:0, kiteEff: kEff,
+    });
+    const coachHtml = cTips.length
+      ? `<div class="coach"><div class="coach-h">💡 다음에 이걸 고쳐봐</div>${cTips.map(([h,b])=>`<div class="coach-tip"><b>${h}</b> — ${b}</div>`).join('')}</div>`
+      : '';
+    ui.ovResult.innerHTML = `<div class="result-grid">${rows}</div>${coachHtml}`;
+    el('startBtn').textContent = '다시 시작';
+    overlay.classList.remove('hidden');
+  }
+
+  function loop(ts) {
+    if (!running) return;
+    const dt = Math.min(0.05, (ts - state.lastTs)/1000);
+    state.lastTs = ts;
+    if (mode === 'precision') {
+      if (state.hits >= state.targetGoal) { draw(); updateStats(); end(); return; }
+    } else {
+      state.timeLeft = Math.max(0, (state.endAt - ts)/1000);
+      if (state.timeLeft <= 0) { draw(); updateStats(); end(); return; }
+    }
+
+    if (mode === 'react') {
+      if (state.phase === 'wait' && ts >= state.showAt) {
+        state.targets = [ makeReactTarget(ts) ];
+        state.phase = 'show';
+        state.showMouse = { x: mouse.x, y: mouse.y };          // 출현 순간 커서 위치
+        state.trail = mouse.inside ? [{ x: mouse.x, y: mouse.y, t: ts }] : [];
+        state.lastTrail = [];
+      }
+    } else if (mode === 'track') {
+      const t = state.targets[0];
+      if (t) {
+        t.x += t.vx*dt; t.y += t.vy*dt;
+        if (t.x < t.r){ t.x=t.r; t.vx*=-1; } if (t.x > W-t.r){ t.x=W-t.r; t.vx*=-1; }
+        if (t.y < t.r){ t.y=t.r; t.vy*=-1; } if (t.y > H-t.r){ t.y=H-t.r; t.vy*=-1; }
+        const d = Math.hypot(mouse.x-t.x, mouse.y-t.y);
+        if (mouse.inside && d <= t.r) { state.trackTime += dt; state.score += Math.round(dt*100); }
+      }
+    } else if (mode === 'kite') {
+      const k = state.kite;
+      const pdx=k.tx-k.px, pdy=k.ty-k.py, pd=Math.hypot(pdx,pdy);
+      if (pd>1){ const s=Math.min(340*dt,pd); k.px+=pdx/pd*s; k.py+=pdy/pd*s; }   // 플레이어 이동
+      const edx=k.px-k.ex, edy=k.py-k.ey, ed=Math.hypot(edx,edy);
+      if (ed>1){ const s=Math.min(175*dt,ed); k.ex+=edx/ed*s; k.ey+=edy/ed*s; }   // 적 추격
+      if (k.invuln>0) k.invuln-=dt*1000;
+      if (ed<40 && k.invuln<=0){ k.taken++; k.invuln=900; }                       // 피격
+      if (k.ehp<=0){ k.kills++; respawnEnemy(k); }                                // 처치
+    }
+    draw(); updateStats();
+    requestAnimationFrame(loop);
+  }
+
+  // 직전 궤적을 ballistic(파랑=팔)/corrective(주황=손목) 구간으로 색 구분 + 전환점 마커
+  function drawTrail() {
+    const tr = state.lastTrail, ti = state.lastTransIdx;
+    if (!tr || tr.length < 2) return;
+    const cut = (ti > 0 && ti < tr.length) ? ti : tr.length - 1;
+    ctx.strokeStyle = 'rgba(88,166,255,.75)'; ctx.lineWidth = 2.5; ctx.beginPath();
+    for (let i = 0; i <= cut; i++) { const p = tr[i]; i ? ctx.lineTo(p.x,p.y) : ctx.moveTo(p.x,p.y); }
+    ctx.stroke();
+    if (cut < tr.length - 1) {
+      ctx.strokeStyle = 'rgba(210,153,34,.9)'; ctx.lineWidth = 2.5; ctx.beginPath();
+      for (let i = cut; i < tr.length; i++) { const p = tr[i]; i === cut ? ctx.moveTo(p.x,p.y) : ctx.lineTo(p.x,p.y); }
+      ctx.stroke();
+      const tp = tr[cut]; ctx.fillStyle = '#d29922'; ctx.beginPath(); ctx.arc(tp.x,tp.y,5,0,Math.PI*2); ctx.fill();
+    }
+    ctx.fillStyle = '#58a6ff'; ctx.beginPath(); ctx.arc(tr[0].x,tr[0].y,4,0,Math.PI*2); ctx.fill();
+  }
+
+  function draw() {
+    ctx.clearRect(0,0,W,H);
+    for (const t of state.targets) {
+      const on = mode==='track' && mouse.inside && Math.hypot(mouse.x-t.x, mouse.y-t.y) <= t.r;
+      const col = on ? '#3fb950' : (mode==='react' ? '#3fb950' : '#f85149');
+      ctx.beginPath(); ctx.arc(t.x,t.y,t.r,0,Math.PI*2); ctx.fillStyle = col; ctx.fill();
+      ctx.beginPath(); ctx.arc(t.x,t.y,t.r*0.55,0,Math.PI*2); ctx.fillStyle='#0d1117'; ctx.fill();
+      ctx.beginPath(); ctx.arc(t.x,t.y,t.r*0.28,0,Math.PI*2); ctx.fillStyle = col; ctx.fill();
+    }
+    if (mode === 'react' && running) {
+      drawTrail();   // 직전 궤적 — ballistic(파랑)/corrective(주황) 구분
+      ctx.textAlign = 'center';
+      if (state.phase === 'wait') {
+        ctx.fillStyle = '#8b949e'; ctx.font = '600 22px sans-serif';
+        ctx.fillText('대기… 타겟(초록)이 뜨면 즉시 클릭', W/2, H/2 - 6);
+        if (state.lastFake) {
+          ctx.fillStyle = '#f85149'; ctx.font = '700 26px sans-serif';
+          ctx.fillText('너무 빨라요! 출현 후 클릭하세요', W/2, H/2 + 34);
+        }
+      }
+      if (state.lastRt > 0) {
+        ctx.fillStyle = state.lastRt <= 300 ? '#3fb950' : '#e6edf3';
+        ctx.font = '700 44px sans-serif';
+        ctx.fillText(state.lastRt + ' ms', W/2, 64);
+      }
+      ctx.textAlign = 'start';
+    }
+    if (mode === 'precision' && running) {
+      drawTrail();   // ballistic(파랑=팔)/corrective(주황=손목) — 주황이 길면 손목 의존
+      ctx.textAlign = 'center';
+      if (state.lastTrail && state.lastTrail.length) {
+        ctx.fillStyle = state.lastClean ? '#3fb950' : '#d29922';
+        ctx.font = '700 30px sans-serif';
+        ctx.fillText(state.lastClean ? '깔끔! ✓' : '지나침 — 천천히', W/2, 56);
+      }
+      ctx.fillStyle = '#8b949e'; ctx.font = '600 14px sans-serif';
+      ctx.fillText('파랑=큰 이동(팔) · 주황=미세 보정(손목) — 주황이 짧을수록 좋음', W/2, H - 26);
+      ctx.textAlign = 'start';
+    }
+    if (mode === 'flick' && running) drawTrail();
+    if (mode === 'kite' && running && state.kite) {
+      const k = state.kite;
+      ctx.strokeStyle='rgba(88,166,255,.22)'; ctx.lineWidth=1.5;
+      ctx.beginPath(); ctx.arc(k.px,k.py,200,0,Math.PI*2); ctx.stroke();   // 사거리
+      const inR = Math.hypot(k.px-k.ex,k.py-k.ey)<=200, ready = performance.now()-k.lastAtk>=600;
+      ctx.fillStyle=(inR&&ready)?'#f0c674':'#f85149';                       // 공격 가능하면 노랑
+      ctx.beginPath(); ctx.arc(k.ex,k.ey,22,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle='#30363d'; ctx.fillRect(k.ex-26,k.ey-36,52,5);
+      ctx.fillStyle='#3fb950'; ctx.fillRect(k.ex-26,k.ey-36,52*Math.max(0,k.ehp)/100,5);
+      ctx.fillStyle = k.invuln>0?'#8b949e':'#58a6ff';                       // 플레이어
+      ctx.beginPath(); ctx.arc(k.px,k.py,16,0,Math.PI*2); ctx.fill();
+      ctx.textAlign='center'; ctx.fillStyle='#8b949e'; ctx.font='600 14px sans-serif';
+      ctx.fillText('우클릭=이동 · A+좌클릭=공격(노랑일 때) · 공격 후 쿨다운엔 우클릭으로 도망', W/2, H-22);
+      ctx.textAlign='start';
+    }
+  }
+
+  function localPos(e) { const r = cv.getBoundingClientRect(); return { x: e.clientX-r.left, y: e.clientY-r.top }; }
+  arena.addEventListener('mousemove', e => {
+    const p=localPos(e); mouse.x=p.x; mouse.y=p.y; mouse.inside=true;
+    if (running && (mode==='flick' || mode==='precision' || (mode==='react' && state.phase==='show'))) state.trail.push({ x:p.x, y:p.y, t: performance.now() });
+  });
+  arena.addEventListener('mouseleave', () => mouse.inside=false);
+  arena.addEventListener('contextmenu', e => e.preventDefault());   // 우클릭 메뉴 차단
+  arena.addEventListener('mousedown', e => {
+    if (!running) return;
+    const p = localPos(e);
+
+    if (mode === 'kite') {
+      const k = state.kite; const now2 = performance.now();
+      if (e.button === 2) { k.tx = p.x; k.ty = p.y; }                  // 우클릭 = 이동
+      else if (e.button === 0 && aHeld) {                              // A + 좌클릭 = 공격(attack-move)
+        const pToE = Math.hypot(k.px-k.ex, k.py-k.ey);
+        if (pToE <= 200 && now2-k.lastAtk >= 600) { k.ehp-=34; k.lastAtk=now2; k.atk++; k.tx=k.px; k.ty=k.py; }
+        else { k.tx=k.ex; k.ty=k.ey; }                                // 사거리 밖 → 적에게 접근
+      }
+      return;
+    }
+
+    if (e.button!==0 || mode === 'track') return;
+
+    if (mode === 'react') {
+      const now = performance.now();
+      if (state.phase === 'wait') {                 // 출현 전 클릭 = 성급함
+        state.fakes++; state.miss++; state.lastFake = true; state.lastRt = 0;
+        state.score = Math.max(0, state.score - 50);
+        state.showAt = now + rand(900, 2600);
+        return;
+      }
+      const t = state.targets[0];
+      if (t && Math.hypot(p.x-t.x, p.y-t.y) <= t.r) {
+        const rt = now - t.born;
+        const mR = trialMetrics(t, now);
+        state.trials.push(mR); state.lastTransIdx = mR.transIdx;
+        state.lastTrail = state.trail.slice();
+        state.rtSum += rt; state.rtCount++; state.hits++;
+        state.lastRt = Math.round(rt); state.lastFake = false;
+        if (rt < state.bestRt) state.bestRt = rt;
+        if (rt <= 300) state.under300++;
+        state.score += 100 + Math.max(0, Math.round((600-rt)/3));
+        scheduleReact(now);
+      } else {
+        state.miss++; state.score = Math.max(0, state.score-25);
+      }
+      return;
+    }
+
+    if (mode === 'precision') {
+      const t = state.targets[0];
+      if (t && Math.hypot(p.x-t.x, p.y-t.y) <= t.r) {
+        const now2 = performance.now();
+        const m = trialMetrics(t, now2);
+        state.trials.push(m); state.lastTrail = state.trail.slice(); state.lastTransIdx = m.transIdx;
+        state.lastClean = (m.over === 0 && m.eff >= 0.8) ? 1 : 0;  // 한 번에 깔끔하게 멈췄나
+        if (state.lastClean) state.clean++;
+        state.rtSum += now2 - t.born; state.rtCount++; state.hits++;
+        state.score += state.lastClean ? 100 : 40;
+        state.targets = [ makeTarget() ];
+        state.showMouse = { x: mouse.x, y: mouse.y };
+        state.trail = mouse.inside ? [{ x: mouse.x, y: mouse.y, t: now2 }] : [];
+      } else {
+        state.miss++;
+      }
+      return;
+    }
+
+    // grid / flick
+    let hit = -1;
+    for (let i=state.targets.length-1;i>=0;i--) {
+      const t = state.targets[i];
+      if (Math.hypot(p.x-t.x, p.y-t.y) <= t.r) { hit=i; break; }
+    }
+    if (hit >= 0) {
+      const t = state.targets[hit];
+      const now2 = performance.now();
+      const rt = now2 - t.born;
+      if (mode === 'flick') {                            // 다양한 위치 간 이동 품질 측정
+        const mF = trialMetrics(t, now2);
+        state.trials.push(mF); state.lastTransIdx = mF.transIdx;
+        state.lastTrail = state.trail.slice();
+      }
+      state.rtSum += rt; state.rtCount++; state.hits++;
+      state.score += 100 + Math.max(0, Math.round((1000-rt)/10));
+      state.targets.splice(hit,1); state.targets.push(makeTarget());
+      if (mode === 'flick') {                            // 다음 이동의 시작점 = 현재 커서 위치
+        state.showMouse = { x: mouse.x, y: mouse.y };
+        state.trail = mouse.inside ? [{ x: mouse.x, y: mouse.y, t: now2 }] : [];
+      }
+    } else {
+      state.miss++; state.score = Math.max(0, state.score-25);
+    }
+  });
+
+  function updateStats() {
+    ui.time.textContent = mode==='precision' ? String(Math.max(0, state.targetGoal - state.hits)) : state.timeLeft.toFixed(1);
+    if (mode === 'kite') {
+      const k = state.kite || {};
+      ui.score.textContent = k.kills||0; ui.hits.textContent = k.kills||0;
+      ui.miss.textContent = k.taken||0; ui.acc.textContent='—'; ui.rt.textContent='—'; ui.u3.textContent='—';
+      return;
+    }
+    ui.score.textContent = state.score;
+    ui.hits.textContent = state.hits;
+    ui.miss.textContent = state.miss;
+    const tot = state.hits + state.miss;
+    ui.acc.textContent = (tot ? (state.hits/tot*100) : 100).toFixed(0) + '%';
+    ui.rt.textContent = state.rtCount ? Math.round(state.rtSum/state.rtCount) : '—';
+    ui.u3.textContent = state.under300;
+  }
+  const modeName = m => ({react:'Reaction', precision:'Precision', kite:'Kite', grid:'Gridshot', flick:'Flick', track:'Tracking'}[m]);
+  // reach 비율 → 감도 진단 [문구, css클래스]
+  function sensDiag(reach) {
+    if (!reach) return ['—', ''];
+    if (reach > 1.07) return ['오버슈팅 우세 → 감도 낮추기', 'delta-down'];
+    if (reach < 0.93) return ['언더슈팅 우세 → 감도 높이기', 'delta-down'];
+    return ['적정 ✓', 'delta-up'];
+  }
+  // ballistic 도달률(%) → 팔/손목 진단 [문구, css클래스]
+  function motionDiag(bpct) {
+    if (!bpct) return ['—', ''];
+    if (bpct > 108) return ['지나침→되돌림 (팔 과함)', 'delta-down'];
+    if (bpct >= 88) return ['팔 던지기 정확 ✓', 'delta-up'];
+    if (bpct >= 70) return ['팔 덜 던짐→손목 의존', 'delta-down'];
+    return ['팔 거의 안 씀→질질', 'delta-down'];
+  }
+  // 판 결과 → 가장 임팩트 큰 약점 1~2개 + 구체적 처방
+  function coachFeedback(m) {
+    const tips = [];
+    if (m.mode === 'kite') {
+      if (m.taken > m.kills + 2) return [['🩸 너무 많이 맞는다', '공격(0.6초 쿨다운) 직후 적에서 멀어지게 이동해. 공격하자마자 도망 → 쿨 끝나면 멈춰서 한 대 → 다시 도망. 이게 스터터 스텝이야.']];
+      if (m.kiteEff < 50) return [['⏱️ 공격을 더 자주', '쿨다운이 끝났는데 안 때리고 도망만 치고 있어. 쿨 끝나면 바로 한 대 박고 다시 빠져 — 도망과 공격을 번갈아.']];
+      return [['✅ 카이팅 좋음', '거리 유지하며 잘 패고 있어. 더 오래 버티거나 처치 수를 늘려봐.']];
+    }
+    if (m.hasTraj) {
+      if (m.overRate >= 35) tips.push(['🛑 오버슈팅을 줄여라', `타겟을 지나치는 비율이 ${m.overRate}%. 확 던지기를 살짝 약하게 하고 끝에서 한 번에 멈추는 연습(stop-and-confirm). 지나쳤다 되돌아오는 시간이 가장 큰 손해야.`]);
+      if (m.ballisticPct && m.ballisticPct < 78) tips.push(['💪 팔을 더 과감하게', `첫 던지기가 타겟의 ${m.ballisticPct}%까지만 가서 나머지를 손목으로 수습 중이야. 한 번에 타겟까지 팔로 쭉 던져 — 손목 보정을 줄이는 게 핵심.`]);
+      else if (m.ballisticPct > 112) tips.push(['🎯 거리감 줄이기', `던지기가 타겟을 ${m.ballisticPct-100}% 지나쳐. 목표보다 살짝 덜 던지는 느낌으로 거리감을 잡아봐.`]);
+      if (m.corrMs >= 220) tips.push(['✂️ 끝마무리가 길다', `보정에 ${m.corrMs}ms를 쓰고 있어. 첫 던지기만 정확해지면 이 시간이 통째로 사라져서 이동이 확 빨라진다.`]);
+      if (m.eff && m.eff < 0.8) tips.push(['📏 직선으로 가라', `경로 효율 ${Math.round(m.eff*100)}%. 마우스가 빙 돌아가고 있어 — 타겟까지 최단 직선으로.`]);
+    }
+    if (m.mode === 'precision' && m.cleanPct < 70) tips.unshift(['🐢 더 천천히', `클린율 ${m.cleanPct}%. 속도를 더 버려도 돼 — 한 발씩 완벽하게 멈춰서 클릭하는 게 이 모드의 전부야.`]);
+    if (m.mode !== 'react' && m.acc < 55) tips.unshift(['🎯 정확도부터', `정확도 ${Math.round(m.acc)}%로 너무 낮아. 속도를 버리고 일단 맞추는 데 집중 — 빗맞힘 1번이 점수와 시간을 둘 다 깎아.`]);
+    if (m.mode === 'react' && m.total && m.under300 === 0 && m.rt) tips.push(['⚡ 300ms 도전', `아직 300ms 이하가 없어. 가까이 뜬 타겟에서만이라도 한 번 터뜨려서 best 기록부터 깨봐.`]);
+    if (!tips.length) tips.push(['✅ 폼이 좋다', '큰 약점이 안 보여. 타겟 크기를 줄이거나 페이스를 올려서 난이도를 높일 때야.']);
+    return tips.slice(0, 2);
+  }
+
+  // ---------- analysis ----------
+  let anFilter = 'all';
+  function fmtDate(t) {
+    const d = new Date(t), p = n => String(n).padStart(2,'0');
+    return `${p(d.getMonth()+1)}/${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
+  }
+  const avg = (arr,key) => arr.length ? arr.reduce((s,r)=>s+r[key],0)/arr.length : 0;
+
+  function drawSpark(canvas, values, color, lowerBetter) {
+    const c = canvas.getContext('2d');
+    const w = canvas.clientWidth, h = canvas.clientHeight;
+    canvas.width = w*devicePixelRatio; canvas.height = h*devicePixelRatio;
+    c.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+    c.clearRect(0,0,w,h);
+    if (!values.length) return;
+    const pad = 8, mn = Math.min(...values), mx = Math.max(...values), range = (mx-mn)||1;
+    const x = i => pad + (values.length===1 ? (w-2*pad)/2 : i/(values.length-1)*(w-2*pad));
+    const y = v => h - pad - (v-mn)/range*(h-2*pad);
+    c.strokeStyle = '#21262d'; c.lineWidth = 1;
+    for (let g=0;g<=2;g++){ const gy = pad + g/2*(h-2*pad); c.beginPath(); c.moveTo(pad,gy); c.lineTo(w-pad,gy); c.stroke(); }
+    c.strokeStyle = color; c.lineWidth = 2; c.beginPath();
+    values.forEach((v,i)=>{ const px=x(i), py=y(v); i?c.lineTo(px,py):c.moveTo(px,py); });
+    c.stroke();
+    c.fillStyle = color; values.forEach((v,i)=>{ c.beginPath(); c.arc(x(i),y(v),2.5,0,Math.PI*2); c.fill(); });
+    c.fillStyle = '#8b949e'; c.font = '10px sans-serif';
+    c.fillText(Math.round(mx), 4, pad+4); c.fillText(Math.round(mn), 4, h-2);
+  }
+
+  function renderAnalysis() {
+    const body = el('anBody');
+    let recs = loadRecords();
+    if (anFilter !== 'all') recs = recs.filter(r => r.mode === anFilter);
+    recs.sort((a,b)=>a.t-b.t);
+    if (!recs.length) { body.innerHTML = `<div class="empty">아직 기록이 없어요. 한 판 플레이하면 추세가 쌓입니다.</div>`; return; }
+
+    const isReact = anFilter === 'react';
+    if (isReact) {
+      const withRt = recs.filter(r=>r.rt>0);
+      const withTraj = recs.filter(r=>r.avgRd!==undefined && r.hits>0);
+      const bestEver = withRt.length ? Math.min(...withRt.map(r=>r.rt)) : 0;
+      const avgRt = avg(withRt,'rt');
+      const u3rate = avg(recs.map(r=>({u: r.hits? r.under300/r.hits*100 : 0})),'u');
+      let impr = null;
+      if (withRt.length >= 4) {
+        const n = Math.min(5, Math.floor(withRt.length/2));
+        const recent = avg(withRt.slice(-n),'rt'), older = avg(withRt.slice(-2*n,-n),'rt');
+        if (older>0) impr = older - recent; // 양수 = 빨라짐
+      }
+      const imprHtml = impr===null ? '<span style="color:var(--muted)">데이터 부족</span>'
+        : `<span class="${impr>=0?'delta-up':'delta-down'}">${impr>=0?'▲ ':'▼ '}${Math.abs(impr).toFixed(0)}ms ${impr>=0?'단축':'증가'}</span>`;
+      const goalCls = avgRt && avgRt<=300 ? 'delta-up' : 'delta-down';
+      body.innerHTML = `
+        <div class="sumrow">
+          <div class="s"><div class="l">판 수</div><div class="v">${recs.length}</div></div>
+          <div class="s"><div class="l">최고(최저 ms)</div><div class="v" style="color:var(--good)">${bestEver||'—'}</div></div>
+          <div class="s"><div class="l">평균 반응</div><div class="v">${avgRt?Math.round(avgRt)+'ms':'—'}</div></div>
+          <div class="s"><div class="l">300ms↓ 비율</div><div class="v">${Math.round(u3rate)}%</div></div>
+          <div class="s"><div class="l">목표 300ms</div><div class="v"><span class="${goalCls}">${avgRt?(avgRt<=300?'✓':Math.round(avgRt-300)+'↑'):'—'}</span></div></div>
+          <div class="s"><div class="l">추세</div><div class="v">${imprHtml}</div></div>
+        </div>
+        <div class="sumrow" style="border-top:1px solid var(--border);padding-top:12px">
+          <div class="s"><div class="l">인지 지연</div><div class="v">${withTraj.length?Math.round(avg(withTraj,'avgRd'))+'ms':'—'}</div></div>
+          <div class="s"><div class="l">이동 시간</div><div class="v">${withTraj.length?Math.round(avg(withTraj,'avgMt'))+'ms':'—'}</div></div>
+          <div class="s"><div class="l">경로 효율</div><div class="v">${withTraj.length?Math.round(avg(withTraj,'avgEff')*100)+'%':'—'}</div></div>
+          <div class="s"><div class="l">오버슈팅</div><div class="v">${withTraj.length?Math.round(avg(withTraj,'overRate'))+'%':'—'}</div></div>
+          <div class="s"><div class="l">평균 이동거리</div><div class="v">${withTraj.length?Math.round(avg(withTraj,'avgDist'))+'px':'—'}</div></div>
+        </div>
+        ${(() => { const wr = withTraj.filter(r=>r.avgReach!==undefined); if(!wr.length) return '';
+          const rch = +avg(wr,'avgReach').toFixed(2); const [diag,dcls]=sensDiag(rch);
+          return `<div class="chart-cap" style="margin:0 0 10px"><b>감도 진단:</b> <span class="${dcls}">${diag}</span> — 평균 reach ${rch} (>1 오버슈팅·감도↑ / <1 언더슈팅·감도↓)</div>`; })()}
+        <div class="chartwrap">
+          <div class="chart-cap">반응시간 추세 (왼쪽=과거 → 오른쪽=최근, <b>아래로 내려갈수록 빠름=개선</b>)</div>
+          <canvas class="spark" id="sparkRt"></canvas>
+        </div>
+        <table class="hist">
+          <thead><tr><th>날짜</th><th>크기</th><th>평균 ms</th><th>최저 ms</th><th>300↓</th><th>성급</th></tr></thead>
+          <tbody>
+            ${recs.slice().reverse().slice(0,12).map(r=>`
+              <tr><td>${fmtDate(r.t)}</td><td>${r.size}</td>
+              <td>${r.rt||'—'}</td><td>${r.bestRt||'—'}</td>
+              <td>${r.hits?Math.round((r.under300||0)/r.hits*100)+'%':'—'}</td><td>${r.fakes||0}</td></tr>`).join('')}
+          </tbody>
+        </table>`;
+      drawSpark(el('sparkRt'), recs.map(r=>r.rt||0), '#3fb950', true);
+      return;
+    }
+
+    const best = Math.max(...recs.map(r=>r.score));
+    const avgScore = avg(recs,'score');
+    let impr = null;
+    if (recs.length >= 4) {
+      const n = Math.min(5, Math.floor(recs.length/2));
+      const ra = avg(recs.slice(-n),'score'), oa = avg(recs.slice(-2*n,-n),'score');
+      if (oa>0) impr = (ra-oa)/oa*100;
+    }
+    const imprHtml = impr===null ? '<span style="color:var(--muted)">데이터 부족</span>'
+      : `<span class="${impr>=0?'delta-up':'delta-down'}">${impr>=0?'▲':'▼'} ${Math.abs(impr).toFixed(1)}%</span>`;
+    body.innerHTML = `
+      <div class="sumrow">
+        <div class="s"><div class="l">판 수</div><div class="v">${recs.length}</div></div>
+        <div class="s"><div class="l">최고 점수</div><div class="v" style="color:var(--accent)">${best}</div></div>
+        <div class="s"><div class="l">평균 점수</div><div class="v">${Math.round(avgScore)}</div></div>
+        <div class="s"><div class="l">평균 ${anFilter==='track'?'추적(s)':'정확도'}</div><div class="v">${anFilter==='track'?avg(recs,'trackTime').toFixed(1):avg(recs,'acc').toFixed(0)+'%'}</div></div>
+        <div class="s"><div class="l">최근 추세</div><div class="v">${imprHtml}</div></div>
+      </div>
+      <div class="chartwrap">
+        <div class="chart-cap">점수 추세 (왼쪽=과거 → 오른쪽=최근)</div>
+        <canvas class="spark" id="sparkScore"></canvas>
+      </div>
+      <table class="hist">
+        <thead><tr><th>날짜</th><th>모드</th><th>점수</th><th>정확도</th><th>반응ms</th></tr></thead>
+        <tbody>
+          ${recs.slice().reverse().slice(0,12).map(r=>`
+            <tr><td>${fmtDate(r.t)}</td><td>${modeName(r.mode)}</td><td>${r.score}</td>
+            <td>${r.mode==='track'?r.trackTime+'s':r.acc+'%'}</td><td>${r.rt||'—'}</td></tr>`).join('')}
+        </tbody>
+      </table>`;
+    drawSpark(el('sparkScore'), recs.map(r=>r.score), '#58a6ff', false);
+  }
+
+  function openAnalysis() { running=false; overlay.classList.add('hidden'); analysis.classList.remove('hidden'); renderAnalysis(); }
+  function closeAnalysis() { analysis.classList.add('hidden'); overlay.classList.remove('hidden'); }
+
+  el('modes').addEventListener('click', e => {
+    const btn = e.target.closest('.mode-btn'); if (!btn) return;
+    [...el('modes').querySelectorAll('.mode-btn')].forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active'); mode = btn.dataset.mode; running = false;
+    analysis.classList.add('hidden');
+    el('lblTime').textContent = mode==='precision' ? '남은 타겟' : '남은 시간';
+    ui.ovTitle.textContent = modeName(mode); ui.ovResult.innerHTML='';
+    el('startBtn').textContent = '시작 (클릭)';
+    overlay.classList.remove('hidden');
+  });
+  el('anTabs').addEventListener('click', e => {
+    const btn = e.target.closest('.mode-btn'); if (!btn) return;
+    [...el('anTabs').querySelectorAll('.mode-btn')].forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active'); anFilter = btn.dataset.f; renderAnalysis();
+  });
+  el('startBtn').addEventListener('click', start);
+  el('restartBtn').addEventListener('click', start);
+  el('statsBtn').addEventListener('click', openAnalysis);
+  el('anClose').addEventListener('click', closeAnalysis);
+  el('anClear').addEventListener('click', () => {
+    if (confirm('저장된 기록을 모두 삭제할까요? 되돌릴 수 없습니다.')) { localStorage.removeItem(STORE_KEY); renderAnalysis(); }
+  });
+  el('anExport').addEventListener('click', () => {
+    const data = localStorage.getItem(STORE_KEY) || '[]';
+    if (navigator.clipboard) navigator.clipboard.writeText(data)
+      .then(()=>alert('기록을 클립보드에 복사했어요. Sol에게 붙여넣으면 분석해줘요.'))
+      .catch(()=>prompt('아래를 복사하세요:', data));
+    else prompt('아래를 복사하세요:', data);
+  });
+  el('anImport').addEventListener('click', () => {
+    const t = prompt('내보낸 기록 JSON을 붙여넣으세요 (기존 기록에 합쳐집니다):');
+    if (!t) return;
+    try {
+      const incoming = JSON.parse(t);
+      if (!Array.isArray(incoming)) throw 0;
+      const cur = loadRecords(), seen = new Set(cur.map(r=>r.t));
+      const merged = cur.concat(incoming.filter(r=>r&&r.t&&!seen.has(r.t))).sort((a,b)=>a.t-b.t);
+      localStorage.setItem(STORE_KEY, JSON.stringify(merged));
+      renderAnalysis();
+      alert(`가져오기 완료: ${merged.length - cur.length}판 추가됨.`);
+    } catch { alert('형식이 올바르지 않아요.'); }
+  });
+  el('sizeRange').addEventListener('input', e => cfg.size = +e.target.value);
+  el('speedRange').addEventListener('input', e => cfg.speed = +e.target.value);
+  window.addEventListener('keydown', e => {
+    if (e.code === 'KeyA') aHeld = true;
+    if (!analysis.classList.contains('hidden')) { if (e.key==='Escape') closeAnalysis(); return; }
+    if (e.code === 'Space') { e.preventDefault(); start(); }
+    if (e.key==='r' || e.key==='R') start();
+  });
+  window.addEventListener('keyup', e => { if (e.code === 'KeyA') aHeld = false; });
+
+  resize();
+})();
+</script>
+</body>
+</html>
